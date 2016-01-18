@@ -25,12 +25,21 @@
 
 </dl>
 
-## Screen Shots
-### Map Panel Screen Shot with no shapes or points
-![alt text](https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShot.png "Map Panel Screen Shot with no shapes or points")
-### Map Panel Screen Shot with a point
-![alt text](https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPoint.png "Map Panel Screen Shot with a point")
-### Map Panel Screen Shot with a shape
-![alt text](https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithAShape.png "Map Panel Screen Shot with a shape")
-### Map Panel Screen Shot with a shape and point
-![alt text](https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPointAndShape.png "Map Panel Screen Shot with a shape and point")
+
+
+<dl>
+    <dt><h2>Screen Shots</h2></dt>  
+    
+    <dt><h3>Map Panel Screen Shot with no shapes or points</h3></dt>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShot.png" alt="Map Panel Screen Shot with no shapes or points" height="250" width="400"></dd>
+    
+    <dt><h3>Map Panel Screen Shot with a point</h3></dt>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPoint.png" alt="Map Panel Screen Shot with a point" height="250" width="400"></dd>
+    
+    <dt><h3>Map Panel Screen Shot with a shape</h3></dt>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithAShape.png" alt="Map Panel Screen Shot with a shape" height="250" width="400"></dd>
+    
+    <dt><h3>Map Panel Screen Shot with a shape and point</h3></dt>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPointAndShape.png" alt="Map Panel Screen Shot with a shape and point" height="250" width="400"></dd>
+
+</dl>
