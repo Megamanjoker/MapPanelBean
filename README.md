@@ -43,3 +43,11 @@
     <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPointAndShape.png" alt="Map Panel Screen Shot with a shape and point" height="250" width="400"></dd>
 
 </dl>
+
+<embed 
+id="MapPanel"
+type="application/x-java-applet;version=1.6"
+width="512" height="512" 
+code="bin.mappanel.window.MapPanel.class"
+pluginspage="http://java.com/download/"
+myParam="" />
