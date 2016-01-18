@@ -1,4 +1,4 @@
-package com.TylerValant.MapPanel.window;
+package mappanel.window;
 
 import java.awt.Dimension;
 

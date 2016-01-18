@@ -1,4 +1,4 @@
-package com.TylerValant.MapPanel.framework;
+package mappanel.framework;
 
 public enum ObjectID
 {

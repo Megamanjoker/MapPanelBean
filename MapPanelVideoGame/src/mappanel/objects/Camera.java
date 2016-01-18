@@ -1,7 +1,7 @@
-package com.TylerValant.MapPanel.objects;
+package mappanel.objects;
 
-import com.TylerValant.MapPanel.framework.MapObject;
-import com.TylerValant.MapPanel.window.MapPanel;
+import mappanel.framework.MapObject;
+import mappanel.window.MapPanel;
 
 public class Camera
 {

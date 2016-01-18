@@ -1,12 +1,11 @@
-package com.TylerValant.MapPanel.framework;
+package mappanel.framework;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.LinkedHashSet;
 import java.util.List;
-
-import com.TylerValant.MapPanel.window.MapPanel;
 
 public class Envelope extends MapObject
 {
@@ -18,6 +17,8 @@ public class Envelope extends MapObject
     private static final boolean DEBUG = false;
     private double startLon, startLat, endLon, endLat;
     private Point center;
+    private boolean draw = true;
+    private Color color = Color.CYAN;
     
     
     public Envelope(double x, double y, ObjectID id)
@@ -26,7 +27,7 @@ public class Envelope extends MapObject
 	// TODO Auto-generated constructor stub
     }
     
-    public Envelope(ObjectID id, Double startLon,Double startLat,Double endLon,Double endLat)
+    public Envelope(ObjectID id, double startLon,double startLat,double endLon,double endLat)
     {
 	super(0, 0, id);
 	this.startLat = startLat;
@@ -38,7 +39,7 @@ public class Envelope extends MapObject
 	center = new Point( newX, newY);
     }
     
-    public Envelope(ObjectID id, Double startLon,Double startLat,Double endLon,Double endLat, int Zoom)
+    public Envelope(ObjectID id, double startLon,double startLat,double endLon,double endLat, int Zoom)
     {
 	super(0, 0, id);
 	this.startLat = startLat;
@@ -54,7 +55,7 @@ public class Envelope extends MapObject
     }
 
     @Override
-    public void tick(List<MapObject> objects)
+    public void tick(LinkedHashSet<MapObject> objects)
     {
 	
 	int newX = (lon2position(startLon, Zoom) + lon2position(endLon, Zoom)) /2;
@@ -65,14 +66,18 @@ public class Envelope extends MapObject
     @Override
     public void render(Graphics g)
     {
-	    g.setColor(Color.CYAN);
-	    int startX = lon2position(startLon,this.getZoom());
-	    int startY = lat2position(startLat, this.getZoom());
-	    int dx =  lon2position(endLon, this.getZoom()) - startX;
-	    int dy =  lat2position(endLat, this.getZoom()) - startY;
-	    g.drawRect(startX,startY, dx, dy);
-//	    System.out.println("Lon = " + startLon + " ,Lat = " + startLat);
-//	    System.out.println("startX = "+ startX + " ,startY = "+ startY + ", dx = "+ dx + ", dy = "+ dy + " ,Zoom = " + Zoom);
+	
+	    if (draw)
+	    {
+		g.setColor(color);
+		int startX = lon2position(startLon, this.getZoom());
+		int startY = lat2position(startLat, this.getZoom());
+		int dx = lon2position(endLon, this.getZoom()) - startX;
+		int dy = lat2position(endLat, this.getZoom()) - startY;
+		g.drawRect(startX, startY, dx, dy);
+		//	    System.out.println("Lon = " + startLon + " ,Lat = " + startLat);
+		//	    System.out.println("startX = "+ startX + " ,startY = "+ startY + ", dx = "+ dx + ", dy = "+ dy + " ,Zoom = " + Zoom);
+	    }
     }
 
     @Override
@@ -112,6 +117,49 @@ public class Envelope extends MapObject
     {
         return center;
     }
+
+    public boolean isDraw()
+    {
+        return draw;
+    }
+
+    public void setDraw(boolean draw)
+    {
+        this.draw = draw;
+    }
+
+    public Color getColor()
+    {
+        return color;
+    }
+
+    public void setColor(Color color)
+    {
+        this.color = color;
+    }
+
+    public double getStartLon()
+    {
+        return startLon;
+    }
+
+    public double getStartLat()
+    {
+        return startLat;
+    }
+
+    public double getEndLon()
+    {
+        return endLon;
+    }
+
+    public double getEndLat()
+    {
+        return endLat;
+    }
+    
+    
+    
 
 //    public void setCenter(Point center)
 //    {

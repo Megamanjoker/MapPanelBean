@@ -1,20 +1,23 @@
-package com.TylerValant.MapPanel.objects;
+package mappanel.objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
-import com.TylerValant.MapPanel.framework.MapObject;
-import com.TylerValant.MapPanel.framework.ObjectID;
+import mappanel.framework.MapObject;
+import mappanel.framework.ObjectID;
 
 public class MapTile extends MapObject implements ImageObserver, Runnable
 {
@@ -37,7 +40,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     private final Semaphore available = new Semaphore(MAX_AVAILABLE, true);
     private MapCenter center = null;
     private MapTile North,East,South,West;
-    private Rectangle NorthBound,EastBound,SouthBound,WestBound;
+    private Rectangle2D NorthBound,EastBound,SouthBound,WestBound;
     private boolean last = false;
     private boolean generateEnable = true;
     
@@ -57,15 +60,15 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	super(x, y, id);
 	this.TileServerURL = TileServerURL;
 	this.Zoom = Zoom;
-	NorthBound = new Rectangle((int) (x + TileSize/2) ,(int)y - TestSize,TestSize - 1,TestSize - 1);
-	EastBound = new Rectangle((int)x + TileSize,(int)(y + TileSize/2),TestSize - 1,TestSize - 1);
-	SouthBound = new Rectangle((int)(x + TileSize/2),(int)y + TileSize,TestSize - 1,TestSize - 1);
-	WestBound = new Rectangle((int)x  - TestSize,(int)(y + TileSize/2),TestSize - 1,TestSize - 1);
+	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
+	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
+	SouthBound = new Rectangle2D.Double(x + TileSize/2, y + TileSize,  TestSize - 1,TestSize - 1);
+	WestBound  = new Rectangle2D.Double(x  - TestSize,  y + TileSize/2,TestSize - 1,TestSize - 1);
 	
     }
 
     @Override
-    public void tick(List<MapObject> objects)
+    public void tick(LinkedHashSet<MapObject> objects)
     {
 //	if(center == null)
 //	{
@@ -85,7 +88,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	checkBounds(objects);
     }
 
-    private void checkBounds(List<MapObject> objects)
+    private void checkBounds(LinkedHashSet<MapObject> objects)
     {
 	boolean NorthEnabled = (0 <= y - TileSize);
 	boolean EastEnabled  = (x < (Math.pow(2, Zoom) - 1) * TileSize );
@@ -181,16 +184,17 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 //		{
 		    if(DEBUG)
 		    {
-			g.setColor(Color.CYAN);
-			g.fillRect((int)x, (int)y, (int)TileSize, (int)TileSize);
-			g.setColor(Color.black);
-			g.drawRect((int)x, (int)y, (int)TileSize, (int)TileSize);
-			g.drawString("X = " + (int)x + " Y = " + (int)y, (int)x + 10, (int)y + 15);
-			g.setColor(new Color(33,237,94));
-			g.drawRect(NorthBound.x, NorthBound.y, NorthBound.width, NorthBound.height);
-			g.drawRect(EastBound.x, EastBound.y, EastBound.width, EastBound.height);
-			g.drawRect(SouthBound.x, SouthBound.y, SouthBound.width, SouthBound.height);
-		    	g.drawRect(WestBound.x, WestBound.y, WestBound.width, WestBound.height);
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.CYAN);
+			g2d.fillRect((int)x, (int)y, (int)TileSize, (int)TileSize);
+			g2d.setColor(Color.black);
+			g2d.drawRect((int)x, (int)y, (int)TileSize, (int)TileSize);
+			g2d.drawString("X = " + (int)x + " Y = " + (int)y, (int)x + 10, (int)y + 15);
+			g2d.setColor(new Color(33,237,94));
+			g2d.drawRect((int)NorthBound.getX(), (int)NorthBound.getY(), (int)NorthBound.getWidth(), (int)NorthBound.getHeight());
+			g2d.drawRect((int)EastBound.getX(),  (int)EastBound.getY(),  (int)EastBound.getWidth(),  (int)EastBound.getHeight() );
+			g2d.drawRect((int)SouthBound.getX(), (int)SouthBound.getY(), (int)SouthBound.getWidth(), (int)SouthBound.getHeight());
+			g2d.drawRect((int)WestBound.getX(),  (int)WestBound.getY(),  (int)WestBound.getWidth(),  (int)WestBound.getHeight() );
 		    
 		    }	
 		    else
@@ -215,9 +219,9 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 
     //bounds for the tile
     @Override
-    public Rectangle getBound()
+    public Rectangle2D getBound()
     {
-	return new Rectangle((int) x,(int) y,(int) TileSize,(int) TileSize);
+	return new Rectangle2D.Double(x,y,TileSize,TileSize);
     }
 
     public int getZoom()
@@ -231,6 +235,16 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         
     }
 
+
+    public String getTileServerURL()
+    {
+        return TileServerURL;
+    }
+
+    public void setTileServerURL(String tileServerURL)
+    {
+        TileServerURL = tileServerURL;
+    }
 
     @Override
     public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height)

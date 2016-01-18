@@ -1,7 +1,9 @@
-package com.TylerValant.MapPanel.framework;
+package mappanel.framework;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -16,6 +18,7 @@ public abstract class MapObject extends JComponent
     protected ObjectID id;
     protected float velX = 0, velY = 0;
     protected int Zoom = 0;
+    protected String name;
     
     public MapObject(double x,double y, ObjectID id)
     {
@@ -31,7 +34,7 @@ public abstract class MapObject extends JComponent
      * Examples - Collision checking, Movement tracking.
      * @param objects - All the objects in the scene
      */
-    public abstract void tick(List<MapObject> objects);
+    public abstract void tick(LinkedHashSet<MapObject> objects);
     
     /**
      * Draws the object.
@@ -43,7 +46,7 @@ public abstract class MapObject extends JComponent
      * 
      * @return - the Bounding box of this object
      */
-    public abstract Rectangle getBound(); 
+    public abstract Rectangle2D getBound(); 
 
     public int getX()
     {
@@ -105,6 +108,18 @@ public abstract class MapObject extends JComponent
     public void setZoom(int zoom)
     {
         Zoom = zoom;
+    }
+
+
+    public String getName()
+    {
+        return name;
+    }
+
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     

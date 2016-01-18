@@ -1,13 +1,15 @@
-package com.TylerValant.MapPanel.objects;
+package mappanel.objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.util.LinkedHashSet;
 import java.util.List;
 
-import com.TylerValant.MapPanel.framework.Envelope;
-import com.TylerValant.MapPanel.framework.MapObject;
-import com.TylerValant.MapPanel.framework.ObjectID;
+import mappanel.framework.Envelope;
+import mappanel.framework.MapObject;
+import mappanel.framework.ObjectID;
 
 public class MapCenter extends MapObject
 {
@@ -16,24 +18,24 @@ public class MapCenter extends MapObject
      */
     private static final long serialVersionUID = 7003532228198805203L;
     double Width=1,Height=1;
-    private boolean DEBUG = true;
-    private Envelope envlope;
+    private boolean DEBUG = false;
+    private Envelope envelope;
     private boolean useEnvelope = true;
     
     public MapCenter(double x, double y, ObjectID id)
     {
 	super(x, y, id);
-	this.envlope = new Envelope(ObjectID.Envelope,  -96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
+	this.envelope = new Envelope(ObjectID.Envelope,  -96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
     }
 
     @Override
-    public void tick(List<MapObject> objects)
+    public void tick(LinkedHashSet<MapObject> objects)
     {
-	envlope.tick(objects);
-	if(!this.getBound().intersects(envlope.getBound(this.Zoom)) && useEnvelope)
+	envelope.tick(objects);
+	if(!this.getBound().intersects(envelope.getBound(this.Zoom)) && useEnvelope)
 	{
-	    this.x = envlope.getCenter().getX();// - this.Width/2;
-	    this.y = envlope.getCenter().getY();// - this.Height/2;
+	    this.x = envelope.getCenter().getX();// - this.Width/2;
+	    this.y = envelope.getCenter().getY();// - this.Height/2;
 	}
     }
 
@@ -51,18 +53,18 @@ public class MapCenter extends MapObject
 	    g.drawRect(getTestPriority().x,getTestPriority().y,getTestPriority().width,getTestPriority().height);
 	    g.setColor(Color.BLUE);
 	    g.drawRect(getTestDeletePriority().x,getTestDeletePriority().y,getTestDeletePriority().width,getTestDeletePriority().height);
-	    envlope.render(g);
 	}
+	envelope.render(g);
     }
 
     /**
      * Not used
      */
     @Override
-    public Rectangle getBound()
+    public Rectangle2D getBound()
     {
 	// TODO Auto-generated method stub
-	return new Rectangle((int)(x),(int)(y),(int)(1) ,(int)(1));
+	return new Rectangle2D.Double(x,y,1,1);
     }
     
     /**
@@ -71,7 +73,7 @@ public class MapCenter extends MapObject
      */
     public Rectangle getTestPriority()
     {
-	return priorityBounds(0.325);
+	return priorityBounds(1);
     }
     
     /**
@@ -80,7 +82,7 @@ public class MapCenter extends MapObject
      */
     public Rectangle getTestDeletePriority()
     {
-	return priorityBounds(0.35);
+	return priorityBounds(1.05);
     }
     
     /**
@@ -131,22 +133,22 @@ public class MapCenter extends MapObject
         Height = height;
     }
 
-//    public Envelope getEnvlope()
-//    {
-//        return envlope;
-//    }
-
-    public void setEnvlope(Double startLon,Double startLat,Double endLon,Double endLat)
+    public Envelope getEnvelope()
     {
-        this.envlope = new Envelope(ObjectID.Envelope, startLon, startLat, endLon, endLat);
+        return envelope;
     }
 
-    public boolean isUseEnvelope()
+    public void setEnvelope(Double startLon,Double startLat,Double endLon,Double endLat)
+    {
+        this.envelope = new Envelope(ObjectID.Envelope, startLon, startLat, endLon, endLat, this.Zoom);
+    }
+
+    public boolean isEnvelopeUsed()
     {
         return useEnvelope;
     }
 
-    public void setUseEnvelope(boolean useEnvelope)
+    public void setEnvelopeUsed(boolean useEnvelope)
     {
         this.useEnvelope = useEnvelope;
     }
@@ -154,7 +156,27 @@ public class MapCenter extends MapObject
     public void setZoom(int Zoom)
     {
 	this.Zoom = Zoom;
-	this.envlope.setZoom(Zoom);
+	this.envelope.setZoom(Zoom);
+    }
+    
+    public boolean isDrawingEnvelope()
+    {
+        return envelope.isDraw();
+    }
+
+    public void setDrawingEnvelope(boolean draw)
+    {
+        this.envelope.setDraw(draw);
+    }
+
+    public Color getEnvelopeColor()
+    {
+        return this.envelope.getColor();
+    }
+
+    public void setEnvelopeColor(Color color)
+    {
+        this.envelope.setColor(color);
     }
     
     

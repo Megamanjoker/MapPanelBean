@@ -1,29 +1,36 @@
-package com.TylerValant.MapPanel.window;
+package mappanel.window;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.lang.NullPointerException;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import com.TylerValant.MapPanel.framework.MapObject;
-import com.TylerValant.MapPanel.framework.ObjectID;
-import com.TylerValant.MapPanel.objects.MapCenter;
-import com.TylerValant.MapPanel.objects.MapPoint;
-import com.TylerValant.MapPanel.objects.MapTile;
+import mappanel.framework.MapObject;
+import mappanel.framework.ObjectID;
+import mappanel.objects.MapCenter;
+import mappanel.objects.MapPoint;
+import mappanel.objects.MapShape;
+import mappanel.objects.MapTile;
 
 public class Handler 
 {
     private static final int TileSize = 256;
-    public List<MapObject> objects = new LinkedList<MapObject>();
-    public List<MapObject> points = new LinkedList<MapObject>();
-    public List<MapObject> shapes = new LinkedList<MapObject>();
+    public LinkedHashSet<MapObject> objects = new LinkedHashSet<MapObject>();
+    public LinkedHashSet<MapObject> points = new LinkedHashSet<MapObject>();
+    public LinkedHashSet<MapObject> shapes = new LinkedHashSet<MapObject>();
     private String TileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
     private MapCenter center;
     private int numberOfTiles = 1;
     private int MaxZoom = 19,MinZoom = 0, Zoom = 0;
+    private LinkedHashSet<ObjectID> idBlackList = new LinkedHashSet<ObjectID>(Arrays.asList(ObjectID.Center,ObjectID.Tile,ObjectID.Envelope));
     
     public void tick()
     {
@@ -73,10 +80,6 @@ public class Handler
 	    {
 		if(object.getId() != ObjectID.Center && object.getId() != ObjectID.Point && object.getId() != ObjectID.Shape)
 		    object.render(g);
-		else if(object.getId() == ObjectID.Point)
-		    points.add(object);
-		else if(object.getId() == ObjectID.Shape)
-		    shapes.add(object);
 	    }
 	}
 	catch (ConcurrentModificationException e)
@@ -127,7 +130,8 @@ public class Handler
      */
     public void CreateMap()
     {
-	addMapObject(new MapTile(0,0,ObjectID.Tile,TileServerURL));
+	if(center != null)
+	    addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,ObjectID.Tile,TileServerURL));
     }
     
     /**
@@ -169,14 +173,31 @@ public class Handler
 //	    System.out.println("old x = " + point.x + " old y = " + point.y + " ");
 	    double lat = MapPanel.position2lat((int)(center.getY() + point.y - center.getHeight()/2), Zoom);
 	    double lon = MapPanel.position2lon((int)(center.getX() + point.x - center.getWidth()/2), Zoom);
+	    double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
+	    double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
 //	    System.out.print("Lon = " + centerLon + " Lat = " + centerLat + " ");
 	    Zoom++;
 	    clearMapTile();
+	    
+	    int x = MapPanel.lon2position(lon, Zoom);
+	    int y = MapPanel.lat2position(lat, Zoom);
+	    if(center.getEnvelope().getBound().intersects(new Rectangle(x,y,1,1)))
+	    {
+		CreateMap(x, y);
+	    }
+	    else if(!center.isEnvelopeUsed())
+	    {
+		CreateMap(x, y);
+	    }
+	    else 
+	    {
+		CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
+	    }
 //	    System.out.println("New x = " + MapPanel.lon2position(centerLon,Zoom) + " New Y = " + MapPanel.lat2position(centerLat, Zoom) + " ");
-	    CreateMap(MapPanel.lon2position(lon,Zoom) ,MapPanel.lat2position(lat, Zoom));
+//	    CreateMap(MapPanel.lon2position(lon,Zoom) ,MapPanel.lat2position(lat, Zoom));
 	    updateObjectZoom();
 	}
-	System.out.println("Zoom In =  " + Zoom);
+//	System.out.println("Zoom In =  " + Zoom);
     }
 
     /**
@@ -190,19 +211,36 @@ public class Handler
 	    
 	    double lat = MapPanel.position2lat((int)(center.getY() + point.y - center.getHeight()/2), Zoom);
 	    double lon = MapPanel.position2lon((int)(center.getX() + point.x - center.getWidth()/2), Zoom);
+
+	    double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
+	    double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
 	    Zoom--;
 	    clearMapTile();
-	    CreateMap(MapPanel.lon2position(lon, Zoom), MapPanel.lat2position(lat, Zoom));
+	    int x = MapPanel.lon2position(lon, Zoom);
+	    int y = MapPanel.lat2position(lat, Zoom);
+	    if(center.getEnvelope().getBound().intersects(new Rectangle(x,y,1,1)))
+	    {
+		CreateMap(x, y);
+	    }
+	    else if(!center.isEnvelopeUsed())
+	    {
+		CreateMap(x, y);
+	    }
+	    else 
+	    {
+		CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
+	    }
+	    
 	    updateObjectZoom();
 	}
 	
-	System.out.println("Zoom Out =  " + Zoom);
+//	System.out.println("Zoom Out =  " + Zoom);
     }
     
     /**
      * Clear out all the tiles
      */
-    private void clearMapTile()
+    protected void clearMapTile()
     {
 	try
 	{
@@ -250,8 +288,39 @@ public class Handler
     public void setTileServerURL(String tileServerURL)
     {
         TileServerURL = tileServerURL;
+        updateTileUrl();
     }
     
+    
+    public int getMaxZoom()
+    {
+        return MaxZoom;
+    }
+
+    public void setMaxZoom(int maxZoom)
+    {
+        MaxZoom = maxZoom;
+    }
+
+    public int getMinZoom()
+    {
+        return MinZoom;
+    }
+
+    public void setMinZoom(int minZoom)
+    {
+        MinZoom = minZoom;
+    }
+
+    public void setUseEnvelope(boolean useEnvelope)
+    {
+	center.setEnvelopeUsed(useEnvelope);
+    }
+    
+    public boolean getUseEnvelope()
+    {
+	return center.isEnvelopeUsed();
+    }
     
     public void updateObjectZoom()
     {
@@ -261,11 +330,24 @@ public class Handler
 	}
     }
     
+    public void updateTileUrl()
+    {
+	for(MapObject object : objects)
+	{
+	    if(object.getId() == ObjectID.Tile)
+	    {
+		MapTile tile = (MapTile)object;
+		tile.setTileServerURL(TileServerURL);
+		tile.setDirty(true);
+	    }
+	}
+    }
+    
     
     /**
      * Removes any lingering tiles
      */
-    private void removeLingeringTiles()
+    protected void removeLingeringTiles()
     {
 	for(MapObject object : objects)
 	{
@@ -295,8 +377,29 @@ public class Handler
 
     public void setZoom(int zoom)
     {
-        Zoom = zoom;
-        updateObjectZoom();
+	 double lat = MapPanel.position2lat((int)(center.getY()), Zoom);
+	 double lon = MapPanel.position2lon((int)(center.getX()), Zoom);
+
+	 double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
+	 double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
+	 clearMapTile();
+	 int x = MapPanel.lon2position(lon, zoom);
+	 int y = MapPanel.lat2position(lat, zoom);
+	 if(center.getEnvelope().getBound().intersects(new Rectangle(x,y,1,1)))
+	 {
+	     CreateMap(x, y);
+	 }
+	 else if(!center.isEnvelopeUsed())
+	 {
+	     CreateMap(x, y);
+	 }
+	 else 
+	 {
+	     CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
+	 }
+	 
+	 this.Zoom = zoom;
+	 updateObjectZoom();
     }
     
     public void ClearScreen(Graphics g)
@@ -304,5 +407,80 @@ public class Handler
 	g.clearRect((int) -(Math.pow(2,  Zoom + 1 * 2) * TileSize)/2, (int)-(Math.pow(2, Zoom + 1 * 2) * TileSize)/2, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize);
 //	g.get
     }
+    
+    public void addPoint(MapPoint point)
+    {
+	
+	objects.add(point);
+	points.add(point);
+    }
+    
+    public void clearPoints()
+    {
+	if (points != null && !points.isEmpty())
+	{
+	    for (MapObject object : points)
+	    {
+		for(MouseListener l :object.getMouseListeners())
+		    object.removeMouseListener(l);
+		
+		objects.remove(object);
+	    }
+	    points.clear();
+	}
+    }
+    
+    public void addShape(MapShape shape)
+    {
+	objects.add(shape);
+	shapes.add(shape);
+    }
+    
+    public void clearShapes()
+    {
+	if (shapes != null && !shapes.isEmpty())
+	{
+	    for (MapObject object : shapes)
+	    {
+		for(MouseListener l :object.getMouseListeners())
+		    object.removeMouseListener(l);
+		objects.remove(object);
+	    }
+	    shapes.clear();
+	}
+    }
+
+    public MapCenter getCenter()
+    {
+        return center;
+    }
+
+    public void setCenter(MapCenter center)
+    {
+        this.center = center;
+    }
+
+    public LinkedHashSet<MapObject> collisionCheckAt(int x, int y)
+    {
+	LinkedHashSet<MapObject> collidedObjects = new LinkedHashSet<MapObject>();
+	for(MapObject object: objects)
+	{
+	    if(object.getBound().contains(center.getX() - center.getWidth()/2 + x, center.getY() - center.getHeight()/2 + y) && !isIdBlackListed(object))
+	    {
+		collidedObjects.add(object);
+	    }
+	}
+	
+	return collidedObjects;
+    }
+
+    private boolean isIdBlackListed(MapObject object)
+    {
+	if(idBlackList.contains(object.getId()))
+	    return true;
+	else
+	    return false;
+    }
+    
     
 }
