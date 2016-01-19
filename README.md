@@ -1,5 +1,5 @@
 ---
-<h1><a href = "http://megamanjoker.github.io/MapPanelBean/">Map Panel Bean<a></h1>
+<h1><a href = "http://megamanjoker.github.io/MapPanelBean">Map Panel Bean<a></h1>
 <h1>It is here.</h1>
 ---
 
