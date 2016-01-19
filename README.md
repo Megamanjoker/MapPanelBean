@@ -2,8 +2,6 @@
 <h1><a href = "http://megamanjoker.github.io/MapPanelBean">Map Panel Bean<a></h1>
 <h1>It is here.</h1>
 ---
-
-
 <h2>The main goals of this Map Panel Bean:</h2>
 
 1. <b> Be easy to integrate in to any java application </b>
@@ -27,12 +25,12 @@ public class someClass
     {
         JFrame frame = new JFrame(title);
         frame.add(map);
-	    frame.pack();
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.setResizable(true);
+	frame.pack();
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setResizable(true);
     	frame.setLocationRelativeTo(null);
-	    frame.setVisible(true);
-	    map.start();
+	frame.setVisible(true);
+	map.start();
     }
 }
 
@@ -103,15 +101,15 @@ public void initShape()
     <dt><h2>Screen Shots</h2></dt>  
     
     <dt><h3>this is the Map Panel</h3></dt>
-    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShot.png" alt="Map Panel Screen Shot with no shapes or points" height="250" width="400"></dd>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShot.png?raw=true" alt="Map Panel Screen Shot with no shapes or points" height="250" width="400"></dd>
     
     <dt><h3>You can add points!</h3></dt>
-    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPoint.png" alt="Map Panel Screen Shot with a point" height="250" width="400"></dd>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPoint.png?raw=true" alt="Map Panel Screen Shot with a point" height="250" width="400"></dd>
     
     <dt><h3>You can add shapes!</h3></dt>
-    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithAShape.png" alt="Map Panel Screen Shot with a shape" height="250" width="400"></dd>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithAShape.png?raw=true" alt="Map Panel Screen Shot with a shape" height="250" width="400"></dd>
     
     <dt><h3>You want both, go right a head!</h3></dt>
-    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPointAndShape.png" alt="Map Panel Screen Shot with a shape and point" height="250" width="400"></dd>
+    <dd><img src="https://github.com/Megamanjoker/MapPanelBean/blob/master/Pictures%20of%20the%20MapPanel/MapPanelScreenShotWithPointAndShape.png?raw=true" alt="Map Panel Screen Shot with a shape and point" height="250" width="400"></dd>
 
 </dl>
