@@ -20,6 +20,14 @@ import mappanel.objects.MapPoint;
 import mappanel.objects.MapShape;
 import mappanel.objects.MapTile;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Window
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class Handler 
 {
     private static final int TileSize = 256;

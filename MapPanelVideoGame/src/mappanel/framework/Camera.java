@@ -1,8 +1,16 @@
-package mappanel.objects;
+package mappanel.framework;
 
-import mappanel.framework.MapObject;
+import mappanel.objects.MapCenter;
 import mappanel.window.MapPanel;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Framework
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class Camera
 {
     private double x,y;

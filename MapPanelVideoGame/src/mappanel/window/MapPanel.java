@@ -12,14 +12,22 @@ import java.util.ConcurrentModificationException;
 import java.util.LinkedHashSet;
 
 import mappanel.Listeners.MouseInput;
-import mappanel.framework.Envelope;
+import mappanel.framework.Camera;
 import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
-import mappanel.objects.Camera;
+import mappanel.objects.MapEnvelope;
 import mappanel.objects.MapCenter;
 import mappanel.objects.MapPoint;
 import mappanel.objects.MapShape;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Window
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class MapPanel extends Canvas implements Runnable
 {
     private static final long serialVersionUID = 5968719154189097854L;
@@ -51,7 +59,7 @@ public class MapPanel extends Canvas implements Runnable
     private double startLon = -96.728477d;
     private boolean draw;
     private boolean useEnvelope;
-    private Envelope envelope;
+    private MapEnvelope envelope;
     
     public MapPanel()
     {
@@ -553,10 +561,10 @@ public class MapPanel extends Canvas implements Runnable
 	    this.endLon = endLon;
 	    this.endLat = endLat;
 	}
-	this.envelope = new Envelope(ObjectID.Envelope, startLon, startLat, endLon, endLat, this.zoom);
+	this.envelope = new MapEnvelope(ObjectID.Envelope, startLon, startLat, endLon, endLat, this.zoom);
     }
     
-    public Envelope getEnvelope()
+    public MapEnvelope getEnvelope()
     {
 	if(center != null)
 	    return this.center.getEnvelope();

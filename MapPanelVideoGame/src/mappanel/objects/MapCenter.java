@@ -7,10 +7,17 @@ import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import mappanel.framework.Envelope;
 import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Framework
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class MapCenter extends MapObject
 {
     /**
@@ -19,13 +26,13 @@ public class MapCenter extends MapObject
     private static final long serialVersionUID = 7003532228198805203L;
     double Width=1,Height=1;
     private boolean DEBUG = false;
-    private Envelope envelope;
+    private MapEnvelope envelope;
     private boolean useEnvelope = true;
     
     public MapCenter(double x, double y, ObjectID id)
     {
 	super(x, y, id);
-	this.envelope = new Envelope(ObjectID.Envelope,  -96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
+	this.envelope = new MapEnvelope(ObjectID.Envelope,  -96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
     }
 
     @Override
@@ -133,14 +140,14 @@ public class MapCenter extends MapObject
         Height = height;
     }
 
-    public Envelope getEnvelope()
+    public MapEnvelope getEnvelope()
     {
         return envelope;
     }
 
     public void setEnvelope(Double startLon,Double startLat,Double endLon,Double endLat)
     {
-        this.envelope = new Envelope(ObjectID.Envelope, startLon, startLat, endLon, endLat, this.Zoom);
+        this.envelope = new MapEnvelope(ObjectID.Envelope, startLon, startLat, endLon, endLat, this.Zoom);
     }
 
     public boolean isEnvelopeUsed()

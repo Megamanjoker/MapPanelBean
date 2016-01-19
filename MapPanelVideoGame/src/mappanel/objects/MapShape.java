@@ -15,6 +15,14 @@ import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 import mappanel.window.MapPanel;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Object
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class MapShape extends MapObject
 {
 

@@ -14,6 +14,15 @@ import mappanel.objects.MapShape;
 import mappanel.window.Handler;
 import mappanel.window.MapPanel;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Listener
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
+
 public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener
 {
     private Point downCoords;

@@ -8,6 +8,14 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Framework
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public abstract class MapObject extends JComponent
 {
     /**

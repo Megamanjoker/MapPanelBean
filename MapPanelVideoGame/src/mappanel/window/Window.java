@@ -4,6 +4,14 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Window
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class Window 
 {
 

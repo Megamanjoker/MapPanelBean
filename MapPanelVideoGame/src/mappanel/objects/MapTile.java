@@ -19,6 +19,14 @@ import javax.imageio.ImageIO;
 import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 
+/**
+ * 
+ * @author Tyler Valant
+ * @category Object
+ * @since 1-19-2016
+ * @version 1.0.0
+ *
+ */
 public class MapTile extends MapObject implements ImageObserver, Runnable
 {
     /**
