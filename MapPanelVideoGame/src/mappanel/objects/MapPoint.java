@@ -30,43 +30,43 @@ public class MapPoint extends MapObject implements ImageObserver
     
     public MapPoint(double x, double y, ObjectID id)
     {
-	this( x,  y,  id,  0,  0,  0,  null,  null,  null);
+	super( x,  y,  id);
     }
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon)
+    public MapPoint(ObjectID id, double lat, double lon)
     {
-	this( x,  y,  id,  lat,  lon,  0,  null,  null,  null);
+	this(id,  lat,  lon,  0,  null,  null,  null);
 	
     }
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon, int Zoom)
+    public MapPoint(ObjectID id, double lat, double lon, int Zoom)
     {
-	this( x,  y,  id,  lat,  lon,  Zoom,  null,  null,  null);
+	this( id,  lat,  lon,  Zoom,  null,  null,  null);
     }
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon, Image image)
+    public MapPoint(ObjectID id, double lat, double lon, Image image)
     {
-	this( x,  y,  id,  lat,  lon,  0,  image,  null,  null);
+	this(id,  lat,  lon,  0,  image,  null,  null);
     }  
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon, int Zoom, Image image)
+    public MapPoint(ObjectID id, double lat, double lon, int Zoom, Image image)
     {
-	this( x,  y,  id,  lat,  lon,  Zoom,  image,  null,  null);
+	this( id,  lat,  lon,  Zoom,  image,  null,  null);
     }
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon, int Zoom, Image image, String Name)
+    public MapPoint(ObjectID id, double lat, double lon, int Zoom, Image image, String Name)
     {
-	this( x,  y,  id,  lat,  lon,  Zoom,  image,  null,  Name);
+	this( id,  lat,  lon,  Zoom,  image,  null,  Name);
     }
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon, int Zoom, Image image, MouseListener mouseListener)
+    public MapPoint( ObjectID id, double lat, double lon, int Zoom, Image image, MouseListener mouseListener)
     {
-	this( x,  y,  id,  lat,  lon,  Zoom,  image,  mouseListener,  null);
+	this( id,  lat,  lon,  Zoom,  image,  mouseListener,  null);
     }
     
-    public MapPoint(double x, double y, ObjectID id, double lat, double lon, int Zoom, Image image, MouseListener mouseListener, String Name)
+    public MapPoint(ObjectID id, double lat, double lon, int Zoom, Image image, MouseListener mouseListener, String Name)
     {
-	super(x, y, id);
+	super(0, 0, id);
 	if(image == null)
 	{
 	    try

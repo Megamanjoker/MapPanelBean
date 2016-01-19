@@ -118,21 +118,21 @@ public class MapPanel extends Canvas implements Runnable
     public void initializeObjects()
     {
 	
-//	testLon.add(10d);
-//	testLat.add(10d);
-//	testLon.add(-10d);
-//	testLat.add(10d);
-//	testLon.add(-10d);
-//	testLat.add(-10d);
-//	testLon.add(10d);
-//	testLat.add(-10d);
-//	addShape(new MapShape(0,0,ObjectID.Shape,testLon,testLat,Color.BLACK)); //,Color.BLACK));
+	testLon.add(10d);
+	testLat.add(10d);
+	testLon.add(-10d);
+	testLat.add(10d);
+	testLon.add(-10d);
+	testLat.add(-10d);
+	testLon.add(10d);
+	testLat.add(-10d);
+	addShape(new MapShape(ObjectID.Shape,testLon,testLat,Color.BLACK)); //,Color.BLACK));
 	handler.CreateMap(lon2position(initLon,initZoom),lat2position(initLat,initZoom));
 	center.setEnvelopeUsed(false);
 //	center.setZoom(initZoom);
 	handler.addMapObject(center);
 	
-//	handler.addPoint(new MapPoint(0,0,ObjectID.Point,32.966199,-96.726889,initZoom));
+//	handler.addPoint(new MapPoint(ObjectID.Point,32.966199,-96.726889,initZoom));
 	handler.setZoom(initZoom);
 //	handler.CreateMap();
     }
