@@ -11,7 +11,7 @@
 3. <b> Be Well Commented and Documentated</b>
 
 ---
-<h1>how to implement</h1>
+<h1>How do I implement this MapPanel?</h1>
 1. Download and import the zip file
 2. Do something like this
 
