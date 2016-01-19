@@ -36,45 +36,40 @@ public class MapPoint extends MapObject implements ImageObserver
     private String Name;
     private boolean enter = false;
     
-    public MapPoint(double x, double y, ObjectID id)
+    public MapPoint(double lat, double lon)
     {
-	super( x,  y,  id);
-    }
-    
-    public MapPoint(ObjectID id, double lat, double lon)
-    {
-	this(id,  lat,  lon,  0,  null,  null,  null);
+	this(lat,  lon,  0,  null,  null,  null);
 	
     }
     
-    public MapPoint(ObjectID id, double lat, double lon, int Zoom)
+    public MapPoint(double lat, double lon, int Zoom)
     {
-	this( id,  lat,  lon,  Zoom,  null,  null,  null);
+	this(lat,  lon,  Zoom,  null,  null,  null);
     }
     
-    public MapPoint(ObjectID id, double lat, double lon, Image image)
+    public MapPoint(double lat, double lon, Image image)
     {
-	this(id,  lat,  lon,  0,  image,  null,  null);
+	this(lat,  lon,  0,  image,  null,  null);
     }  
     
-    public MapPoint(ObjectID id, double lat, double lon, int Zoom, Image image)
+    public MapPoint(double lat, double lon, int Zoom, Image image)
     {
-	this( id,  lat,  lon,  Zoom,  image,  null,  null);
+	this(lat,  lon,  Zoom,  image,  null,  null);
     }
     
-    public MapPoint(ObjectID id, double lat, double lon, int Zoom, Image image, String Name)
+    public MapPoint(double lat, double lon, int Zoom, Image image, String Name)
     {
-	this( id,  lat,  lon,  Zoom,  image,  null,  Name);
+	this(lat,  lon,  Zoom,  image,  null,  Name);
     }
     
-    public MapPoint( ObjectID id, double lat, double lon, int Zoom, Image image, MouseListener mouseListener)
+    public MapPoint(double lat, double lon, int Zoom, Image image, MouseListener mouseListener)
     {
-	this( id,  lat,  lon,  Zoom,  image,  mouseListener,  null);
+	this(lat,  lon,  Zoom,  image,  mouseListener,  null);
     }
     
-    public MapPoint(ObjectID id, double lat, double lon, int Zoom, Image image, MouseListener mouseListener, String Name)
+    public MapPoint(double lat, double lon, int Zoom, Image image, MouseListener mouseListener, String Name)
     {
-	super(0, 0, id);
+	super(0, 0, ObjectID.Point);
 	if(image == null)
 	{
 	    try

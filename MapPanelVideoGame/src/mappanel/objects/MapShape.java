@@ -42,55 +42,67 @@ public class MapShape extends MapObject
     private GeneralPath bounds = new GeneralPath();
     private boolean enter = false;
 
-    public MapShape(double x, double y, ObjectID id)
+    public MapShape(double x, double y)
     {
-	super(x, y, id);
+	super(x, y, ObjectID.Shape);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats)
     {
-	this(id,lons,lats,null,null,null);
+	this(lons,lats,null,null,null);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats, Color shapeStrokeColor)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, Color shapeStrokeColor)
     {
-	this(id,lons,lats,null,shapeStrokeColor,null);
+	this(lons,lats,null,shapeStrokeColor,null);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, Color shapeStrokeColor, int zoom)
     {
-	this(id,lons,lats,name,shapeStrokeColor,null);
+	this(lons, lats, null , shapeStrokeColor, null, zoom, null, null);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats, Color shapeStrokeColor,Color shapeFillColor)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor)
     {
-	this(id,lons,lats,null,shapeStrokeColor,shapeFillColor);
+	this(lons,lats,name,shapeStrokeColor,null);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, Color shapeStrokeColor,Color shapeFillColor)
     {
-	this(id,lons,lats,name,shapeStrokeColor,shapeFillColor,null);
+	this(lons,lats,null,shapeStrokeColor,shapeFillColor);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, BasicStroke strokeThickness)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor)
     {
-	this(id, lons, lats, name , shapeStrokeColor, shapeFillColor, strokeThickness,false);
+	this(lons,lats,name,shapeStrokeColor,shapeFillColor,null);
     }
     
-    public MapShape(ObjectID id, ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, BasicStroke strokeThickness, Boolean Line)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, BasicStroke strokeThickness)
     {
-	super(0, 0, id);
+	this(lons, lats, name , shapeStrokeColor, shapeFillColor, strokeThickness,false);
+    }
+    
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, BasicStroke strokeThickness, Boolean Line)
+    {
+	this(lons, lats, name , shapeStrokeColor, shapeFillColor, null, strokeThickness, Line);
+    }
+    
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean Line)
+    {
+	super(0, 0, ObjectID.Shape);
 	this.ListOfLon = lons;
 	this.ListOfLat = lats;
 	this.name = name;
-	this.line = Line;
 	
+	if(Line != null)
+	    this.line = Line;
 	if(shapeStrokeColor != null)
 	    this.shapeStrokeColor = shapeStrokeColor;
 	if(shapeFillColor != null)
 	    this.shapeFillColor = shapeFillColor;
 	if(strokeThickness != null)
     		this.strokeThickness = strokeThickness;
+	
     }
 
     

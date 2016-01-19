@@ -68,11 +68,6 @@ public class MapPanel extends Canvas implements Runnable
     
     private void initialize()
     {
-//	this.disableEvents(MouseEvent.MOUSE_ENTERED);
-//	this.disableEvents(MouseEvent.MOUSE_EXITED);
-	
-	WIDTH = getWidth();
-	HEIGHT = getHeight();
 	handler = new Handler();
 	center = new MapCenter(lon2position(initLon,initZoom),lat2position(initLat,initZoom), ObjectID.Center);
 	handler.setCenter(center);
@@ -134,15 +129,12 @@ public class MapPanel extends Canvas implements Runnable
 	testLat.add(-10d);
 	testLon.add(10d);
 	testLat.add(-10d);
-	addShape(new MapShape(ObjectID.Shape,testLon,testLat,Color.BLACK)); //,Color.BLACK));
+	addShape(new MapShape(testLon,testLat,Color.BLACK,initZoom)); //,Color.BLACK));
+	addPoint(new MapPoint(endLat,endLon,initZoom));
 	handler.CreateMap(lon2position(initLon,initZoom),lat2position(initLat,initZoom));
 	center.setEnvelopeUsed(false);
-//	center.setZoom(initZoom);
 	handler.addMapObject(center);
 	
-//	handler.addPoint(new MapPoint(ObjectID.Point,32.966199,-96.726889,initZoom));
-	handler.setZoom(initZoom);
-//	handler.CreateMap();
     }
     
     public synchronized void start()
@@ -237,9 +229,9 @@ public class MapPanel extends Canvas implements Runnable
 	try
 	{
 	    handler.render(g);
-	    handler.renderShapes(g);
-	    handler.renderPoints(g);
-	    handler.renderCenter(g);
+//	    handler.renderShapes(g);
+//	    handler.renderPoints(g);
+//	    handler.renderCenter(g);
 	}
 	catch (Exception e)
 	{

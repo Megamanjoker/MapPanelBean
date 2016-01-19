@@ -25,7 +25,7 @@ public class MapCenter extends MapObject
      */
     private static final long serialVersionUID = 7003532228198805203L;
     double Width=1,Height=1;
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
     private MapEnvelope envelope;
     private boolean useEnvelope = true;
     

@@ -89,6 +89,9 @@ public class Handler
 		if(object.getId() != ObjectID.Center && object.getId() != ObjectID.Point && object.getId() != ObjectID.Shape)
 		    object.render(g);
 	    }
+	    renderShapes(g);
+	    renderPoints(g);
+	    renderCenter(g);
 	}
 	catch (ConcurrentModificationException e)
 	{
