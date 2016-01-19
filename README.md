@@ -69,7 +69,7 @@ public void initShape()
     Lats.add(-10d);
     Lons.add(10d);
     Lats.add(-10d);
-    addShape(new MapShape(ObjectID.Shape,Lons,Lats,Color.BLACK));
+    map.addShape(new MapShape(ObjectID.Shape,Lons,Lats,Color.BLACK));
 }
 ```
 
@@ -90,10 +90,10 @@ public void initShape()
     </dd>
     
     <dt><h3>MapPoint</h3></dt>
-    <dd></dd>
+    <dd>The Base for all the points</dd>
     
     <dt><h3>MapShape</h3></dt>
-    <dd></dd>
+    <dd>The Base for all the shapes</dd>
 
 </dl>
 
