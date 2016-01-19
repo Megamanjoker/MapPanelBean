@@ -68,12 +68,12 @@
     {
         <span class="pl-smi">JFrame</span> frame <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">JFrame</span>(title);
         frame<span class="pl-k">.</span>add(map);
-        frame<span class="pl-k">.</span>pack();
-        frame<span class="pl-k">.</span>setDefaultCloseOperation(<span class="pl-smi">JFrame</span><span class="pl-c1"><span class="pl-k">.</span>EXIT_ON_CLOSE</span>);
-        frame<span class="pl-k">.</span>setResizable(<span class="pl-c1">true</span>);
+    frame<span class="pl-k">.</span>pack();
+    frame<span class="pl-k">.</span>setDefaultCloseOperation(<span class="pl-smi">JFrame</span><span class="pl-c1"><span class="pl-k">.</span>EXIT_ON_CLOSE</span>);
+    frame<span class="pl-k">.</span>setResizable(<span class="pl-c1">true</span>);
         frame<span class="pl-k">.</span>setLocationRelativeTo(<span class="pl-c1">null</span>);
-        frame<span class="pl-k">.</span>setVisible(<span class="pl-c1">true</span>);
-        map<span class="pl-k">.</span>start();
+    frame<span class="pl-k">.</span>setVisible(<span class="pl-c1">true</span>);
+    map<span class="pl-k">.</span>start();
     }
 }
 </pre></div>
@@ -116,7 +116,7 @@
     <span class="pl-smi">Lats</span><span class="pl-k">.</span>add(<span class="pl-k">-</span><span class="pl-c1">10d</span>);
     <span class="pl-smi">Lons</span><span class="pl-k">.</span>add(<span class="pl-c1">10d</span>);
     <span class="pl-smi">Lats</span><span class="pl-k">.</span>add(<span class="pl-k">-</span><span class="pl-c1">10d</span>);
-    addShape(<span class="pl-k">new</span> <span class="pl-smi">MapShape</span>(<span class="pl-smi">ObjectID</span><span class="pl-k">.</span><span class="pl-smi">Shape</span>,<span class="pl-smi">Lons</span>,<span class="pl-smi">Lats</span>,<span class="pl-smi">Color</span><span class="pl-c1"><span class="pl-k">.</span>BLACK</span>));
+    map<span class="pl-k">.</span>addShape(<span class="pl-k">new</span> <span class="pl-smi">MapShape</span>(<span class="pl-smi">ObjectID</span><span class="pl-k">.</span><span class="pl-smi">Shape</span>,<span class="pl-smi">Lons</span>,<span class="pl-smi">Lats</span>,<span class="pl-smi">Color</span><span class="pl-c1"><span class="pl-k">.</span>BLACK</span>));
 }</pre></div>
 
 <hr>
@@ -141,11 +141,11 @@
     
     <dt><h3>
 <a id="mappoint" class="anchor" href="#mappoint" aria-hidden="true"><span class="octicon octicon-link"></span></a>MapPoint</h3></dt>
-    <dd></dd>
+    <dd>The Base for all the points</dd>
     
     <dt><h3>
 <a id="mapshape" class="anchor" href="#mapshape" aria-hidden="true"><span class="octicon octicon-link"></span></a>MapShape</h3></dt>
-    <dd></dd>
+    <dd>The Base for all the shapes</dd>
 
 </dl>
 
