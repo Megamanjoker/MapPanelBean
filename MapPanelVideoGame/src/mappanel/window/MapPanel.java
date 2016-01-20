@@ -13,10 +13,10 @@ import java.util.LinkedHashSet;
 
 import mappanel.Listeners.MouseInput;
 import mappanel.framework.Camera;
+import mappanel.framework.Center;
+import mappanel.framework.Envelope;
 import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
-import mappanel.objects.MapEnvelope;
-import mappanel.objects.MapCenter;
 import mappanel.objects.MapPoint;
 import mappanel.objects.MapShape;
 
@@ -39,7 +39,6 @@ public class MapPanel extends Canvas implements Runnable
     private Thread thread;
     private int initZoom = 15;
     private double initLat = 32.966199,initLon = -96.726889;
-    private MapCenter center;
     private ArrayList<Double> testLon = new ArrayList<Double>();
     private ArrayList<Double> testLat = new ArrayList<Double>();
     private String tileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
@@ -50,7 +49,6 @@ public class MapPanel extends Canvas implements Runnable
     
     //Object Handler
     Handler handler;
-    Camera camera;
     private LinkedHashSet<MapPoint> listOfPoints = new LinkedHashSet<MapPoint>();
     private LinkedHashSet<MapShape> listOfShapes = new LinkedHashSet<MapShape>();
     private double endLat =  32.965182;
@@ -59,7 +57,7 @@ public class MapPanel extends Canvas implements Runnable
     private double startLon = -96.728477d;
     private boolean draw = false;
     private boolean useEnvelope = false;
-    private MapEnvelope envelope;
+    private Envelope envelope;
     
     public MapPanel()
     {
@@ -68,29 +66,25 @@ public class MapPanel extends Canvas implements Runnable
     
     private void initialize()
     {
-	handler = new Handler();
-	center = new MapCenter(lon2position(initLon,initZoom),lat2position(initLat,initZoom));
-	handler.setCenter(center);
-	camera = new Camera(lon2position(initLon,initZoom),lat2position(initLat,initZoom),this);
+	handler = new Handler(initLon,initLat,initZoom,this);
+	
 	this.setBackground(new Color(54,69,79));
 	this.setIgnoreRepaint(true);
-	initializeValues();
-	initializeObjects();
+	preinitializeHandler();
+	initializeMap();
 	initializeListeners();
 	
     }
     
-    private void initializeValues()
+    private void preinitializeHandler()
     {
 	handler.setMaxZoom(maxZoom);
 	handler.setMinZoom(minZoom);
-	handler.setZoom(initZoom);
+	handler.setEnvelope(startLon, startLat, endLon, endLat);
+	handler.setDrawingEnvelope(draw);
+	handler.setEnvelopeColor(envelopeColor);
+	handler.setEnvelopeUsed(useEnvelope);
 	
-	center.setZoom(initZoom);
-	center.setEnvelope(startLon, startLat, endLon, endLat);
-	center.setDrawingEnvelope(draw);
-	center.setEnvelopeColor(envelopeColor);
-	center.setEnvelopeUsed(useEnvelope);
 	
 	if(tileServerURL != null)
 	    handler.setTileServerURL(tileServerURL);
@@ -112,15 +106,14 @@ public class MapPanel extends Canvas implements Runnable
 
     private void initializeListeners()
     {
-	MouseInput mouse = new MouseInput(handler,center,this);
-	mouse.setCenter(center);
+	MouseInput mouse = new MouseInput(handler,this);
 	this.addMouseListener(mouse);
 	this.addMouseMotionListener(mouse);
 	this.addMouseWheelListener(mouse);
 	
     }
 
-    public void initializeObjects()
+    public void initializeMap()
     {
 	// Debug Test Data for a point and shape
 //	testLon.add(10d);
@@ -135,7 +128,6 @@ public class MapPanel extends Canvas implements Runnable
 //	addPoint(new MapPoint(endLat,endLon,initZoom));
 	// end of Debug
 	handler.CreateMap(lon2position(initLon,initZoom),lat2position(initLat,initZoom));
-	handler.addMapObject(center);
 	
     }
     
@@ -215,7 +207,7 @@ public class MapPanel extends Canvas implements Runnable
 	
 	/////////////////////////////////////////////
 	//Start Of Camera
-	g2d.translate(camera.getX(), camera.getY());
+	g2d.translate(handler.getCamera().getX(), handler.getCamera().getY());
 	handler.ClearScreen(g);
 	//Drawing the gameObjects
 	try
@@ -229,7 +221,7 @@ public class MapPanel extends Canvas implements Runnable
 	
 	
 	//End Of Camera
-	g2d.translate(-camera.getX(), -camera.getY());
+	g2d.translate(-handler.getCamera().getX(), -handler.getCamera().getY());
 	/////////////////////////////////////////////
 	g.dispose();
 	bs.show();
@@ -245,10 +237,9 @@ public class MapPanel extends Canvas implements Runnable
     {
 	try
 	{
-	    handler.tick();	    
-	    camera.tick(center);
-	    center.setWidth(this.getWidth());
-	    center.setHeight(this.getHeight());
+	    handler.tick();
+	    handler.getCenter().setWidth(this.getWidth());
+	    handler.getCenter().setHeight(this.getHeight());
 	}
 	catch (Exception e)
 	{
@@ -442,17 +433,17 @@ public class MapPanel extends Canvas implements Runnable
     
     public boolean isEnvelopeUsed()
     {
-	if(center != null)
-	    return center.isEnvelopeUsed();
+	if(handler.getCenter() != null)
+	    return handler.getCenter().isEnvelopeUsed();
 	else
 	    return useEnvelope;
     }
 
     public void setEnvelopeUsed(boolean useEnvelope)
     {
-	if(center != null)
+	if(handler.getCenter() != null)
 	{    
-	    this.center.setEnvelopeUsed(useEnvelope);
+	    this.handler.getCenter().setEnvelopeUsed(useEnvelope);
 	    this.useEnvelope = useEnvelope;
 	}
 	else
@@ -461,18 +452,18 @@ public class MapPanel extends Canvas implements Runnable
     
     public boolean isDrawingEnvolpe()
     {
-	if(center != null)
-	    return center.getEnvelope().isDraw();
+	if(handler.getCenter() != null)
+	    return handler.getCenter().getEnvelope().isDraw();
 	else
 	    return draw;
     }
 
     public void setDrawingEnvolpe(boolean draw)
     {
-	if(center != null)
+	if(handler.getCenter() != null)
 	{
 	    this.draw = draw;
-	    this.center.getEnvelope().setDraw(draw);
+	    this.handler.getCenter().getEnvelope().setDraw(draw);
 	}
 	else
 	    this.draw = draw;
@@ -480,17 +471,17 @@ public class MapPanel extends Canvas implements Runnable
 
     public Color getEnvelopeColor()
     {
-	if(center != null)
-	    return this.center.getEnvelope().getColor();
+	if(handler.getCenter() != null)
+	    return this.handler.getCenter().getEnvelope().getColor();
 	else
 	    return envelopeColor;
     }
 
     public void setEnvelopeColor(Color color)
     {
-	if(center != null)
+	if(handler.getCenter() != null)
 	{
-	    this.center.getEnvelope().setColor(color);
+	    this.handler.getCenter().getEnvelope().setColor(color);
 	    this.envelopeColor = color;
 	}
 	else
@@ -499,9 +490,9 @@ public class MapPanel extends Canvas implements Runnable
     
     public void setEnvelope(Double startLon, Double startLat, Double endLon, Double endLat)
     {
-	if(center != null)
+	if(handler.getCenter() != null)
 	{
-	    this.center.setEnvelope(startLon, startLat, endLon, endLat);
+	    this.handler.getCenter().setEnvelope(startLon, startLat, endLon, endLat);
 	}
 	else
 	{
@@ -510,13 +501,13 @@ public class MapPanel extends Canvas implements Runnable
 	    this.endLon = endLon;
 	    this.endLat = endLat;
 	}
-	this.envelope = new MapEnvelope(startLon, startLat, endLon, endLat, this.zoom);
+	this.envelope = new Envelope(startLon, startLat, endLon, endLat, this.zoom);
     }
     
-    public MapEnvelope getEnvelope()
+    public Envelope getEnvelope()
     {
-	if(center != null)
-	    return this.center.getEnvelope();
+	if(handler.getCenter() != null)
+	    return this.handler.getCenter().getEnvelope();
 	else
 	    return this.envelope;
     }
@@ -526,9 +517,9 @@ public class MapPanel extends Canvas implements Runnable
         return handler;
     }
 
-    public MapCenter getCenter()
+    public Center getCenter()
     {
-        return center;
+        return handler.getCenter();
     }
 
     public LinkedHashSet<MapObject> collisionCheckAt(int x, int y)

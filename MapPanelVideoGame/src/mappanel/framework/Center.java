@@ -1,4 +1,4 @@
-package mappanel.objects;
+package mappanel.framework;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,8 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import mappanel.framework.MapObject;
-import mappanel.framework.ObjectID;
+import mappanel.window.MapPanel;
 
 /**
  * 
@@ -19,21 +18,22 @@ import mappanel.framework.ObjectID;
  * @version 1.0.0
  *
  */
-public class MapCenter extends MapObject
+public class Center extends MapObject
 {
     /**
      * 
      */
     private static final long serialVersionUID = 7003532228198805203L;
     double Width=1,Height=1;
+    double lon,lat;
     private boolean DEBUG = true;
-    private MapEnvelope envelope;
-    private boolean useEnvelope = true;
+    private Envelope envelope;
+    private boolean useEnvelope = false;
     
-    public MapCenter(double x, double y)
+    public Center(double x, double y)
     {
 	super(x, y, ObjectID.Center);
-	this.envelope = new MapEnvelope(-96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
+	this.envelope = new Envelope(-96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
     }
 
     
@@ -57,11 +57,11 @@ public class MapCenter extends MapObject
 	if(DEBUG)
 	{
 	    Graphics2D g2d = (Graphics2D) g;
-	    g.setColor(Color.ORANGE);
-	    g.fillRect((int)x - 4, (int)y - 4, 8, 8);
-	    g.setColor(Color.RED);
+	    g2d.setColor(Color.ORANGE);
+	    g2d.fillRect((int)x - 4, (int)y - 4, 8, 8);
+	    g2d.setColor(Color.RED);
 	    g2d.draw(getPriority());
-	    g.setColor(Color.BLUE);
+	    g2d.setColor(Color.BLUE);
 	    g2d.draw(getDeletePriority());
 	}
 	envelope.render(g);
@@ -125,14 +125,14 @@ public class MapCenter extends MapObject
         Height = height;
     }
 
-    public MapEnvelope getEnvelope()
+    public Envelope getEnvelope()
     {
         return envelope;
     }
 
     public void setEnvelope(Double startLon,Double startLat,Double endLon,Double endLat)
     {
-        this.envelope = new MapEnvelope(startLon, startLat, endLon, endLat, this.Zoom);
+        this.envelope = new Envelope(startLon, startLat, endLon, endLat, this.Zoom);
     }
 
     public boolean isEnvelopeUsed()
@@ -147,7 +147,11 @@ public class MapCenter extends MapObject
     
     public void setZoom(int Zoom)
     {
+//	this.lon = MapPanel.position2lon((int) this.x, this.Zoom);
+//	this.lat = MapPanel.position2lat((int) this.y, this.Zoom);
 	this.Zoom = Zoom;
+//	this.x = MapPanel.lon2position(this.lon, this.Zoom);
+//	this.y = MapPanel.lat2position(this.y, this.Zoom);
 	this.envelope.setZoom(Zoom);
     }
     

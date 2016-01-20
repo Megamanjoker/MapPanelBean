@@ -1,5 +1,6 @@
 package mappanel.window;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -14,9 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import mappanel.framework.Camera;
+import mappanel.framework.Center;
 import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
-import mappanel.objects.MapCenter;
 import mappanel.objects.MapPoint;
 import mappanel.objects.MapShape;
 import mappanel.objects.MapTile;
@@ -36,10 +38,20 @@ public class Handler
     public LinkedHashSet<MapObject> points = new LinkedHashSet<MapObject>();
     public LinkedHashSet<MapObject> shapes = new LinkedHashSet<MapObject>();
     private String TileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
-    private MapCenter center;
+    private Center center;
     private int numberOfTiles = 1;
     private int MaxZoom = 19,MinZoom = 0, Zoom = 0;
     private LinkedHashSet<ObjectID> idBlackList = new LinkedHashSet<ObjectID>(Arrays.asList(ObjectID.Center,ObjectID.Tile,ObjectID.Envelope));
+    private Camera camera;
+    
+    
+    public Handler(double initLon, double initLat, int initZoom, MapPanel mapPanel)
+    {
+	this.Zoom = initZoom;
+	center = new Center(MapPanel.lon2position(initLon,initZoom),MapPanel.lat2position(initLat,initZoom));
+	camera = new Camera(MapPanel.lon2position(initLon,initZoom), MapPanel.lat2position(initLat,initZoom),mapPanel);
+//	updateObjectZoom();
+    }
     
     public void tick()
     {
@@ -48,11 +60,7 @@ public class Handler
 	    for(MapObject object : objects)
 	    {
 		object.tick(objects);
-		if(center == null && object.getId() == ObjectID.Center)
-		{
-		    center = (MapCenter) object;
-		}
-		else if( object.getId() == ObjectID.Tile)
+		if( object.getId() == ObjectID.Tile)
 		{
 		    numberOfTiles++;
 		}
@@ -69,6 +77,10 @@ public class Handler
 		    }
 	    }
 	    numberOfTiles = 0;
+	    
+	    center.tick(objects);
+	    camera.tick(center);
+	    
 	    removeLingeringTiles();
 	}
 	catch (ConcurrentModificationException e)
@@ -87,7 +99,7 @@ public class Handler
 	{
 	    for(MapObject object : objects)
 	    {
-		if(object.getId() != ObjectID.Center && object.getId() != ObjectID.Point && object.getId() != ObjectID.Shape)
+		if(object.getId() == ObjectID.Tile)
 		    object.render(g);
 	    }
 	    renderShapes(g);
@@ -142,7 +154,7 @@ public class Handler
     public void CreateMap()
     {
 	if(center != null)
-	    addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,ObjectID.Tile,TileServerURL));
+	    addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,TileServerURL));
     }
     
     /**
@@ -150,7 +162,7 @@ public class Handler
      */
     public void CreateMap(int x,int y)
     {
-	MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,ObjectID.Tile,TileServerURL,Zoom);
+	MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,TileServerURL, this.center,Zoom);
 	StartingTile.setLast(true);
 	addMapObject(StartingTile);
 	if(center != null)
@@ -168,7 +180,7 @@ public class Handler
     public void CreateMap(Point point)
     {
 	clearMapTile();
-	addMapObject(new MapTile(point.getX(),point.getY(),ObjectID.Tile,TileServerURL));
+	addMapObject(new MapTile(point.getX(),point.getY(),TileServerURL));
     }
 
     /**
@@ -324,6 +336,7 @@ public class Handler
     
     public void updateObjectZoom()
     {
+//	this.center.setZoom(Zoom);
 	for(MapObject object : objects)
 	{
 	    object.setZoom(Zoom);
@@ -356,6 +369,8 @@ public class Handler
 		MapTile tile = (MapTile) object;
 		if(!center.getDeletePriority().intersects(tile.getBound()) && !tile.isLast())
 		{
+
+		    System.out.println("x = " + tile.getX() + " y = " + tile.getY() );
 		    if(tile.getLoadImageThread().isAlive())
 		    {
 			tile.getLoadImageThread().interrupt();
@@ -398,6 +413,14 @@ public class Handler
 	}
 	 
 	 this.Zoom = zoom;
+	 this.center.setZoom(zoom);
+	 updateObjectZoom();
+    }
+    
+    public void setInitZoom(int zoom)
+    {
+
+	this.Zoom = zoom;
 	 updateObjectZoom();
     }
     
@@ -448,12 +471,12 @@ public class Handler
 	}
     }
 
-    public MapCenter getCenter()
+    public Center getCenter()
     {
         return center;
     }
 
-    public void setCenter(MapCenter center)
+    public void setCenter(Center center)
     {
         this.center = center;
     }
@@ -479,6 +502,32 @@ public class Handler
 	else
 	    return false;
     }
+
+    public void setEnvelope(double startLon, double startLat, double endLon, double endLat)
+    {
+	center.setEnvelope(startLon, startLat, endLon, endLat);
+    }
+
+    public void setDrawingEnvelope(boolean draw)
+    {
+	center.setDrawingEnvelope(draw);
+    }
+
+    public void setEnvelopeColor(Color envelopeColor)
+    {
+	center.setEnvelopeColor(envelopeColor);
+    }
+
+    public void setEnvelopeUsed(boolean useEnvelope)
+    {
+	center.setEnvelopeUsed(useEnvelope);
+    }
+
+    public Camera getCamera()
+    {
+        return camera;
+    }
+    
     
     
 }

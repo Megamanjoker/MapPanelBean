@@ -16,6 +16,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import mappanel.framework.Center;
 import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 
@@ -43,15 +44,16 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     private boolean dirty = true;
     private static final int MAX_AVAILABLE = 200;
     private final Semaphore available = new Semaphore(MAX_AVAILABLE, true);
-    private MapCenter center = null;
+    private Center center = null;
     private MapTile North,East,South,West;
     private Rectangle2D NorthBound,EastBound,SouthBound,WestBound;
     private boolean last = false;
     private boolean generateEnable = true;
     
-    public MapTile(double x, double y, ObjectID id, String TileServerURL)
+    public MapTile(double x, double y, String TileServerURL)
     {
-	super(x, y, id);
+	super(x, y, ObjectID.Tile);
+	System.out.println("a");
 	this.TileServerURL = TileServerURL;
 	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
 	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
@@ -60,11 +62,12 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	last = true;
     }
     
-    public MapTile(double x, double y, ObjectID id, String TileServerURL, int Zoom)
+    public MapTile(double x, double y, String TileServerURL, Center center ,int Zoom)
     {
-	super(x, y, id);
+	super(x, y, ObjectID.Tile);
 	this.TileServerURL = TileServerURL;
 	this.Zoom = Zoom;
+	this.center = center;
 	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
 	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
 	SouthBound = new Rectangle2D.Double(x + TileSize/2, y + TileSize,  TestSize - 1,TestSize - 1);
@@ -77,11 +80,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     {
 	for(MapObject object : objects)
 	{
-	    if(object.getId() == ObjectID.Center && center == null)
-	    {
-		center = (MapCenter) object;
-	    }
-	    else if(object.getId() == ObjectID.Tile)
+	    if(object.getId() == ObjectID.Tile)
 	    {
 		getNeighbors(object);
 	    }
@@ -99,25 +98,25 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	
 	if(North == null  && NorthEnabled && generateEnable && NorthBound.intersects(center.getPriority()))
 	{
-	    North = new MapTile(x,y - TileSize,ObjectID.Tile, this.TileServerURL, this.Zoom);
+	    North = new MapTile(x, y - TileSize, this.TileServerURL, this.center, this.Zoom);
 	    objects.add(North);
 	    this.last = false;
 	}
 	else if(East == null  && EastEnabled && generateEnable && EastBound.intersects(center.getPriority()))
 	{
-	    East = new MapTile(x + TileSize, y,ObjectID.Tile, this.TileServerURL, this.Zoom);
+	    East = new MapTile(x + TileSize, y, this.TileServerURL, this.center, this.Zoom);
 	    objects.add(East);
 	    this.last = false;
 	}
 	else if(South == null  && SouthEnabled && generateEnable && SouthBound.intersects(center.getPriority()))
 	{
-	    South = new MapTile(x, y + TileSize,ObjectID.Tile, this.TileServerURL, this.Zoom);
+	    South = new MapTile(x, y + TileSize, this.TileServerURL, this.center, this.Zoom);
 	    objects.add(South);
 	    this.last = false;
 	}
 	else if(West == null  && WestEnabled && generateEnable && WestBound.intersects(center.getPriority()))
 	{
-	    West = new MapTile(x - TileSize,y,ObjectID.Tile, this.TileServerURL, this.Zoom);
+	    West = new MapTile(x - TileSize,y, this.TileServerURL, this.center, this.Zoom);
 	    objects.add(West);
 	    this.last = false;
 	}

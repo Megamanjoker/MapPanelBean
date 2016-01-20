@@ -1,6 +1,5 @@
 package mappanel.framework;
 
-import mappanel.objects.MapCenter;
 import mappanel.window.MapPanel;
 
 /**
@@ -51,8 +50,8 @@ public class Camera
      */
     public void tick(MapObject center)
     {
-	x = map.getWidth()/2 - center.getX(); // 
-	y = map.getHeight()/2 - center.getY(); //MapPanel.HEIGHT/2 - 
+	x = map.getWidth()/2 - center.getX(); 
+	y = map.getHeight()/2 - center.getY(); 
     }
     
     

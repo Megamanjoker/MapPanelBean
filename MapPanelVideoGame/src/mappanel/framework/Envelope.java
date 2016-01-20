@@ -1,4 +1,4 @@
-package mappanel.objects;
+package mappanel.framework;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,9 +8,6 @@ import java.awt.Rectangle;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import mappanel.framework.MapObject;
-import mappanel.framework.ObjectID;
-
 /**
  * 
  * @author Tyler Valant
@@ -19,7 +16,7 @@ import mappanel.framework.ObjectID;
  * @version 1.0.0
  *
  */
-public class MapEnvelope extends MapObject
+public class Envelope extends MapObject
 {
     /**
      * 
@@ -33,12 +30,12 @@ public class MapEnvelope extends MapObject
     private Color color = Color.CYAN;
     
     
-    public MapEnvelope(double x, double y, ObjectID id)
+    public Envelope(double x, double y, ObjectID id)
     {
 	super(x, y, id);
     }
     
-    public MapEnvelope(double startLon,double startLat,double endLon,double endLat, Integer Zoom)
+    public Envelope(double startLon,double startLat,double endLon,double endLat, Integer Zoom)
     {
 	super(0, 0, ObjectID.Envelope);
 	if(Zoom != null)

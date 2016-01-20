@@ -7,8 +7,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import mappanel.framework.Center;
 import mappanel.framework.MapObject;
-import mappanel.objects.MapCenter;
 import mappanel.objects.MapPoint;
 import mappanel.objects.MapShape;
 import mappanel.window.Handler;
@@ -28,20 +28,17 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 {
     private Point downCoords;
     private Handler handle;
-    private MapObject center;
     private MapPanel map;
 
     /**
      * @param handle - the handler of the map
-     * @param center - the center of the window
      * @param map - the map
      * 
      * Constructor
      */
-    public MouseInput(Handler handle, MapCenter center,MapPanel map)
+    public MouseInput(Handler handle, MapPanel map)
     {
 	this.handle = handle;
-	this.center = center;
 	this.map = map;
 	
     }
@@ -67,8 +64,8 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 	{
 	    int tx = downCoords.x - e.getX();
 	    int ty = downCoords.y - e.getY();
-	    center.setX(center.getX() + tx);
-	    center.setY(center.getY() + ty);
+	    handle.getCenter().setX(handle.getCenter().getX() + tx);
+	    handle.getCenter().setY(handle.getCenter().getY() + ty);
 	    downCoords.x = e.getX();
 	    downCoords.y = e.getY();
 	}
@@ -85,14 +82,14 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
     public void mouseExited(MouseEvent e)
     {
-	Point mapPoint = new Point(center.getX() - getMap().getWidth()/2 + e.getX(), center.getY() - getMap().getHeight()/2 + e.getY());
+	Point mapPoint = new Point(handle.getCenter().getX() - getMap().getWidth()/2 + e.getX(), handle.getCenter().getY() - getMap().getHeight()/2 + e.getY());
 	checkObjects(e);
     }
 
     public void mouseMoved(MouseEvent e)
     {
 	//This is for the Debug Panel
-	Point mapPoint = new Point(center.getX() - map.getWidth()/2 + e.getX(), center.getY() - map.getHeight()/2 + e.getY());
+	Point mapPoint = new Point(handle.getCenter().getX() - map.getWidth()/2 + e.getX(), handle.getCenter().getY() - map.getHeight()/2 + e.getY());
 	getMap().mouseLat = MapPanel.position2lat((int) mapPoint.getY(), getMap().getZoom());
 	getMap().mouseLon = MapPanel.position2lon((int) mapPoint.getX(), getMap().getZoom());
 	//
@@ -178,12 +175,12 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
     public MapObject getCenter()
     {
-        return center;
+        return handle.getCenter();
     }
 
     public void setCenter(MapObject center)
     {
-        this.center = center;
+        this.handle.setCenter(handle.getCenter());
     }
     
     /**
@@ -193,7 +190,7 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
      */
     protected void checkObjects(MouseEvent e)
     {
-	Point mapPoint = new Point(center.getX() - getMap().getWidth()/2 + e.getX(), center.getY() - getMap().getHeight()/2 + e.getY());
+	Point mapPoint = new Point(handle.getCenter().getX() - getMap().getWidth()/2 + e.getX(), handle.getCenter().getY() - getMap().getHeight()/2 + e.getY());
 	for(MapObject point: handle.points)
 	{
 	    if(point.getBound().contains(mapPoint))
