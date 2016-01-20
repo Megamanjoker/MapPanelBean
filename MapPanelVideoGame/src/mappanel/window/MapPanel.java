@@ -197,6 +197,9 @@ public class MapPanel extends Canvas implements Runnable
 	    }
 	    catch (Exception e)
 	    {
+		System.out.println("Creating Double Buffer Strategy Failed");
+		e.printStackTrace();
+		System.out.println("Trying again...");
 		return;
 	    }
 	}

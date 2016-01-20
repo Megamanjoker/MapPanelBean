@@ -246,16 +246,25 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	    }
 	    catch (MalformedURLException e)
 	    {
+		System.out.println("No legal protocol could be found in a specification string or the string could not be parsed");
+		System.out.println("Start of Stack Trace");
 		e.printStackTrace();
+		System.out.println("Ended of Stack Trace");
 	    }
 	    catch (IOException e)
 	    {
+		System.out.println("No picture at this URL");
+		System.out.println("Start of Stack Trace");
 		e.printStackTrace();
+		System.out.println("Ended of Stack Trace");
 	    }
 	}
 	catch (InterruptedException e1)
 	{
+	    System.out.println("Thread Interrupted");
+	    System.out.println("Start of Stack Trace");
 	    e1.printStackTrace();
+	    System.out.println("Ended of Stack Trace");
 	}
 	
 	running = false;

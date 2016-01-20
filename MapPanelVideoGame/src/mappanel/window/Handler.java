@@ -285,6 +285,8 @@ public class Handler
 	}
 	catch (ConcurrentModificationException e)
 	{
+	    System.out.println("Could not clear map tiles");
+	    System.out.println("Trying again...");
 	    clearMapTile();
 	    return;
 	}
