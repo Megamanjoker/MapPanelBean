@@ -29,9 +29,6 @@ import mappanel.framework.ObjectID;
  */
 public class MapTile extends MapObject implements ImageObserver, Runnable
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = -7211837370532773221L;
 
     private boolean DEBUG = false;
@@ -56,10 +53,10 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     {
 	super(x, y, id);
 	this.TileServerURL = TileServerURL;
-	NorthBound = new Rectangle((int) (x + TileSize/2) ,(int)y - TestSize,TestSize - 1,TestSize - 1);
-	EastBound = new Rectangle((int)x + TileSize,(int)(y + TileSize/2),TestSize - 1,TestSize - 1);
-	SouthBound = new Rectangle((int)(x + TileSize/2),(int)y + TileSize,TestSize - 1,TestSize - 1);
-	WestBound = new Rectangle((int)x  - TestSize,(int)(y + TileSize/2),TestSize - 1,TestSize - 1);
+	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
+	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
+	SouthBound = new Rectangle2D.Double(x + TileSize/2, y + TileSize,  TestSize - 1,TestSize - 1);
+	WestBound  = new Rectangle2D.Double(x  - TestSize,  y + TileSize/2,TestSize - 1,TestSize - 1);
 	last = true;
     }
     
@@ -78,20 +75,17 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     @Override
     public void tick(LinkedHashSet<MapObject> objects)
     {
-//	if(center == null)
-//	{
-	    for(MapObject object : objects)
+	for(MapObject object : objects)
+	{
+	    if(object.getId() == ObjectID.Center && center == null)
 	    {
-		if(object.getId() == ObjectID.Center && center == null)
-		{
-		    center = (MapCenter) object;
-		}
-		else if(object.getId() == ObjectID.Tile)
-		{
-		    getNeighbors(object);
-		}
+		center = (MapCenter) object;
 	    }
-//	}
+	    else if(object.getId() == ObjectID.Tile)
+	    {
+		getNeighbors(object);
+	    }
+	}
 	
 	checkBounds(objects);
     }
@@ -103,53 +97,46 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	boolean SouthEnabled = (y < (Math.pow(2, Zoom) - 1) * TileSize );
 	boolean WestEnabled  = (0 <= x - TileSize);
 	
-	
-//	System.out.println("X = " + (x) + ", Y = " + (y) + ",  NorthEnabled = " + NorthEnabled + ",  EastEnabled = " + EastEnabled  + ",  SouthEnabled = " + SouthEnabled  + ",  WestEnabled = " + WestEnabled );
-//	System.out.println("Zoom = " + Zoom + ", Max = " + ((Math.pow(2, Zoom)-1) * TileSize));
-	if(North == null  && NorthEnabled && generateEnable && NorthBound.intersects(center.getTestPriority()))//&& NorthBound.intersects(center.getTestPriority())
+	if(North == null  && NorthEnabled && generateEnable && NorthBound.intersects(center.getPriority()))
 	{
-//	    System.out.println("Adding North");
 	    North = new MapTile(x,y - TileSize,ObjectID.Tile, this.TileServerURL, this.Zoom);
 	    objects.add(North);
 	    this.last = false;
 	}
-	else if(East == null  && EastEnabled && generateEnable && EastBound.intersects(center.getTestPriority()))//&& EastBound.intersects(center.getTestPriority())
+	else if(East == null  && EastEnabled && generateEnable && EastBound.intersects(center.getPriority()))
 	{
-//	    System.out.println("Adding East");
 	    East = new MapTile(x + TileSize, y,ObjectID.Tile, this.TileServerURL, this.Zoom);
 	    objects.add(East);
 	    this.last = false;
 	}
-	else if(South == null  && SouthEnabled && generateEnable && SouthBound.intersects(center.getTestPriority()))//&& SouthBound.intersects(center.getTestPriority())
+	else if(South == null  && SouthEnabled && generateEnable && SouthBound.intersects(center.getPriority()))
 	{
-//	    System.out.println("Adding South");
 	    South = new MapTile(x, y + TileSize,ObjectID.Tile, this.TileServerURL, this.Zoom);
 	    objects.add(South);
 	    this.last = false;
 	}
-	else if(West == null  && WestEnabled && generateEnable && WestBound.intersects(center.getTestPriority()))//&& WestBound.intersects(center.getTestPriority())
+	else if(West == null  && WestEnabled && generateEnable && WestBound.intersects(center.getPriority()))
 	{
-//	    System.out.println("Adding West");
 	    West = new MapTile(x - TileSize,y,ObjectID.Tile, this.TileServerURL, this.Zoom);
 	    objects.add(West);
 	    this.last = false;
 	}
-	else if(!NorthBound.intersects(center.getTestPriority()))
+	else if(!NorthBound.intersects(center.getPriority()))
 	{
 	    objects.remove(North);
 	    North = null;
 	}
-	else if (!EastBound.intersects(center.getTestPriority()))
+	else if (!EastBound.intersects(center.getPriority()))
 	{
 	    objects.remove(East);
 	    East = null;
 	}
-	else if (!SouthBound.intersects(center.getTestPriority()))
+	else if (!SouthBound.intersects(center.getPriority()))
 	{
 	    objects.remove(South);
 	    South = null;
 	}
-	else if (!WestBound.intersects(center.getTestPriority()))
+	else if (!WestBound.intersects(center.getPriority()))
 	{
 	    objects.remove(West);
 	    West = null;
@@ -158,28 +145,22 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 
     private void getNeighbors(MapObject object)
     {
-//	for(MapObject object: objects)
-//	{
-//	    if(object.getId() == ObjectID.Tile)
-//	    {
-		if(object.getBound().intersects(NorthBound))
-		{
-		    North = (MapTile) object;
-		}
-		else if(object.getBound().intersects(EastBound))
-		{
-		    East = (MapTile) object;
-		}
-		else if(object.getBound().intersects(SouthBound))
-		{
-		    South = (MapTile) object;
-		}
-		else if(object.getBound().intersects(WestBound))
-		{
-		    West = (MapTile) object;
-		}
-//	    }
-//	}
+	if(object.getBound().intersects(NorthBound))
+	{
+	    North = (MapTile) object;
+	}
+	else if(object.getBound().intersects(EastBound))
+	{
+	    East = (MapTile) object;
+	}
+	else if(object.getBound().intersects(SouthBound))
+	{
+	    South = (MapTile) object;
+	}
+	else if(object.getBound().intersects(WestBound))
+	{
+	    West = (MapTile) object;
+	}
     }
 
     
@@ -188,40 +169,32 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     {
 	if(center != null)
 	{
-//	    if(center.getTestPriority().intersects(getBound()))
-//		{
-		    if(DEBUG)
-		    {
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setColor(Color.CYAN);
-			g2d.fillRect((int)x, (int)y, (int)TileSize, (int)TileSize);
-			g2d.setColor(Color.black);
-			g2d.drawRect((int)x, (int)y, (int)TileSize, (int)TileSize);
-			g2d.drawString("X = " + (int)x + " Y = " + (int)y, (int)x + 10, (int)y + 15);
-			g2d.setColor(new Color(33,237,94));
-			g2d.drawRect((int)NorthBound.getX(), (int)NorthBound.getY(), (int)NorthBound.getWidth(), (int)NorthBound.getHeight());
-			g2d.drawRect((int)EastBound.getX(),  (int)EastBound.getY(),  (int)EastBound.getWidth(),  (int)EastBound.getHeight() );
-			g2d.drawRect((int)SouthBound.getX(), (int)SouthBound.getY(), (int)SouthBound.getWidth(), (int)SouthBound.getHeight());
-			g2d.drawRect((int)WestBound.getX(),  (int)WestBound.getY(),  (int)WestBound.getWidth(),  (int)WestBound.getHeight() );
-		    
-		    }	
-		    else
-		    {
-			if (dirty)
-			{
-			    this.start();
-			}
-			else if(!running)
-			{
-			    g.drawImage(image, (int) (x), (int) (y), (int) TileSize, (int) TileSize, this);
-			}
-		    }    
-//		}
-//		else
-//		{
-//			dirty = true;
-//			image = null;
-//		}
+	    Graphics2D g2d = (Graphics2D) g;
+	    if(DEBUG)
+	    {
+		
+		g2d.setColor(Color.CYAN);
+		g2d.fillRect((int)x, (int)y, (int)TileSize, (int)TileSize);
+		g2d.setColor(Color.black);
+		g2d.drawRect((int)x, (int)y, (int)TileSize, (int)TileSize);
+		g2d.drawString("X = " + (int)x + " Y = " + (int)y, (int)x + 10, (int)y + 15);
+		g2d.setColor(new Color(33,237,94));
+		g2d.draw(NorthBound);
+		g2d.draw(EastBound);
+		g2d.draw(SouthBound);
+		g2d.draw(WestBound);    
+	    }	
+	    else
+	    {
+		if (dirty)
+		{
+		    this.start();
+		}
+		else if(!running)
+		{
+		    g2d.drawImage(image, (int) (x), (int) (y), (int) TileSize, (int) TileSize, this);
+		}
+	    }    
 	}
     }
 
@@ -242,7 +215,6 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         Zoom = zoom;
         
     }
-
 
     public String getTileServerURL()
     {

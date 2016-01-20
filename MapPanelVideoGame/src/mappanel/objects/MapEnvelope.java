@@ -2,6 +2,7 @@ package mappanel.objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.LinkedHashSet;
@@ -35,29 +36,19 @@ public class MapEnvelope extends MapObject
     public MapEnvelope(double x, double y, ObjectID id)
     {
 	super(x, y, id);
-	// TODO Auto-generated constructor stub
     }
     
-    public MapEnvelope(ObjectID id, double startLon,double startLat,double endLon,double endLat)
+    public MapEnvelope(double startLon,double startLat,double endLon,double endLat, Integer Zoom)
     {
-	super(0, 0, id);
+	super(0, 0, ObjectID.Envelope);
+	if(Zoom != null)
+	    this.Zoom = Zoom;
+	
 	this.startLat = startLat;
 	this.startLon = startLon;
 	this.endLat = endLat;
 	this.endLon = endLon;
-	int newX = (lon2position(startLon, Zoom) + lon2position(endLon, Zoom)) /2;
-	int newY = (lat2position(startLat, Zoom) + lat2position(endLat, Zoom)) /2;
-	center = new Point( newX, newY);
-    }
-    
-    public MapEnvelope(ObjectID id, double startLon,double startLat,double endLon,double endLat, int Zoom)
-    {
-	super(0, 0, id);
-	this.startLat = startLat;
-	this.startLon = startLon;
-	this.endLat = endLat;
-	this.endLon = endLon;
-	this.Zoom = Zoom;
+	
 	int newX = (lon2position(startLon, Zoom) + lon2position(endLon, Zoom)) /2;
 	int newY = (lat2position(startLat, Zoom) + lat2position(endLat, Zoom)) /2;
 	center = new Point( newX, newY);
@@ -80,14 +71,9 @@ public class MapEnvelope extends MapObject
 	
 	    if (draw)
 	    {
-		g.setColor(color);
-		int startX = lon2position(startLon, this.getZoom());
-		int startY = lat2position(startLat, this.getZoom());
-		int dx = lon2position(endLon, this.getZoom()) - startX;
-		int dy = lat2position(endLat, this.getZoom()) - startY;
-		g.drawRect(startX, startY, dx, dy);
-		//	    System.out.println("Lon = " + startLon + " ,Lat = " + startLat);
-		//	    System.out.println("startX = "+ startX + " ,startY = "+ startY + ", dx = "+ dx + ", dy = "+ dy + " ,Zoom = " + Zoom);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(color);
+		g2d.draw(getBound());
 	    }
     }
 
@@ -168,14 +154,4 @@ public class MapEnvelope extends MapObject
     {
         return endLat;
     }
-    
-    
-    
-
-//    public void setCenter(Point center)
-//    {
-//        this.center = center;
-//    }
-    
-    
 }

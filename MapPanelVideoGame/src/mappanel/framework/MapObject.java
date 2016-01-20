@@ -15,6 +15,7 @@ import javax.swing.JComponent;
  * @since 1-19-2016
  * @version 1.0.0
  *
+ * The MapObject class is the base component for all objects in the Map.
  */
 public abstract class MapObject extends JComponent
 {
@@ -28,12 +29,17 @@ public abstract class MapObject extends JComponent
     protected int Zoom = 0;
     protected String name;
     
+    /**
+     * Constructor
+     * @param x - x coordinate
+     * @param y - y coordinate
+     * @param id - the id of the object
+     */
     public MapObject(double x,double y, ObjectID id)
     {
 	this.x = x;
 	this.y = y;
 	this.id = id;
-	this.setIgnoreRepaint(true);
     }
     
     
@@ -51,7 +57,7 @@ public abstract class MapObject extends JComponent
     public abstract void render(Graphics g);
     
     /**
-     * 
+     * The bounds of this object
      * @return - the Bounding box of this object
      */
     public abstract Rectangle2D getBound(); 

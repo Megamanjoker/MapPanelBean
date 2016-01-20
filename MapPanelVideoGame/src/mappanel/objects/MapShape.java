@@ -109,7 +109,7 @@ public class MapShape extends MapObject
     @Override
     public void tick(LinkedHashSet<MapObject> objects)
     {
-	// TODO Auto-generated method stub
+	
     }
 
     @Override

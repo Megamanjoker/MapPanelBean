@@ -10,6 +10,8 @@ import mappanel.window.MapPanel;
  * @since 1-19-2016
  * @version 1.0.0
  *
+ * The Camera class is used to keep track of where the windows is relative to the map
+ * The Camera class is attached to MapCenter Class
  */
 public class Camera
 {
@@ -44,14 +46,13 @@ public class Camera
     }
 
     /**
-     * re-centers the camera for drawing 
+     * re-centers the camera to the MapCenter for drawing 
      * @param center - the center of the map
      */
     public void tick(MapObject center)
     {
-	MapCenter newCenter = (MapCenter) center;
-	x = map.getWidth()/2 - newCenter.getX(); // 
-	y = map.getHeight()/2 - newCenter.getY(); //MapPanel.HEIGHT/2 - 
+	x = map.getWidth()/2 - center.getX(); // 
+	y = map.getHeight()/2 - center.getY(); //MapPanel.HEIGHT/2 - 
     }
     
     

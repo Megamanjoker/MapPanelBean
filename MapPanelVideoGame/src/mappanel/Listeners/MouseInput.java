@@ -21,6 +21,7 @@ import mappanel.window.MapPanel;
  * @since 1-19-2016
  * @version 1.0.0
  *
+ * The Class is for listening to all things mouse 
  */
 
 public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener
@@ -30,11 +31,18 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
     private MapObject center;
     private MapPanel map;
 
+    /**
+     * @param handle - the handler of the map
+     * @param center - the center of the window
+     * @param map - the map
+     * 
+     * Constructor
+     */
     public MouseInput(Handler handle, MapCenter center,MapPanel map)
     {
 	this.handle = handle;
 	this.center = center;
-	this.setMap(map);
+	this.map = map;
 	
     }
     
@@ -49,24 +57,18 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 	handleDrag(e);
     }
 
+    /**
+     * When dragging the mouse, the center moves around mouse cursor. 
+     * @param e - the mouse event
+     */
     private void handleDrag(MouseEvent e)
     {
-	//System.out.println("Drag");
 	if (downCoords != null)
 	{
 	    int tx = downCoords.x - e.getX();
 	    int ty = downCoords.y - e.getY();
-//	    for(MapObject object : handle.objects)
-//	    {
-//		//System.out.println("Type " + object.id);
-//		if(object.getId() == ObjectID.Center)
-//		{
-//		    System.out.print("From X: " + object.getX() + " Y: " + object.getY());
-		    center.setX(center.getX() + tx);
-		    center.setY(center.getY() + ty);
-//		    System.out.println(" To X: " + object.getX() + " Y: " + object.getY());
-//		}
-//	    }
+	    center.setX(center.getX() + tx);
+	    center.setY(center.getY() + ty);
 	    downCoords.x = e.getX();
 	    downCoords.y = e.getY();
 	}
@@ -142,20 +144,13 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 		}
 	    }
 	}
-	
-	
-	
-	
-	
     }
 
     public void mousePressed(MouseEvent e)
     {
-	//System.out.println("Pressed");
 	if (e.getButton() == MouseEvent.BUTTON1)
 	{
 	    downCoords = e.getPoint();
-	    // downPosition = getMapPosition();
 	}
 	
 	checkObjects(e);
@@ -166,6 +161,7 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 	checkObjects(e);
     }
 
+    
     public void mouseWheelMoved(MouseWheelEvent e)
     {
 	int wheel = e.getWheelRotation();
@@ -190,6 +186,11 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
         this.center = center;
     }
     
+    /**
+     * @param e - the mouse event
+     * 
+     * Checks all the objects on the map to see if the event is on them, then dispatchs the event to the one's hit
+     */
     protected void checkObjects(MouseEvent e)
     {
 	Point mapPoint = new Point(center.getX() - getMap().getWidth()/2 + e.getX(), center.getY() - getMap().getHeight()/2 + e.getY());

@@ -2,6 +2,7 @@ package mappanel.objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashSet;
@@ -29,20 +30,21 @@ public class MapCenter extends MapObject
     private MapEnvelope envelope;
     private boolean useEnvelope = true;
     
-    public MapCenter(double x, double y, ObjectID id)
+    public MapCenter(double x, double y)
     {
-	super(x, y, id);
-	this.envelope = new MapEnvelope(ObjectID.Envelope,  -96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
+	super(x, y, ObjectID.Center);
+	this.envelope = new MapEnvelope(-96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
     }
 
+    
     @Override
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	envelope.tick(objects);
 	if(!this.getBound().intersects(envelope.getBound(this.Zoom)) && useEnvelope)
 	{
-	    this.x = envelope.getCenter().getX();// - this.Width/2;
-	    this.y = envelope.getCenter().getY();// - this.Height/2;
+	    this.x = envelope.getCenter().getX();
+	    this.y = envelope.getCenter().getY();
 	}
     }
 
@@ -54,12 +56,13 @@ public class MapCenter extends MapObject
     {
 	if(DEBUG)
 	{
+	    Graphics2D g2d = (Graphics2D) g;
 	    g.setColor(Color.ORANGE);
 	    g.fillRect((int)x - 4, (int)y - 4, 8, 8);
 	    g.setColor(Color.RED);
-	    g.drawRect(getTestPriority().x,getTestPriority().y,getTestPriority().width,getTestPriority().height);
+	    g2d.draw(getPriority());
 	    g.setColor(Color.BLUE);
-	    g.drawRect(getTestDeletePriority().x,getTestDeletePriority().y,getTestDeletePriority().width,getTestDeletePriority().height);
+	    g2d.draw(getDeletePriority());
 	}
 	envelope.render(g);
     }
@@ -75,39 +78,21 @@ public class MapCenter extends MapObject
     }
     
     /**
-     * Testing Priority
-     * @return
-     */
-    public Rectangle getTestPriority()
-    {
-	return priorityBounds(1);
-    }
-    
-    /**
-     * Testing Delete Priority
-     * @return
-     */
-    public Rectangle getTestDeletePriority()
-    {
-	return priorityBounds(1.05);
-    }
-    
-    /**
-     * Don't delete these tiles
+     * the tiles in this 
      * @return - Collision box of don't delete box 
      */
-    public Rectangle getPriority()
+    public Rectangle2D getPriority()
     {
-	return priorityBounds(0.2);
+	return priorityBounds(1);
     }
     
     /**
      * Anything outside this box should be deleted
      * @return - Collision box of do delete box
      */
-    public Rectangle getDeletePriority()
+    public Rectangle2D getDeletePriority()
     {
-	return priorityBounds(0.3);
+	return priorityBounds(1.05);
     }
 
     /**
@@ -115,9 +100,9 @@ public class MapCenter extends MapObject
      * @param percent - the percent of increase or decrease of the bounds
      * @return - the bound with the percent
      */
-    private Rectangle priorityBounds(double percent)
+    private Rectangle2D priorityBounds(double percent)
     {
-	return new Rectangle((int)((x - Width/2) -  ((Width/2) * percent)),(int)((y - Height/2) - ((Height/2) * percent)),(int)(Width + Width * percent) - 1 ,(int)(Height + Height * percent) -1) ;
+	return new Rectangle2D.Double((x - Width/2) -  ((Width/2) * percent),(y - Height/2) - ((Height/2) * percent),(Width + Width * percent) - 1 ,(Height + Height * percent) - 1) ;
     }
     
     public int getWidth()
@@ -147,7 +132,7 @@ public class MapCenter extends MapObject
 
     public void setEnvelope(Double startLon,Double startLat,Double endLon,Double endLat)
     {
-        this.envelope = new MapEnvelope(ObjectID.Envelope, startLon, startLat, endLon, endLat, this.Zoom);
+        this.envelope = new MapEnvelope(startLon, startLat, endLon, endLat, this.Zoom);
     }
 
     public boolean isEnvelopeUsed()

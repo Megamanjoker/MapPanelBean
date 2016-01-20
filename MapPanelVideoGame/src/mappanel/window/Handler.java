@@ -1,6 +1,7 @@
 package mappanel.window;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseListener;
@@ -127,7 +128,6 @@ public class Handler
     
     public void addMapObject(MapObject object)
     {
-	//System.out.println("MapObject Added");
 	this.objects.add(object);
     }
     
@@ -150,7 +150,6 @@ public class Handler
      */
     public void CreateMap(int x,int y)
     {
-//	System.out.println("X = " + (x - x % TileSize) + " Y = " + (y - y % TileSize));
 	MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,ObjectID.Tile,TileServerURL,Zoom);
 	StartingTile.setLast(true);
 	addMapObject(StartingTile);
@@ -180,13 +179,10 @@ public class Handler
     {
 	if(Zoom <  MaxZoom)
 	{
-//	    System.out.println("Center x = " + center.x + " Center y = " + center.y + " ");
-//	    System.out.println("old x = " + point.x + " old y = " + point.y + " ");
 	    double lat = MapPanel.position2lat((int)(center.getY() + point.y - center.getHeight()/2), Zoom);
 	    double lon = MapPanel.position2lon((int)(center.getX() + point.x - center.getWidth()/2), Zoom);
 	    double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
 	    double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
-//	    System.out.print("Lon = " + centerLon + " Lat = " + centerLat + " ");
 	    Zoom++;
 	    clearMapTile();
 	    
@@ -204,11 +200,8 @@ public class Handler
 	    {
 		CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
 	    }
-//	    System.out.println("New x = " + MapPanel.lon2position(centerLon,Zoom) + " New Y = " + MapPanel.lat2position(centerLat, Zoom) + " ");
-//	    CreateMap(MapPanel.lon2position(lon,Zoom) ,MapPanel.lat2position(lat, Zoom));
 	    updateObjectZoom();
 	}
-//	System.out.println("Zoom In =  " + Zoom);
     }
 
     /**
@@ -244,8 +237,6 @@ public class Handler
 	    
 	    updateObjectZoom();
 	}
-	
-//	System.out.println("Zoom Out =  " + Zoom);
     }
     
     /**
@@ -282,8 +273,6 @@ public class Handler
 	}
 	catch (ConcurrentModificationException e)
 	{
-	    // TODO Auto-generated catch block
-	    //e.printStackTrace();
 	    clearMapTile();
 	    return;
 	}
@@ -365,9 +354,8 @@ public class Handler
 	    if(object.getId() == ObjectID.Tile)
 	    {
 		MapTile tile = (MapTile) object;
-		if(!center.getTestDeletePriority().intersects(tile.getBound()) && !tile.isLast())
+		if(!center.getDeletePriority().intersects(tile.getBound()) && !tile.isLast())
 		{
-//		    System.out.println("Deleting X = " + tile.getX() + ", Y =" + tile.getY());
 		    if(tile.getLoadImageThread().isAlive())
 		    {
 			tile.getLoadImageThread().interrupt();
@@ -388,26 +376,26 @@ public class Handler
 
     public void setZoom(int zoom)
     {
-	 double lat = MapPanel.position2lat((int)(center.getY()), Zoom);
-	 double lon = MapPanel.position2lon((int)(center.getX()), Zoom);
+	double lat = MapPanel.position2lat((int)(center.getY()), Zoom);
+	double lon = MapPanel.position2lon((int)(center.getX()), Zoom);
 
-	 double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
-	 double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
-	 clearMapTile();
-	 int x = MapPanel.lon2position(lon, zoom);
-	 int y = MapPanel.lat2position(lat, zoom);
-	 if(center.getEnvelope().getBound().intersects(new Rectangle(x,y,1,1)))
-	 {
-	     CreateMap(x, y);
-	 }
-	 else if(!center.isEnvelopeUsed())
-	 {
-	     CreateMap(x, y);
-	 }
-	 else 
-	 {
-	     CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
-	 }
+	double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
+	double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
+	clearMapTile();
+	int x = MapPanel.lon2position(lon, zoom);
+	int y = MapPanel.lat2position(lat, zoom);
+	if(center.getEnvelope().getBound().intersects(new Rectangle(x,y,1,1)))
+	{
+	    CreateMap(x, y);
+	}
+	else if(!center.isEnvelopeUsed())
+	{
+	    CreateMap(x, y);
+	}
+	else 
+	{
+	    CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
+	}
 	 
 	 this.Zoom = zoom;
 	 updateObjectZoom();
@@ -415,8 +403,7 @@ public class Handler
     
     public void ClearScreen(Graphics g)
     {
-	g.clearRect((int) -(Math.pow(2,  Zoom + 1 * 2) * TileSize)/2, (int)-(Math.pow(2, Zoom + 1 * 2) * TileSize)/2, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize);
-//	g.get
+	g.clearRect((int) - (Math.pow(2,  Zoom + 1 * 2) * TileSize)/2, (int)-(Math.pow(2, Zoom + 1 * 2) * TileSize)/2, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize);
     }
     
     public void addPoint(MapPoint point)

@@ -117,15 +117,12 @@ public class MapPoint extends MapObject implements ImageObserver
     @Override
     public Rectangle2D getBound()
     {
-	// TODO Auto-generated method stub
-//	System.out.println(new Rectangle((int)x,(int)y, width,height));
 	return new Rectangle2D.Double(x,y, width,height);
     }
 
     @Override
     public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5)
     {
-	// TODO Auto-generated method stub
 	return false;
     }
 
