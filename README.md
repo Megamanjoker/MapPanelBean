@@ -1,6 +1,5 @@
 ---
 <h1><a href = "http://megamanjoker.github.io/MapPanelBean">Map Panel Bean<a></h1>
-<h1>It is here.</h1>
 ---
 <h2>The main goals of this Map Panel Bean:</h2>
 
