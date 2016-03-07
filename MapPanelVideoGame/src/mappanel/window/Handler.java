@@ -37,6 +37,7 @@ public class Handler
     public LinkedHashSet<MapObject> objects = new LinkedHashSet<MapObject>();
     public LinkedHashSet<MapObject> points = new LinkedHashSet<MapObject>();
     public LinkedHashSet<MapObject> shapes = new LinkedHashSet<MapObject>();
+    public LinkedHashSet<String> listOfTileServerURL = new LinkedHashSet<String>();
     private String TileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
     private Center center;
     private int numberOfTiles = 1;
@@ -47,6 +48,7 @@ public class Handler
     
     public Handler(double initLon, double initLat, int initZoom, MapPanel mapPanel)
     {
+	this.listOfTileServerURL.add(TileServerURL);
 	this.Zoom = initZoom;
 	center = new Center(MapPanel.lon2position(initLon,initZoom),MapPanel.lat2position(initLat,initZoom));
 	camera = new Camera(MapPanel.lon2position(initLon,initZoom), MapPanel.lat2position(initLat,initZoom),mapPanel);
@@ -154,7 +156,7 @@ public class Handler
     public void CreateMap()
     {
 	if(center != null)
-	    addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,TileServerURL));
+	    addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,listOfTileServerURL));
     }
     
     /**
@@ -162,7 +164,7 @@ public class Handler
      */
     public void CreateMap(int x,int y)
     {
-	MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,TileServerURL, this.center,Zoom);
+	MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,listOfTileServerURL, this.center,Zoom);
 	StartingTile.setLast(true);
 	addMapObject(StartingTile);
 	if(center != null)
@@ -180,7 +182,7 @@ public class Handler
     public void CreateMap(Point point)
     {
 	clearMapTile();
-	addMapObject(new MapTile(point.getX(),point.getY(),TileServerURL));
+	addMapObject(new MapTile(point.getX(),point.getY(),listOfTileServerURL));
     }
 
     /**
@@ -285,8 +287,8 @@ public class Handler
 	}
 	catch (ConcurrentModificationException e)
 	{
-	    System.out.println("Could not clear map tiles");
-	    System.out.println("Trying again...");
+//	    System.out.println("Could not clear map tiles");
+//	    System.out.println("Trying again...");
 	    clearMapTile();
 	    return;
 	}
@@ -294,16 +296,16 @@ public class Handler
 	
     }
     
-    public String getTileServerURL()
-    {
-        return TileServerURL;
-    }
-
-    public void setTileServerURL(String tileServerURL)
-    {
-        TileServerURL = tileServerURL;
-        updateTileUrl();
-    }
+//    public String getTileServerURL()
+//    {
+//        return TileServerURL;
+//    }
+//
+//    public void setTileServerURL(String tileServerURL)
+//    {
+//        TileServerURL = tileServerURL;
+//        updateTileUrl();
+//    }
     
     
     public int getMaxZoom()
@@ -352,7 +354,7 @@ public class Handler
 	    if(object.getId() == ObjectID.Tile)
 	    {
 		MapTile tile = (MapTile)object;
-		tile.setTileServerURL(TileServerURL);
+		tile.setListOfTileServerURL(listOfTileServerURL);
 		tile.setDirty(true);
 	    }
 	}
@@ -371,8 +373,6 @@ public class Handler
 		MapTile tile = (MapTile) object;
 		if(!center.getDeletePriority().intersects(tile.getBound()) && !tile.isLast())
 		{
-
-		    System.out.println("x = " + tile.getX() + " y = " + tile.getY() );
 		    if(tile.getLoadImageThread().isAlive())
 		    {
 			tile.getLoadImageThread().interrupt();
@@ -529,7 +529,25 @@ public class Handler
     {
         return camera;
     }
+
+    public void setCenterLocation(double lon, double lat)
+    {
+	center.setX(MapPanel.lon2position(lon, Zoom));
+	center.setY(MapPanel.lat2position(lat, Zoom));
+	CreateMap(MapPanel.lon2position(lon, Zoom),MapPanel.lat2position(lat, Zoom));
+	
+    }
     
+    public void addURL(String url)
+    {
+	this.listOfTileServerURL.add(url);
+	updateTileUrl();
+    }
     
+    public void clearURLs()
+    {
+	this.listOfTileServerURL.clear();
+	updateTileUrl();
+    }
     
 }

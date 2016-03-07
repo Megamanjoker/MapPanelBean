@@ -4,10 +4,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
@@ -89,6 +90,11 @@ public class MapShape extends MapObject
     
     public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean Line)
     {
+	this(lons, lats, name , shapeStrokeColor, shapeFillColor, null, strokeThickness, Line, null);
+    }
+    
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean Line, MouseListener mouse)
+    {
 	super(0, 0, ObjectID.Shape);
 	this.ListOfLon = lons;
 	this.ListOfLat = lats;
@@ -101,11 +107,12 @@ public class MapShape extends MapObject
 	if(shapeFillColor != null)
 	    this.shapeFillColor = shapeFillColor;
 	if(strokeThickness != null)
-    		this.strokeThickness = strokeThickness;
+	    this.strokeThickness = strokeThickness;
+	if(mouse != null)
+	    this.addMouseListener(mouse);
 	
     }
 
-    
     @Override
     public void tick(LinkedHashSet<MapObject> objects)
     {

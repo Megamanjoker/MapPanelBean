@@ -37,8 +37,9 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     private int TileSize = 256;
     private int TestSize = 16;
     private int Zoom = 0;
-    private Image image = null;
-    private String TileServerURL = "";
+    private LinkedHashSet<Image> image = new LinkedHashSet<Image>();
+//    private String TileServerURL = "";
+    private LinkedHashSet<String> listOfTileServerURL;
     private Thread loadImageThread = new Thread(this);
     private volatile boolean running = false;
     private boolean dirty = true;
@@ -50,22 +51,45 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     private boolean last = false;
     private boolean generateEnable = true;
     
-    public MapTile(double x, double y, String TileServerURL)
+//    public MapTile(double x, double y, String TileServerURL)
+//    {
+//	super(x, y, ObjectID.Tile);
+//	this.TileServerURL = TileServerURL;
+//	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
+//	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
+//	SouthBound = new Rectangle2D.Double(x + TileSize/2, y + TileSize,  TestSize - 1,TestSize - 1);
+//	WestBound  = new Rectangle2D.Double(x  - TestSize,  y + TileSize/2,TestSize - 1,TestSize - 1);
+//	last = true;
+//    }
+//    
+//    public MapTile(double x, double y, String TileServerURL, Center center ,int Zoom)
+//    {
+//	super(x, y, ObjectID.Tile);
+//	this.TileServerURL = TileServerURL;
+//	this.Zoom = Zoom;
+//	this.center = center;
+//	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
+//	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
+//	SouthBound = new Rectangle2D.Double(x + TileSize/2, y + TileSize,  TestSize - 1,TestSize - 1);
+//	WestBound  = new Rectangle2D.Double(x  - TestSize,  y + TileSize/2,TestSize - 1,TestSize - 1);
+//	
+//    }
+    
+    public MapTile(double x, double y, LinkedHashSet<String> listOfTileServerURL)
     {
 	super(x, y, ObjectID.Tile);
-	System.out.println("a");
-	this.TileServerURL = TileServerURL;
+	this.listOfTileServerURL = listOfTileServerURL;
 	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
 	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
 	SouthBound = new Rectangle2D.Double(x + TileSize/2, y + TileSize,  TestSize - 1,TestSize - 1);
 	WestBound  = new Rectangle2D.Double(x  - TestSize,  y + TileSize/2,TestSize - 1,TestSize - 1);
-	last = true;
+	
     }
     
-    public MapTile(double x, double y, String TileServerURL, Center center ,int Zoom)
+    public MapTile(double x, double y, LinkedHashSet<String> listOfTileServerURL, Center center ,int Zoom)
     {
 	super(x, y, ObjectID.Tile);
-	this.TileServerURL = TileServerURL;
+	this.listOfTileServerURL = listOfTileServerURL;
 	this.Zoom = Zoom;
 	this.center = center;
 	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
@@ -98,25 +122,25 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	
 	if(North == null  && NorthEnabled && generateEnable && NorthBound.intersects(center.getPriority()))
 	{
-	    North = new MapTile(x, y - TileSize, this.TileServerURL, this.center, this.Zoom);
+	    North = new MapTile(x, y - TileSize, this.listOfTileServerURL, this.center, this.Zoom);
 	    objects.add(North);
 	    this.last = false;
 	}
 	else if(East == null  && EastEnabled && generateEnable && EastBound.intersects(center.getPriority()))
 	{
-	    East = new MapTile(x + TileSize, y, this.TileServerURL, this.center, this.Zoom);
+	    East = new MapTile(x + TileSize, y, this.listOfTileServerURL, this.center, this.Zoom);
 	    objects.add(East);
 	    this.last = false;
 	}
 	else if(South == null  && SouthEnabled && generateEnable && SouthBound.intersects(center.getPriority()))
 	{
-	    South = new MapTile(x, y + TileSize, this.TileServerURL, this.center, this.Zoom);
+	    South = new MapTile(x, y + TileSize, this.listOfTileServerURL, this.center, this.Zoom);
 	    objects.add(South);
 	    this.last = false;
 	}
 	else if(West == null  && WestEnabled && generateEnable && WestBound.intersects(center.getPriority()))
 	{
-	    West = new MapTile(x - TileSize,y, this.TileServerURL, this.center, this.Zoom);
+	    West = new MapTile(x - TileSize,y, this.listOfTileServerURL, this.center, this.Zoom);
 	    objects.add(West);
 	    this.last = false;
 	}
@@ -191,7 +215,8 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 		}
 		else if(!running)
 		{
-		    g2d.drawImage(image, (int) (x), (int) (y), (int) TileSize, (int) TileSize, this);
+		    for(Image i : image)
+			g2d.drawImage(i, (int) (x), (int) (y), (int) TileSize, (int) TileSize, this);
 		}
 	    }    
 	}
@@ -215,15 +240,15 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         
     }
 
-    public String getTileServerURL()
-    {
-        return TileServerURL;
-    }
-
-    public void setTileServerURL(String tileServerURL)
-    {
-        TileServerURL = tileServerURL;
-    }
+//    public String getTileServerURL()
+//    {
+//        return TileServerURL;
+//    }
+//
+//    public void setTileServerURL(String tileServerURL)
+//    {
+//        TileServerURL = tileServerURL;
+//    }
 
     @Override
     public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height)
@@ -241,21 +266,28 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	    URL url;
 	    try
 	    {
-		url = new URL( TileServerURL + Zoom + "/"+ (int)(y/256) + "/"+ (int)(x/256));
-		image = ImageIO.read(url);
+		for(String URL : listOfTileServerURL)
+		{
+		    url = new URL( URL + Zoom + "/"+ (int)(y/256) + "/"+ (int)(x/256));
+		    image.add(ImageIO.read(url));
+		}
 	    }
 	    catch (MalformedURLException e)
 	    {
 		System.out.println("No legal protocol could be found in a specification string or the string could not be parsed");
 		System.out.println("Start of Stack Trace");
+		System.out.println("------------------------------------------------------");
 		e.printStackTrace();
+		System.out.println("------------------------------------------------------");
 		System.out.println("Ended of Stack Trace");
 	    }
 	    catch (IOException e)
 	    {
 		System.out.println("No picture at this URL");
 		System.out.println("Start of Stack Trace");
+		System.out.println("------------------------------------------------------");
 		e.printStackTrace();
+		System.out.println("------------------------------------------------------");
 		System.out.println("Ended of Stack Trace");
 	    }
 	}
@@ -263,7 +295,9 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	{
 	    System.out.println("Thread Interrupted");
 	    System.out.println("Start of Stack Trace");
+	    System.out.println("------------------------------------------------------");
 	    e1.printStackTrace();
+	    System.out.println("------------------------------------------------------");
 	    System.out.println("Ended of Stack Trace");
 	}
 	
@@ -320,6 +354,21 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     public Thread getLoadImageThread()
     {
         return loadImageThread;
+    }
+
+    public LinkedHashSet<String> getListOfTileServerURL()
+    {
+	return listOfTileServerURL;
+    }
+
+    public void setListOfTileServerURL(LinkedHashSet<String> listOfTileServerURL)
+    {
+	this.listOfTileServerURL = listOfTileServerURL;
+    }
+    
+    public void addURL(String url)
+    {
+	listOfTileServerURL.add(url);
     }
     
    

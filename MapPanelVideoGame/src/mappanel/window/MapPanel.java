@@ -87,9 +87,9 @@ public class MapPanel extends Canvas implements Runnable
 	
 	
 	if(tileServerURL != null)
-	    handler.setTileServerURL(tileServerURL);
+	    handler.addURL(tileServerURL);
 	else
-	    handler.setTileServerURL("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/");
+	    handler.addURL("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/");
 	
 	for(MapPoint point : listOfPoints)
 	{
@@ -197,9 +197,9 @@ public class MapPanel extends Canvas implements Runnable
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("Creating Double Buffer Strategy Failed");
-		e.printStackTrace();
-		System.out.println("Trying again...");
+//		System.out.println("Creating Double Buffer Strategy Failed");
+//		e.printStackTrace();
+//		System.out.println("Trying again...");
 		return;
 	    }
 	}
@@ -291,108 +291,6 @@ public class MapPanel extends Canvas implements Runnable
 	return (int) Math.floor(
 		(1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * ymax);
     }
-
-    public int getInitZoom()
-    {
-        return initZoom;
-    }
-
-    public void setInitZoom(int initZoom)
-    {
-        this.initZoom = initZoom;
-    }
-
-    public void setTileServer(String tileURL)
-    {
-	if (handler != null)
-	{
-	    handler.setTileServerURL(tileURL);
-	    this.tileServerURL = tileURL;
-	}
-	else
-	{
-	    this.tileServerURL = tileURL;
-	}
-    }
-    
-    public String getTileServer()
-    {
-	if (handler != null)
-	    return handler.getTileServerURL();
-	else
-	    return tileServerURL;
-    }
-
-    public void setMinZoom(int minZoom)
-    {
-	if (handler != null)
-	{
-	    handler.setMinZoom(minZoom);
-	    this.minZoom = minZoom;
-	}
-	else
-	{
-	    this.minZoom = minZoom;
-	}
-    }
-    
-    public int getMinZoom()
-    {
-	if(handler != null)
-	    return handler.getMinZoom();
-	else
-	    return this.minZoom;
-    }
-    
-    public void setMaxZoom(int maxZoom)
-    {
-	if (handler != null)
-	{
-	    handler.setMaxZoom(maxZoom);
-	    this.maxZoom = maxZoom;
-	}
-	else
-	{
-	    this.maxZoom = maxZoom;
-	}
-    }
-    
-    public int getMaxZoom()
-    {
-	if(handler == null)
-	{
-	    return maxZoom;
-	}
-	else
-	{
-	    return handler.getMaxZoom();
-	}
-    }
-    
-    public int getZoom()
-    {
-	if(handler == null)
-	{
-	    return initZoom;
-	}
-	else
-	{
-	    return handler.getZoom();
-	}
-    }
-    
-    public void setZoom(int zoom)
-    {
-	if (handler != null)
-	{
-	    handler.setZoom(zoom);
-	    this.zoom = zoom;
-	}
-	else
-	{
-	    this.zoom = zoom;
-	}
-    }
     
     public void addPoint(MapPoint point)
     {
@@ -432,6 +330,26 @@ public class MapPanel extends Canvas implements Runnable
 	{
 	    handler.clearShapes();
 	}
+    }
+    
+    
+
+    public LinkedHashSet<MapObject> collisionCheckAt(int x, int y)
+    {
+	// TODO Auto-generated method stub
+	return handler.collisionCheckAt(x,y);
+    }
+    
+    
+    //start of setters/getters
+    public void setMouseListener()
+    {
+	
+    }
+
+    public void setCenterLocation(double lon, double lat)
+    {
+	handler.setCenterLocation(lon,lat);
     }
     
     public boolean isEnvelopeUsed()
@@ -524,10 +442,147 @@ public class MapPanel extends Canvas implements Runnable
     {
         return handler.getCenter();
     }
-
-    public LinkedHashSet<MapObject> collisionCheckAt(int x, int y)
+    
+    public int getInitZoom()
     {
-	// TODO Auto-generated method stub
-	return handler.collisionCheckAt(x,y);
+        return initZoom;
     }
+
+    public void setInitZoom(int initZoom)
+    {
+        this.initZoom = initZoom;
+    }
+
+//    public void setTileServer(String tileURL)
+//    {
+//	if (handler != null)
+//	{
+//	    this.firePropertyChange("tileServer", this.tileServerURL, tileServerURL);
+//	    handler.setTileServerURL(tileURL);
+//	    this.tileServerURL = tileURL;
+//	}
+//	else
+//	{
+//	    this.tileServerURL = tileURL;
+//	}
+//    }
+//    
+//    public String getTileServer()
+//    {
+//	if (handler != null)
+//	    return handler.getTileServerURL();
+//	else
+//	    return tileServerURL;
+//    }
+    
+    public void addURL(String url)
+    {
+	if (handler != null)
+	    handler.addURL(url);
+    }
+    
+    public void clearURLs()
+    {
+	if (handler != null)
+	    handler.clearURLs();
+    }
+    
+
+    public void setMinZoom(int minZoom)
+    {
+	if (handler != null)
+	{
+	    this.firePropertyChange("minZoom", this.minZoom, minZoom);
+	    handler.setMinZoom(minZoom);
+	    this.minZoom = minZoom;
+	}
+	else
+	{
+	    this.minZoom = minZoom;
+	}
+    }
+    
+    public int getMinZoom()
+    {
+	if(handler != null)
+	    return handler.getMinZoom();
+	else
+	    return this.minZoom;
+    }
+    
+    public void setMaxZoom(int maxZoom)
+    {
+	if (handler != null)
+	{
+	    this.firePropertyChange("maxZoom", this.maxZoom, maxZoom);
+	    handler.setMaxZoom(maxZoom);
+	    this.maxZoom = maxZoom;
+	}
+	else
+	{
+	    this.maxZoom = maxZoom;
+	}
+    }
+    
+    public int getMaxZoom()
+    {
+	if(handler == null)
+	{
+	    return maxZoom;
+	}
+	else
+	{
+	    return handler.getMaxZoom();
+	}
+    }
+    
+    public int getZoom()
+    {
+	if(handler == null)
+	{
+	    return initZoom;
+	}
+	else
+	{
+	    return handler.getZoom();
+	}
+    }
+    
+    public void setZoom(int zoom)
+    {
+	if (handler != null)
+	{
+	    this.firePropertyChange("zoom", this.zoom, zoom);
+	    handler.setZoom(zoom);
+	    this.zoom = zoom;
+	}
+	else
+	{
+	    this.zoom = zoom;
+	}
+    }
+
+    public double getMouseLon()
+    {
+        return mouseLon;
+    }
+
+    public void setMouseLon(double mouseLon)
+    {
+	this.firePropertyChange("mouseLon", this.mouseLon, mouseLon);
+        this.mouseLon = mouseLon;
+    }
+
+    public double getMouseLat()
+    {
+        return mouseLat;
+    }
+
+    public void setMouseLat(double mouseLat)
+    {
+	this.firePropertyChange("mouseLat", this.mouseLat, mouseLat);
+        this.mouseLat = mouseLat;
+    }
+    
+    
 }

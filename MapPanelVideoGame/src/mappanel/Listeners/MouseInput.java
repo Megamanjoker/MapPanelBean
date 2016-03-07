@@ -1,6 +1,7 @@
 package mappanel.Listeners;
 
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -24,11 +25,12 @@ import mappanel.window.MapPanel;
  * The Class is for listening to all things mouse 
  */
 
-public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener
+public class MouseInput extends MouseAdapter
 {
     private Point downCoords;
     private Handler handle;
     private MapPanel map;
+    private boolean mouseEntered;
 
     /**
      * @param handle - the handler of the map
@@ -77,68 +79,71 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
     public void mouseEntered(MouseEvent e)
     {
-	checkObjects(e);
+	mouseEntered = true;
     }
 
     public void mouseExited(MouseEvent e)
     {
-	Point mapPoint = new Point(handle.getCenter().getX() - getMap().getWidth()/2 + e.getX(), handle.getCenter().getY() - getMap().getHeight()/2 + e.getY());
-	checkObjects(e);
+	mouseEntered = false;
     }
 
     public void mouseMoved(MouseEvent e)
     {
-	//This is for the Debug Panel
-	Point mapPoint = new Point(handle.getCenter().getX() - map.getWidth()/2 + e.getX(), handle.getCenter().getY() - map.getHeight()/2 + e.getY());
-	getMap().mouseLat = MapPanel.position2lat((int) mapPoint.getY(), getMap().getZoom());
-	getMap().mouseLon = MapPanel.position2lon((int) mapPoint.getX(), getMap().getZoom());
-	//
-	
-	for(MapObject point: handle.points)
+	if(mouseEntered)
 	{
-	    MapPoint t = (MapPoint) point;
-	    if(point.getBound().contains(mapPoint))
+	    //This is for the Debug Panel
+	    Point mapPoint = new Point(handle.getCenter().getX() - map.getWidth()/2 + e.getX(), handle.getCenter().getY() - map.getHeight()/2 + e.getY());
+	    map.setMouseLat(MapPanel.position2lat((int) mapPoint.getY(), getMap().getZoom()));
+	    map.setMouseLon(MapPanel.position2lon((int) mapPoint.getX(), getMap().getZoom()));
+	    
+	    //
+	
+	    for(MapObject point: handle.points)
 	    {
-		if(!t.isEnter())
+		MapPoint t = (MapPoint) point;
+		if(point.getBound().contains(mapPoint))
 		{
-		    t.setEnter(true);
+		    if(!t.isEnter())
+		    {
+			t.setEnter(true);
+			for(MouseListener ml : t.getMouseListeners())
+			{
+			    ml.mouseEntered(e);
+			}
+		    }
+		}
+		else if(t.isEnter())
+		{
+		    t.setEnter(false);
 		    for(MouseListener ml : t.getMouseListeners())
 		    {
-			ml.mouseEntered(e);
+			ml.mouseExited(e);
 		    }
 		}
 	    }
-	    else if(t.isEnter())
-	    {
-		t.setEnter(false);
-		for(MouseListener ml : t.getMouseListeners())
-		{
-		    ml.mouseExited(e);
-		}
-	    }
-	}
 	
-	for(MapObject shape: handle.shapes)
-	{
-	    MapShape t = (MapShape) shape;
-	    if(shape.getBound().contains(mapPoint))
+	    for(MapObject shape: handle.shapes)
 	    {
-		if(!t.isEnter())
+		MapShape t = (MapShape) shape;
+		if(shape.getBound().contains(mapPoint))
 		{
-		    t.setEnter(true);
-		    for(MouseListener ml : t.getMouseListeners())
+		    if(!t.isEnter())
 		    {
-			ml.mouseEntered(e);
+			t.setEnter(true);
+			for(MouseListener ml : t.getMouseListeners())
+			{
+			    ml.mouseEntered(e);
+			}
 		    }
 		}
-	    }
-	    else if(t.isEnter())
-	    {
-		t.setEnter(false);
-		for(MouseListener ml : t.getMouseListeners())
+		else if(t.isEnter())
 		{
-		    ml.mouseExited(e);
-		}
+		    t.setEnter(false);
+		    for(MouseListener ml : t.getMouseListeners())
+		    {
+			ml.mouseExited(e);
+		    }
+	    	}
 	    }
 	}
     }
@@ -161,9 +166,9 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
     
     public void mouseWheelMoved(MouseWheelEvent e)
     {
-	int wheel = e.getWheelRotation();
+	double wheel = e.getPreciseWheelRotation();
 	
-	if(wheel < 0)
+	if(wheel <= 0)
 	{
 	    handle.ZoomIn(e.getPoint());
 	}
@@ -180,7 +185,7 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
     public void setCenter(MapObject center)
     {
-        this.handle.setCenter(handle.getCenter());
+        this.handle.setCenter( (Center) center);
     }
     
     /**

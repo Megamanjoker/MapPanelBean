@@ -26,7 +26,7 @@ public class Center extends MapObject
     private static final long serialVersionUID = 7003532228198805203L;
     double Width=1,Height=1;
     double lon,lat;
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     private Envelope envelope;
     private boolean useEnvelope = false;
     
@@ -83,7 +83,7 @@ public class Center extends MapObject
      */
     public Rectangle2D getPriority()
     {
-	return priorityBounds(1);
+	return priorityBounds(.3);
     }
     
     /**
@@ -92,7 +92,7 @@ public class Center extends MapObject
      */
     public Rectangle2D getDeletePriority()
     {
-	return priorityBounds(1.05);
+	return priorityBounds(.4);
     }
 
     /**
