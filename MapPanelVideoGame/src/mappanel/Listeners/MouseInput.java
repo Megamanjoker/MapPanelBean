@@ -27,8 +27,8 @@ import mappanel.window.MapPanel;
 
 public class MouseInput extends MouseAdapter
 {
-    private Point downCoords;
-    private Handler handle;
+    protected Point downCoords;
+    protected Handler handle;
     private MapPanel map;
     private boolean mouseEntered;
 
@@ -108,6 +108,7 @@ public class MouseInput extends MouseAdapter
 			t.setEnter(true);
 			for(MouseListener ml : t.getMouseListeners())
 			{
+                            e.setSource(point);
 			    ml.mouseEntered(e);
 			}
 		    }
@@ -117,6 +118,7 @@ public class MouseInput extends MouseAdapter
 		    t.setEnter(false);
 		    for(MouseListener ml : t.getMouseListeners())
 		    {
+                        e.setSource(point);
 			ml.mouseExited(e);
 		    }
 		}
@@ -132,6 +134,7 @@ public class MouseInput extends MouseAdapter
 			t.setEnter(true);
 			for(MouseListener ml : t.getMouseListeners())
 			{
+                            e.setSource(shape);
 			    ml.mouseEntered(e);
 			}
 		    }
@@ -141,6 +144,7 @@ public class MouseInput extends MouseAdapter
 		    t.setEnter(false);
 		    for(MouseListener ml : t.getMouseListeners())
 		    {
+                        e.setSource(shape);
 			ml.mouseExited(e);
 		    }
 	    	}
@@ -167,7 +171,6 @@ public class MouseInput extends MouseAdapter
     public void mouseWheelMoved(MouseWheelEvent e)
     {
 	double wheel = e.getPreciseWheelRotation();
-	
 	if(wheel <= 0)
 	{
 	    handle.ZoomIn(e.getPoint());
@@ -176,6 +179,7 @@ public class MouseInput extends MouseAdapter
 	{
 	    handle.ZoomOut(e.getPoint());
 	}
+	super.mouseWheelMoved(e);
     }
 
     public MapObject getCenter()
@@ -195,11 +199,13 @@ public class MouseInput extends MouseAdapter
      */
     protected void checkObjects(MouseEvent e)
     {
+//	System.out.println("Checking objects");
 	Point mapPoint = new Point(handle.getCenter().getX() - getMap().getWidth()/2 + e.getX(), handle.getCenter().getY() - getMap().getHeight()/2 + e.getY());
 	for(MapObject point: handle.points)
 	{
 	    if(point.getBound().contains(mapPoint))
 	    {
+                e.setSource(point);
 		point.dispatchEvent(e);
 	    }
 	}
@@ -208,6 +214,7 @@ public class MouseInput extends MouseAdapter
 	{
 	    if(shape.getBound().contains(mapPoint))
 	    {
+                e.setSource(shape);
 		shape.dispatchEvent(e);
 	    }
 	}

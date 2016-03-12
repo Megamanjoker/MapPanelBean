@@ -36,38 +36,38 @@ public class MapPoint extends MapObject implements ImageObserver
     private String Name;
     private boolean enter = false;
     
-    public MapPoint(double lat, double lon)
+    public MapPoint(double lon, double lat)
     {
-	this(lat,  lon,  0,  null,  null,  null);
+	this(lon,  lat,  0,  null,  null,  null);
 	
     }
     
-    public MapPoint(double lat, double lon, int Zoom)
+    public MapPoint(double lon, double lat, int Zoom)
     {
-	this(lat,  lon,  Zoom,  null,  null,  null);
+	this(lon,  lat,  0,  null,  null,  null);
     }
     
-    public MapPoint(double lat, double lon, Image image)
+    public MapPoint(double lon, double lat, Image image)
     {
-	this(lat,  lon,  0,  image,  null,  null);
+	this(lon,  lat,  0,  image,  null,  null);
     }  
     
-    public MapPoint(double lat, double lon, int Zoom, Image image)
+    public MapPoint(double lon, double lat, int Zoom, Image image)
     {
-	this(lat,  lon,  Zoom,  image,  null,  null);
+	this(lon,  lat,  Zoom,  image,  null,  null);
     }
     
-    public MapPoint(double lat, double lon, int Zoom, Image image, String Name)
+    public MapPoint(double lon, double lat, int Zoom, Image image, String Name)
     {
-	this(lat,  lon,  Zoom,  image,  null,  Name);
+	this(lon,  lat,  Zoom,  image,  null,  Name);
     }
     
-    public MapPoint(double lat, double lon, int Zoom, Image image, MouseListener mouseListener)
+    public MapPoint(double lon, double lat, int Zoom, Image image, MouseListener mouseListener)
     {
-	this(lat,  lon,  Zoom,  image,  mouseListener,  null);
+	this(lon,  lat,  Zoom,  image,  mouseListener,  null);
     }
     
-    public MapPoint(double lat, double lon, int Zoom, Image image, MouseListener mouseListener, String Name)
+    public MapPoint(double lon, double lat, int Zoom, Image image, MouseListener mouseListener, String Name)
     {
 	super(0, 0, ObjectID.Point);
 	if(image == null)
@@ -108,25 +108,25 @@ public class MapPoint extends MapObject implements ImageObserver
     
         
 
-    @Override
+    
     public void render(Graphics g)
     {
 	g.drawImage(image, (int)x, (int)y, this);
     }
 
-    @Override
+    
     public Rectangle2D getBound()
     {
 	return new Rectangle2D.Double(x,y, width,height);
     }
 
-    @Override
+    
     public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5)
     {
 	return false;
     }
 
-    @Override
+    
     public void setZoom(int Zoom)
     {
         this.Zoom = Zoom;
@@ -145,7 +145,7 @@ public class MapPoint extends MapObject implements ImageObserver
         Name = name;
     }
 
-    @Override
+    
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;

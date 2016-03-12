@@ -30,7 +30,7 @@ public class Envelope extends MapObject
     private Color color = Color.CYAN;
     
     
-    public Envelope(double x, double y, ObjectID id)
+    public Envelope(int x, int y, ObjectID id)
     {
 	super(x, y, id);
     }
@@ -49,20 +49,22 @@ public class Envelope extends MapObject
 	int newX = (lon2position(startLon, Zoom) + lon2position(endLon, Zoom)) /2;
 	int newY = (lat2position(startLat, Zoom) + lat2position(endLat, Zoom)) /2;
 	center = new Point( newX, newY);
-	this.x = center.getX();
-	this.y = center.getY();
+	this.x = newX;
+	this.y = newY;
     }
 
-    @Override
+    
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	
 	int newX = (lon2position(startLon, Zoom) + lon2position(endLon, Zoom)) /2;
 	int newY = (lat2position(startLat, Zoom) + lat2position(endLat, Zoom)) /2;
+	
 	center = new Point( newX, newY);
+//	System.out.println(center);
     }
 
-    @Override
+    
     public void render(Graphics g)
     {
 	
@@ -74,7 +76,7 @@ public class Envelope extends MapObject
 	    }
     }
 
-    @Override
+    
     public Rectangle getBound()
     {
 	int StartX = lon2position(startLon,Zoom);
@@ -132,19 +134,39 @@ public class Envelope extends MapObject
         this.color = color;
     }
 
+    public void setStartLon(double startLon)
+    {
+        this.startLon = startLon;
+    } 
+    
     public double getStartLon()
     {
         return startLon;
     }
 
+    public void setStartLat(double startLat)
+    {
+        this.startLat = startLat;
+    }
+    
     public double getStartLat()
     {
         return startLat;
     }
 
+    public void setEndLon(double endLon)
+    {
+        this.endLon = endLon;
+    }
+    
     public double getEndLon()
     {
         return endLon;
+    }   
+
+    public void setEndLat(double endLat)
+    {
+        this.endLat = endLat;
     }
 
     public double getEndLat()

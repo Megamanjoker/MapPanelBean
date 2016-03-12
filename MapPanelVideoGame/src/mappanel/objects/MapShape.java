@@ -9,6 +9,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+import javax.swing.JLabel;
+
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
@@ -42,8 +44,10 @@ public class MapShape extends MapObject
     private Boolean line = false;
     private GeneralPath bounds = new GeneralPath();
     private boolean enter = false;
+    private boolean isLabelVisable = false;
+    private JLabel shapeLabel; 
 
-    public MapShape(double x, double y)
+    public MapShape(int x, int y)
     {
 	super(x, y, ObjectID.Shape);
     }
@@ -83,25 +87,26 @@ public class MapShape extends MapObject
 	this(lons, lats, name , shapeStrokeColor, shapeFillColor, strokeThickness,false);
     }
     
-    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, BasicStroke strokeThickness, Boolean Line)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, BasicStroke strokeThickness, Boolean isItALine)
     {
-	this(lons, lats, name , shapeStrokeColor, shapeFillColor, null, strokeThickness, Line);
+	this(lons, lats, name , shapeStrokeColor, shapeFillColor, null, strokeThickness, isItALine);
     }
     
-    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean Line)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean isItALine)
     {
-	this(lons, lats, name , shapeStrokeColor, shapeFillColor, null, strokeThickness, Line, null);
+	this(lons, lats, name , shapeStrokeColor, shapeFillColor, Zoom, strokeThickness, isItALine, null, null,null,null,null);
     }
     
-    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean Line, MouseListener mouse)
+    public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean isItALine, String labelText, Color LabelBackgroundColor, Color LabelForgroundColor, Boolean labelVisible, MouseListener mouse)
     {
 	super(0, 0, ObjectID.Shape);
 	this.ListOfLon = lons;
 	this.ListOfLat = lats;
 	this.name = name;
+	this.Zoom = Zoom;
 	
-	if(Line != null)
-	    this.line = Line;
+	if(isItALine != null)
+	    this.line = isItALine;
 	if(shapeStrokeColor != null)
 	    this.shapeStrokeColor = shapeStrokeColor;
 	if(shapeFillColor != null)
@@ -110,22 +115,23 @@ public class MapShape extends MapObject
 	    this.strokeThickness = strokeThickness;
 	if(mouse != null)
 	    this.addMouseListener(mouse);
+//	if()
 	
     }
 
-    @Override
+    
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	
     }
 
-    @Override
+    
     public void render(Graphics g)
     {
 	tempColor = g.getColor();
 	
 	Graphics2D g2d = (Graphics2D) g;
-	g2d.setColor(shapeStrokeColor);
+//	g2d.setColor(shapeStrokeColor);
 	Stroke tempStroke = g2d.getStroke();
 	GeneralPath shape = new GeneralPath();
 	g2d.setStroke(strokeThickness);
@@ -139,11 +145,12 @@ public class MapShape extends MapObject
 	    if(!line)
 		shape.closePath();
 	    
-	    if(shapeFillColor != null)
+	    if(!line)
 	    {
 		g2d.setColor(shapeFillColor);
 		g2d.fill(shape);
 	    }
+	    g2d.setColor(shapeStrokeColor);
 	    g2d.draw(shape);
 	    bounds = shape;
 	}
@@ -151,7 +158,7 @@ public class MapShape extends MapObject
 	g.setColor(tempColor);
     }
 
-    @Override
+    
     public Rectangle2D getBound()
     {
 	return bounds.getBounds2D();

@@ -58,6 +58,14 @@ public class MapPanel extends Canvas implements Runnable
     private boolean draw = false;
     private boolean useEnvelope = false;
     private Envelope envelope;
+    private double lowerLeftCornerLat;
+    private double lowerLeftCornerLon;
+    private double upperLeftCornerLat;
+    private double upperLeftCornerLon;
+    private double upperRightCornerLon;
+    private double upperRightCornerLat;
+    private double lowerRightCornerLon;
+    private double lowerRightCornerLat;
     
     public MapPanel()
     {
@@ -582,6 +590,54 @@ public class MapPanel extends Canvas implements Runnable
     {
 	this.firePropertyChange("mouseLat", this.mouseLat, mouseLat);
         this.mouseLat = mouseLat;
+    }
+
+    public double getUpperRightCornerLon()
+    {
+	upperRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth()/2, this.getZoom());
+        return upperRightCornerLon;
+    }
+
+    public double getUpperRightCornerLat()
+    {
+	upperRightCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight()/2, this.getZoom());
+        return upperRightCornerLat;
+    }
+
+    public double getLowerRightCornerLon()
+    {
+	lowerRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth()/2, this.getZoom());
+        return lowerRightCornerLon;
+    }
+
+    public double getLowerRightCornerLat()
+    {
+	lowerRightCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight()/2, this.getZoom());
+        return lowerRightCornerLat;
+    }
+
+    public double getUpperLeftCornerLon()
+    {
+	upperLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth()/2, this.getZoom());
+        return upperLeftCornerLon;
+    }
+
+    public double getUpperLeftCornerLat()
+    {
+	upperLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight()/2, this.getZoom());
+        return upperLeftCornerLat;
+    }
+
+    public double getLowerLeftCornerLon()
+    {
+	lowerLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth()/2, this.getZoom());
+        return lowerLeftCornerLon;
+    }
+
+    public double getLowerLeftCornerLat()
+    {
+	lowerLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight()/2, this.getZoom());
+        return lowerLeftCornerLat;
     }
     
     

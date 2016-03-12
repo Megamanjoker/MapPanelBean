@@ -52,6 +52,7 @@ public class Handler
 	this.Zoom = initZoom;
 	center = new Center(MapPanel.lon2position(initLon,initZoom),MapPanel.lat2position(initLat,initZoom));
 	camera = new Camera(MapPanel.lon2position(initLon,initZoom), MapPanel.lat2position(initLat,initZoom),mapPanel);
+	objects.add(center);
 //	updateObjectZoom();
     }
     
@@ -182,7 +183,7 @@ public class Handler
     public void CreateMap(Point point)
     {
 	clearMapTile();
-	addMapObject(new MapTile(point.getX(),point.getY(),listOfTileServerURL));
+	addMapObject(new MapTile(point.x,point.y,listOfTileServerURL));
     }
 
     /**
@@ -341,9 +342,18 @@ public class Handler
     public void updateObjectZoom()
     {
 //	this.center.setZoom(Zoom);
-	for(MapObject object : objects)
+	
+	try
 	{
-	    object.setZoom(Zoom);
+	    for(MapObject object : objects)
+	    {
+	        object.setZoom(Zoom);
+	    }
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
     }
     
@@ -415,7 +425,6 @@ public class Handler
 	}
 	 
 	 this.Zoom = zoom;
-	 this.center.setZoom(zoom);
 	 updateObjectZoom();
     }
     

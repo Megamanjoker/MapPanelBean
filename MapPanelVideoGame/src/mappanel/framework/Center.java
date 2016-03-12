@@ -3,6 +3,7 @@ package mappanel.framework;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashSet;
@@ -29,29 +30,38 @@ public class Center extends MapObject
     private boolean DEBUG = false;
     private Envelope envelope;
     private boolean useEnvelope = false;
+    private int oldX = 0,oldY = 0;
     
-    public Center(double x, double y)
+    
+    public Center(int x, int y)
     {
 	super(x, y, ObjectID.Center);
 	this.envelope = new Envelope(-96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
     }
 
     
-    @Override
+    
     public void tick(LinkedHashSet<MapObject> objects)
     {
+	if(oldX != x || oldY != y)
+	{
+	   firePropertyChange("center", new Point(oldX, oldY), new Point((int)x, (int)y));
+	   this.oldX = x;
+	   this.oldY = y;
+	}
+	
 	envelope.tick(objects);
 	if(!this.getBound().intersects(envelope.getBound(this.Zoom)) && useEnvelope)
 	{
-	    this.x = envelope.getCenter().getX();
-	    this.y = envelope.getCenter().getY();
+	    this.x = envelope.getCenter().x;
+	    this.y = envelope.getCenter().y;
 	}
     }
 
     /**
      * Only renders in debug mode
      */
-    @Override
+    
     public void render(Graphics g)
     {
 	if(DEBUG)
@@ -70,7 +80,7 @@ public class Center extends MapObject
     /**
      * Not used
      */
-    @Override
+    
     public Rectangle2D getBound()
     {
 	// TODO Auto-generated method stub
@@ -132,7 +142,10 @@ public class Center extends MapObject
 
     public void setEnvelope(Double startLon,Double startLat,Double endLon,Double endLat)
     {
-        this.envelope = new Envelope(startLon, startLat, endLon, endLat, this.Zoom);
+        this.envelope.setStartLon(startLon);
+        this.envelope.setStartLat(startLat);
+        this.envelope.setEndLon(endLon);
+        this.envelope.setEndLat(endLat);
     }
 
     public boolean isEnvelopeUsed()
@@ -152,6 +165,7 @@ public class Center extends MapObject
 	this.Zoom = Zoom;
 //	this.x = MapPanel.lon2position(this.lon, this.Zoom);
 //	this.y = MapPanel.lat2position(this.y, this.Zoom);
+//	System.out.println("Setting Zoom");
 	this.envelope.setZoom(Zoom);
     }
     

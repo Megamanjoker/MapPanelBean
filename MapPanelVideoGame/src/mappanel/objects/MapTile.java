@@ -75,7 +75,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 //	
 //    }
     
-    public MapTile(double x, double y, LinkedHashSet<String> listOfTileServerURL)
+    public MapTile(int x, int y, LinkedHashSet<String> listOfTileServerURL)
     {
 	super(x, y, ObjectID.Tile);
 	this.listOfTileServerURL = listOfTileServerURL;
@@ -86,7 +86,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	
     }
     
-    public MapTile(double x, double y, LinkedHashSet<String> listOfTileServerURL, Center center ,int Zoom)
+    public MapTile(int x, int y, LinkedHashSet<String> listOfTileServerURL, Center center ,int Zoom)
     {
 	super(x, y, ObjectID.Tile);
 	this.listOfTileServerURL = listOfTileServerURL;
@@ -99,7 +99,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	
     }
 
-    @Override
+    
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	for(MapObject object : objects)
@@ -187,7 +187,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     }
 
     
-    @Override
+    
     public void render(Graphics g)
     {
 	if(center != null)
@@ -223,7 +223,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     }
 
     //bounds for the tile
-    @Override
+    
     public Rectangle2D getBound()
     {
 	return new Rectangle2D.Double(x,y,TileSize,TileSize);
@@ -250,14 +250,14 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 //        TileServerURL = tileServerURL;
 //    }
 
-    @Override
+    
     public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height)
     {
 	// TODO Auto-generated method stub
 	return false;
     }
 
-    @Override
+    
     public void run()
     {
 	try

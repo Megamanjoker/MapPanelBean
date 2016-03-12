@@ -8,76 +8,46 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-/**
- * 
- * @author Tyler Valant
- * @category Framework
- * @since 1-19-2016
- * @version 1.0.0
- *
- * The MapObject class is the base component for all objects in the Map.
- */
 public abstract class MapObject extends JComponent
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 3769380260168628120L;
-    protected double x,y;
+    protected int x,y;
     protected ObjectID id;
     protected float velX = 0, velY = 0;
     protected int Zoom = 0;
     protected String name;
     
-    /**
-     * Constructor
-     * @param x - x coordinate
-     * @param y - y coordinate
-     * @param id - the id of the object
-     */
-    public MapObject(double x,double y, ObjectID id)
+
+    public MapObject(int x,int y, ObjectID id)
     {
 	this.x = x;
 	this.y = y;
 	this.id = id;
     }
     
-    
-    /**
-     * Does some function each tick
-     * Examples - Collision checking, Movement tracking.
-     * @param objects - All the objects in the scene
-     */
+
     public abstract void tick(LinkedHashSet<MapObject> objects);
     
-    /**
-     * Draws the object.
-     * @param g - graphic to be drawn on.
-     */
     public abstract void render(Graphics g);
     
-    /**
-     * The bounds of this object
-     * @return - the Bounding box of this object
-     */
     public abstract Rectangle2D getBound(); 
 
     public int getX()
     {
-        return (int) x;
+        return x;
     }
 
-    public void setX(double x)
+    public void setX(int x)
     {
         this.x = x;
     }
 
     public int getY()
     {
-        return (int) y;
+        return y;
     }
 
-    public void setY(double y)
+    public void setY(int y)
     {
         this.y = y;
     }
@@ -135,9 +105,5 @@ public abstract class MapObject extends JComponent
     {
         this.name = name;
     }
-
-    
-    
-    
     
 }
