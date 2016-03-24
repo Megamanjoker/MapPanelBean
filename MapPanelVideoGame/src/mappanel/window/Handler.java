@@ -2,18 +2,11 @@ package mappanel.window;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseListener;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
+import java.util.*;
 import java.lang.NullPointerException;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import mappanel.framework.Camera;
 import mappanel.framework.Center;
@@ -25,21 +18,20 @@ import mappanel.objects.MapTile;
 
 /**
  * 
- * @author Tyler Valant
- * @category Window
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Window
+ *  1-19-2016
+ *  1.0.0
  *
  */
 public class Handler 
 {
     private static final int TileSize = 256;
-    public LinkedHashSet<MapObject> objects = new LinkedHashSet<MapObject>();
-    public LinkedHashSet<MapObject> points = new LinkedHashSet<MapObject>();
-    public LinkedHashSet<MapObject> shapes = new LinkedHashSet<MapObject>();
-    public LinkedHashSet<String> listOfTileServerURL = new LinkedHashSet<String>();
-    private String TileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
-    private Center center;
+    public LinkedHashSet<MapObject> objects = new LinkedHashSet<>();
+    public LinkedHashSet<MapObject> points = new LinkedHashSet<>();
+    public LinkedHashSet<MapObject> shapes = new LinkedHashSet<>();
+    public LinkedHashSet<String> listOfTileServerURL = new LinkedHashSet<>();
+	private Center center;
     private int numberOfTiles = 1;
     private int MaxZoom = 19,MinZoom = 0, Zoom = 0;
     private LinkedHashSet<ObjectID> idBlackList = new LinkedHashSet<ObjectID>(Arrays.asList(ObjectID.Center,ObjectID.Tile,ObjectID.Envelope));
@@ -48,7 +40,8 @@ public class Handler
     
     public Handler(double initLon, double initLat, int initZoom, MapPanel mapPanel)
     {
-	this.listOfTileServerURL.add(TileServerURL);
+		String tileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
+		this.listOfTileServerURL.add(tileServerURL);
 	this.Zoom = initZoom;
 	center = new Center(MapPanel.lon2position(initLon,initZoom),MapPanel.lat2position(initLat,initZoom));
 	camera = new Camera(MapPanel.lon2position(initLon,initZoom), MapPanel.lat2position(initLat,initZoom),mapPanel);
@@ -75,7 +68,7 @@ public class Handler
 		    	if( object.getId() == ObjectID.Tile)
 			{
 			    MapTile Map = (MapTile) object;
-			    Map.setLast(true);
+			    Map.setLast();
 			}
 		    }
 	    }
@@ -83,7 +76,6 @@ public class Handler
 	    
 	    center.tick(objects);
 	    camera.tick(center);
-	    
 	    removeLingeringTiles();
 	}
 	catch (ConcurrentModificationException e)
@@ -98,52 +90,25 @@ public class Handler
     
     public void render(Graphics g)
     {
-	try
-	{
-	    for(MapObject object : objects)
-	    {
-		if(object.getId() == ObjectID.Tile)
-		    object.render(g);
-	    }
-	    renderShapes(g);
-	    renderPoints(g);
-	    renderCenter(g);
-	}
-	catch (ConcurrentModificationException e)
-	{
-	    
-	}
-    }
-    
-    public void renderCenter(Graphics g)
-    {
-	if(center != null)
-	{
-	    center.render(g);
-	}
-	
-    }
-    
-    public void renderShapes(Graphics g)
-    {
-	for(MapObject object : shapes)
-	{
-		object.render(g);
-	}
-    }
-    
-    public void renderPoints(Graphics g)
-    {
-	for(MapObject object : points)
-	{
-	    object.render(g);
-	 
-	}
+
+        try
+        {
+            ArrayList<MapObject> renderingList = new ArrayList<>(objects);
+
+            renderingList.sort((o1, o2) -> o1.getRenderingPriority() - o2.getRenderingPriority());
+            
+            for(MapObject object : renderingList)
+                object.render(g);
+        }
+        catch (ConcurrentModificationException e)
+        {
+
+        }
     }
     
     public void addMapObject(MapObject object)
     {
-	this.objects.add(object);
+	    this.objects.add(object);
     }
     
     public void removeMapObject(MapObject object)
@@ -156,8 +121,8 @@ public class Handler
      */
     public void CreateMap()
     {
-	if(center != null)
-	    addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,listOfTileServerURL));
+        if(center != null)
+            addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,listOfTileServerURL));
     }
     
     /**
@@ -165,14 +130,14 @@ public class Handler
      */
     public void CreateMap(int x,int y)
     {
-	MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,listOfTileServerURL, this.center,Zoom);
-	StartingTile.setLast(true);
-	addMapObject(StartingTile);
-	if(center != null)
-	{
-	    center.setY(y);
-	    center.setX(x);
-	}
+        MapTile StartingTile = new MapTile(x - x % TileSize,y - y % TileSize,listOfTileServerURL, this.center,Zoom);
+        StartingTile.setLast();
+        addMapObject(StartingTile);
+        if(center != null)
+        {
+            center.setY(y);
+            center.setX(x);
+        }
 	
     }
     
@@ -182,22 +147,22 @@ public class Handler
      */
     public void CreateMap(Point point)
     {
-	clearMapTile();
-	addMapObject(new MapTile(point.x,point.y,listOfTileServerURL));
+        clearMapTile();
+        addMapObject(new MapTile(point.x,point.y,listOfTileServerURL));
     }
 
     /**
      * Zoom in
-     * @param point - zoom in on this point
+     *  point - zoom in on this point
      */
     public void ZoomIn(Point point)
     {
 	if(Zoom <  MaxZoom)
 	{
-	    double lat = MapPanel.position2lat((int)(center.getY() + point.y - center.getHeight()/2), Zoom);
-	    double lon = MapPanel.position2lon((int)(center.getX() + point.x - center.getWidth()/2), Zoom);
-	    double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
-	    double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
+	    double lat = MapPanel.position2lat(center.getY() + point.y - center.getHeight()/2, Zoom);
+	    double lon = MapPanel.position2lon(center.getX() + point.x - center.getWidth()/2, Zoom);
+	    double envelopeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
+	    double envelopeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
 	    Zoom++;
 	    clearMapTile();
 	    
@@ -213,7 +178,7 @@ public class Handler
 	    }
 	    else 
 	    {
-		CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
+		CreateMap(MapPanel.lon2position(envelopeLon, Zoom), MapPanel.lat2position(envelopeLat, Zoom));
 	    }
 	    updateObjectZoom();
 	}
@@ -221,18 +186,18 @@ public class Handler
 
     /**
      * Zoom out 
-     * @param point - zoom out from this point
+     *  point - zoom out from this point
      */
     public void ZoomOut(Point point)
     {
 	if(MinZoom < Zoom)
 	{
 	    
-	    double lat = MapPanel.position2lat((int)(center.getY() + point.y - center.getHeight()/2), Zoom);
-	    double lon = MapPanel.position2lon((int)(center.getX() + point.x - center.getWidth()/2), Zoom);
+	    double lat = MapPanel.position2lat(center.getY() + point.y - center.getHeight()/2, Zoom);
+	    double lon = MapPanel.position2lon(center.getX() + point.x - center.getWidth()/2, Zoom);
 
-	    double envolpeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
-	    double envolpeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
+	    double envelopeLon = MapPanel.position2lon((int)(center.getEnvelope().getCenter().getX()), Zoom);
+	    double envelopeLat = MapPanel.position2lat((int)(center.getEnvelope().getCenter().getY()), Zoom);
 	    Zoom--;
 	    clearMapTile();
 	    int x = MapPanel.lon2position(lon, Zoom);
@@ -247,7 +212,7 @@ public class Handler
 	    }
 	    else 
 	    {
-		CreateMap(MapPanel.lon2position(envolpeLon, Zoom), MapPanel.lat2position(envolpeLat, Zoom));
+		CreateMap(MapPanel.lon2position(envelopeLon, Zoom), MapPanel.lat2position(envelopeLat, Zoom));
 	    }
 	    
 	    updateObjectZoom();
@@ -272,7 +237,7 @@ public class Handler
 		    {
 			tile.getLoadImageThread().interrupt();
 		    }
-	            tile.setGenerateEnable(false);
+	            tile.setGenerateEnable();
 	        }
 	    }
 	    
@@ -288,25 +253,11 @@ public class Handler
 	}
 	catch (ConcurrentModificationException e)
 	{
-//	    System.out.println("Could not clear map tiles");
-//	    System.out.println("Trying again...");
 	    clearMapTile();
-	    return;
 	}
 	
 	
     }
-    
-//    public String getTileServerURL()
-//    {
-//        return TileServerURL;
-//    }
-//
-//    public void setTileServerURL(String tileServerURL)
-//    {
-//        TileServerURL = tileServerURL;
-//        updateTileUrl();
-//    }
     
     
     public int getMaxZoom()
@@ -359,15 +310,11 @@ public class Handler
     
     public void updateTileUrl()
     {
-	for(MapObject object : objects)
-	{
-	    if(object.getId() == ObjectID.Tile)
-	    {
-		MapTile tile = (MapTile)object;
-		tile.setListOfTileServerURL(listOfTileServerURL);
-		tile.setDirty(true);
-	    }
-	}
+        objects.stream().filter(object -> object.getId() == ObjectID.Tile).forEach(object -> {
+            MapTile tile = (MapTile) object;
+            tile.setListOfTileServerURL(listOfTileServerURL);
+            tile.setDirty();
+        });
     }
     
     
@@ -376,22 +323,15 @@ public class Handler
      */
     protected void removeLingeringTiles()
     {
-	for(MapObject object : objects)
-	{
-	    if(object.getId() == ObjectID.Tile)
-	    {
-		MapTile tile = (MapTile) object;
-		if(!center.getDeletePriority().intersects(tile.getBound()) && !tile.isLast())
-		{
-		    if(tile.getLoadImageThread().isAlive())
-		    {
-			tile.getLoadImageThread().interrupt();
-		    }
-		    objects.remove(tile);
-		    
-		}
-	    }
-	}
+        objects.stream().filter(object -> object.getId() == ObjectID.Tile).forEach(object -> {
+            MapTile tile = (MapTile) object;
+            if (!center.getDeletePriority().intersects(tile.getBound()) && !tile.isLast()) {
+                if (tile.getLoadImageThread().isAlive()) {
+                    tile.getLoadImageThread().interrupt();
+                }
+                objects.remove(tile);
+            }
+        });
 	
 	
     }
@@ -442,30 +382,29 @@ public class Handler
     
     public void addPoint(MapPoint point)
     {
-	
-	objects.add(point);
-	points.add(point);
+        objects.add(point);
+        points.add(point);
     }
     
     public void clearPoints()
     {
-	if (points != null && !points.isEmpty())
-	{
-	    for (MapObject object : points)
-	    {
-		for(MouseListener l :object.getMouseListeners())
-		    object.removeMouseListener(l);
-		
-		objects.remove(object);
-	    }
-	    points.clear();
-	}
+        if (points != null && !points.isEmpty())
+        {
+            for (MapObject object : points)
+            {
+                for(MouseListener l :object.getMouseListeners())
+                    object.removeMouseListener(l);
+
+                objects.remove(object);
+            }
+            points.clear();
+        }
     }
     
     public void addShape(MapShape shape)
     {
-	objects.add(shape);
-	shapes.add(shape);
+	    objects.add(shape);
+	    shapes.add(shape);
     }
     
     public void clearShapes()
@@ -508,10 +447,7 @@ public class Handler
 
     private boolean isIdBlackListed(MapObject object)
     {
-	if(idBlackList.contains(object.getId()))
-	    return true;
-	else
-	    return false;
+		return idBlackList.contains(object.getId());
     }
 
     public void setEnvelope(double startLon, double startLat, double endLon, double endLat)

@@ -2,30 +2,25 @@ package mappanel.window;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.LinkedHashSet;
+import javax.swing.JPanel;
 
 import mappanel.Listeners.MouseInput;
-import mappanel.framework.Camera;
 import mappanel.framework.Center;
 import mappanel.framework.Envelope;
 import mappanel.framework.MapObject;
-import mappanel.framework.ObjectID;
 import mappanel.objects.MapPoint;
 import mappanel.objects.MapShape;
 
 /**
  * 
  * @author Tyler Valant
- * @category Window
  * @since 1-19-2016
- * @version 1.0.0
+ * @version 1.0.5.12-SNAPSHOT
  *
  */
 public class MapPanel extends Canvas implements Runnable
@@ -36,19 +31,18 @@ public class MapPanel extends Canvas implements Runnable
     private int minZoom = 0;
     public int WIDTH,HEIGHT;
     private volatile boolean running = false;
-    private Thread thread;
-    private int initZoom = 15;
+	private int initZoom = 15;
     private double initLat = 32.966199,initLon = -96.726889;
     private ArrayList<Double> testLon = new ArrayList<Double>();
     private ArrayList<Double> testLat = new ArrayList<Double>();
-    private String tileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
-    private int zoom = 0;
+	private int zoom = 0;
     private Color envelopeColor = Color.BLACK;
     public double mouseLon = 0;
     public double mouseLat = 0;
     
     //Object Handler
     Handler handler;
+    DebugConsole debugConsole;
     private LinkedHashSet<MapPoint> listOfPoints = new LinkedHashSet<MapPoint>();
     private LinkedHashSet<MapShape> listOfShapes = new LinkedHashSet<MapShape>();
     private double endLat =  32.965182;
@@ -58,18 +52,11 @@ public class MapPanel extends Canvas implements Runnable
     private boolean draw = false;
     private boolean useEnvelope = false;
     private Envelope envelope;
-    private double lowerLeftCornerLat;
-    private double lowerLeftCornerLon;
-    private double upperLeftCornerLat;
-    private double upperLeftCornerLon;
-    private double upperRightCornerLon;
-    private double upperRightCornerLat;
-    private double lowerRightCornerLon;
-    private double lowerRightCornerLat;
-    
-    public MapPanel()
+
+	public MapPanel()
     {
-	
+	debugConsole = new DebugConsole(this);
+        this.debugConsole.setVisible(false);
     }
     
     private void initialize()
@@ -92,9 +79,10 @@ public class MapPanel extends Canvas implements Runnable
 	handler.setDrawingEnvelope(draw);
 	handler.setEnvelopeColor(envelopeColor);
 	handler.setEnvelopeUsed(useEnvelope);
-	
-	
-	if(tileServerURL != null)
+
+
+		String tileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
+		if(tileServerURL != null)
 	    handler.addURL(tileServerURL);
 	else
 	    handler.addURL("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/");
@@ -145,7 +133,7 @@ public class MapPanel extends Canvas implements Runnable
 	    return;
 	
 	running = true;
-	thread = new Thread(this);
+		Thread thread = new Thread(this);
 	thread.start();
     }
     
@@ -154,7 +142,7 @@ public class MapPanel extends Canvas implements Runnable
 	running = false;
     }
     
-    @Override
+
     public void run()
     {
 	initialize();
@@ -182,7 +170,8 @@ public class MapPanel extends Canvas implements Runnable
 	    
 	    if(System.currentTimeMillis() - timer > 1000)
 	    {
-		timer += 1000;
+		
+                timer += 1000;
 //		System.out.println("FPS: " + frames + ", Tick: " + updates + ", Number of Objects: " + handler.objects.size());
 		updates = 0;
 		frames = 0;
@@ -251,6 +240,7 @@ public class MapPanel extends Canvas implements Runnable
 	    handler.tick();
 	    handler.getCenter().setWidth(this.getWidth());
 	    handler.getCenter().setHeight(this.getHeight());
+            debugConsole.tick();
 	}
 	catch (Exception e)
 	{
@@ -261,9 +251,9 @@ public class MapPanel extends Canvas implements Runnable
     }
 
     public static void main(String args[])
-    {
-	new Window(1280,800,"Map Panel Prototype", new MapPanel());
-    }
+{
+	new Window(new MapPanel());
+}
 
     public static double position2lon(int x, int z)
     {
@@ -594,51 +584,54 @@ public class MapPanel extends Canvas implements Runnable
 
     public double getUpperRightCornerLon()
     {
-	upperRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth()/2, this.getZoom());
+		double upperRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth() / 2, this.getZoom());
         return upperRightCornerLon;
     }
 
     public double getUpperRightCornerLat()
     {
-	upperRightCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight()/2, this.getZoom());
+		double upperRightCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight() / 2, this.getZoom());
         return upperRightCornerLat;
     }
 
     public double getLowerRightCornerLon()
     {
-	lowerRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth()/2, this.getZoom());
+		double lowerRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth() / 2, this.getZoom());
         return lowerRightCornerLon;
     }
 
     public double getLowerRightCornerLat()
     {
-	lowerRightCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight()/2, this.getZoom());
+		double lowerRightCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight() / 2, this.getZoom());
         return lowerRightCornerLat;
     }
 
     public double getUpperLeftCornerLon()
     {
-	upperLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth()/2, this.getZoom());
+		double upperLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth() / 2, this.getZoom());
         return upperLeftCornerLon;
     }
 
     public double getUpperLeftCornerLat()
     {
-	upperLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight()/2, this.getZoom());
+		double upperLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight() / 2, this.getZoom());
         return upperLeftCornerLat;
     }
 
     public double getLowerLeftCornerLon()
     {
-	lowerLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth()/2, this.getZoom());
+		double lowerLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth() / 2, this.getZoom());
         return lowerLeftCornerLon;
     }
 
     public double getLowerLeftCornerLat()
     {
-	lowerLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight()/2, this.getZoom());
+		double lowerLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight() / 2, this.getZoom());
         return lowerLeftCornerLat;
     }
     
-    
+    public JPanel getDebugConsole()
+    {
+        return debugConsole;
+    }
 }

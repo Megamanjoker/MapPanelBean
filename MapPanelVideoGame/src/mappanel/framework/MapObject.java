@@ -1,12 +1,9 @@
 package mappanel.framework;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashSet;
-import java.util.List;
-
-import javax.swing.JComponent;
 
 public abstract class MapObject extends JComponent
 {
@@ -16,13 +13,15 @@ public abstract class MapObject extends JComponent
     protected float velX = 0, velY = 0;
     protected int Zoom = 0;
     protected String name;
+    protected int renderingPriority;
     
 
-    public MapObject(int x,int y, ObjectID id)
+    public MapObject(int x,int y, ObjectID id, int renderingPriority)
     {
-	this.x = x;
-	this.y = y;
-	this.id = id;
+        this.x = x;
+        this.y = y;
+        this.id = id;
+        this.renderingPriority = renderingPriority;
     }
     
 
@@ -94,16 +93,23 @@ public abstract class MapObject extends JComponent
         Zoom = zoom;
     }
 
+    public int getRenderingPriority() {
+        return renderingPriority;
+    }
 
+    public void setRenderingPriority(int renderingPriority) {
+        this.renderingPriority = renderingPriority;
+    }
+
+    @Override
     public String getName()
     {
         return name;
     }
 
-
+    @Override
     public void setName(String name)
     {
         this.name = name;
     }
-    
 }

@@ -13,10 +13,10 @@ import mappanel.window.MapPanel;
 
 /**
  * 
- * @author Tyler Valant
- * @category Framework
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Framework
+ *  1-19-2016
+ *  1.0.0
  *
  */
 public class Center extends MapObject
@@ -25,9 +25,9 @@ public class Center extends MapObject
      * 
      */
     private static final long serialVersionUID = 7003532228198805203L;
-    double Width=1,Height=1;
+    private double Width=1;
+    private double Height=1;
     double lon,lat;
-    private boolean DEBUG = false;
     private Envelope envelope;
     private boolean useEnvelope = false;
     private int oldX = 0,oldY = 0;
@@ -35,8 +35,8 @@ public class Center extends MapObject
     
     public Center(int x, int y)
     {
-	super(x, y, ObjectID.Center);
-	this.envelope = new Envelope(-96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
+        super(x, y, ObjectID.Center,2);
+        this.envelope = new Envelope(-96.728477, 32.966722,  -96.725505, 32.965182, Zoom);
     }
 
     
@@ -64,7 +64,8 @@ public class Center extends MapObject
     
     public void render(Graphics g)
     {
-	if(DEBUG)
+        boolean DEBUG = false;
+        if(DEBUG)
 	{
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.setColor(Color.ORANGE);
@@ -89,7 +90,7 @@ public class Center extends MapObject
     
     /**
      * the tiles in this 
-     * @return - Collision box of don't delete box 
+     *  - Collision box of don't delete box
      */
     public Rectangle2D getPriority()
     {
@@ -98,7 +99,7 @@ public class Center extends MapObject
     
     /**
      * Anything outside this box should be deleted
-     * @return - Collision box of do delete box
+     *  - Collision box of do delete box
      */
     public Rectangle2D getDeletePriority()
     {
@@ -107,8 +108,8 @@ public class Center extends MapObject
 
     /**
      * This method is to minimize the number of times, I have to write the equation Rect = (x - w/2 - (w/2 * %) , y - h/2 - (h/2 * %), w + w * %, h + h * %)
-     * @param percent - the percent of increase or decrease of the bounds
-     * @return - the bound with the percent
+     *  percent - the percent of increase or decrease of the bounds
+     *  - the bound with the percent
      */
     private Rectangle2D priorityBounds(double percent)
     {

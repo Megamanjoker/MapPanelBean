@@ -4,14 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
@@ -22,19 +20,17 @@ import mappanel.framework.ObjectID;
 
 /**
  * 
- * @author Tyler Valant
- * @category Object
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Object
+ *  1-19-2016
+ *  1.0.0
  *
  */
 public class MapTile extends MapObject implements ImageObserver, Runnable
 {
     private static final long serialVersionUID = -7211837370532773221L;
 
-    private boolean DEBUG = false;
-    
-    private int TileSize = 256;
+	private int TileSize = 256;
     private int TestSize = 16;
     private int Zoom = 0;
     private LinkedHashSet<Image> image = new LinkedHashSet<Image>();
@@ -77,7 +73,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     
     public MapTile(int x, int y, LinkedHashSet<String> listOfTileServerURL)
     {
-	super(x, y, ObjectID.Tile);
+	super(x, y, ObjectID.Tile,0);
 	this.listOfTileServerURL = listOfTileServerURL;
 	NorthBound = new Rectangle2D.Double(x + TileSize/2 ,y - TestSize,  TestSize - 1,TestSize - 1);
 	EastBound  = new Rectangle2D.Double(x + TileSize,   y + TileSize/2,TestSize - 1,TestSize - 1);
@@ -88,7 +84,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     
     public MapTile(int x, int y, LinkedHashSet<String> listOfTileServerURL, Center center ,int Zoom)
     {
-	super(x, y, ObjectID.Tile);
+	super(x, y, ObjectID.Tile,0);
 	this.listOfTileServerURL = listOfTileServerURL;
 	this.Zoom = Zoom;
 	this.center = center;
@@ -193,7 +189,8 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	if(center != null)
 	{
 	    Graphics2D g2d = (Graphics2D) g;
-	    if(DEBUG)
+		boolean DEBUG = false;
+		if(DEBUG)
 	    {
 		
 		g2d.setColor(Color.CYAN);
@@ -229,12 +226,14 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	return new Rectangle2D.Double(x,y,TileSize,TileSize);
     }
 
-    public int getZoom()
+
+	public int getZoom()
     {
         return Zoom;
     }
 
-    public void setZoom(int zoom)
+
+	public void setZoom(int zoom)
     {
         Zoom = zoom;
         
@@ -318,9 +317,9 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 	loadImageThread.start();
     }
 
-    public void setDirty(boolean b)
+    public void setDirty()
     {
-	dirty = b;
+	dirty = true;
 	
     }
     
@@ -335,9 +334,9 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         return last;
     }
 
-    public void setLast(boolean last)
+    public void setLast()
     {
-        this.last = last;
+        this.last = true;
     }
 
     
@@ -346,9 +345,9 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         return generateEnable;
     }
 
-    public void setGenerateEnable(boolean generateEnable)
+    public void setGenerateEnable()
     {
-        this.generateEnable = generateEnable;
+        this.generateEnable = false;
     }
 
     public Thread getLoadImageThread()

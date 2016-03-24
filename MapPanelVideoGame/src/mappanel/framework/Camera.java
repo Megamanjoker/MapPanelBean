@@ -4,10 +4,10 @@ import mappanel.window.MapPanel;
 
 /**
  * 
- * @author Tyler Valant
- * @category Framework
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Framework
+ *  1-19-2016
+ *  1.0.0
  *
  * The Camera class is used to keep track of where the windows is relative to the map
  * The Camera class is attached to MapCenter Class
@@ -46,7 +46,7 @@ public class Camera
 
     /**
      * re-centers the camera to the MapCenter for drawing 
-     * @param center - the center of the map
+     *  center - the center of the map
      */
     public void tick(MapObject center)
     {

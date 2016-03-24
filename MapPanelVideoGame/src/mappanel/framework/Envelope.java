@@ -10,10 +10,10 @@ import java.util.List;
 
 /**
  * 
- * @author Tyler Valant
- * @category Framework
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Framework
+ *  1-19-2016
+ *  1.0.0
  *
  */
 public class Envelope extends MapObject
@@ -28,16 +28,10 @@ public class Envelope extends MapObject
     private Point center;
     private boolean draw = true;
     private Color color = Color.CYAN;
-    
-    
-    public Envelope(int x, int y, ObjectID id)
-    {
-	super(x, y, id);
-    }
-    
+
     public Envelope(double startLon,double startLat,double endLon,double endLat, Integer Zoom)
     {
-	super(0, 0, ObjectID.Envelope);
+	super(0, 0, ObjectID.Envelope,3);
 	if(Zoom != null)
 	    this.Zoom = Zoom;
 	
@@ -46,8 +40,8 @@ public class Envelope extends MapObject
 	this.endLat = endLat;
 	this.endLon = endLon;
 	
-	int newX = (lon2position(startLon, Zoom) + lon2position(endLon, Zoom)) /2;
-	int newY = (lat2position(startLat, Zoom) + lat2position(endLat, Zoom)) /2;
+	int newX = (lon2position(startLon, this.Zoom) + lon2position(endLon, this.Zoom)) /2;
+	int newY = (lat2position(startLat, this.Zoom) + lat2position(endLat, this.Zoom)) /2;
 	center = new Point( newX, newY);
 	this.x = newX;
 	this.y = newY;

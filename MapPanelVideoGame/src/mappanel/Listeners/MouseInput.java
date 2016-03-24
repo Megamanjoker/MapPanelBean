@@ -17,10 +17,10 @@ import mappanel.window.MapPanel;
 
 /**
  * 
- * @author Tyler Valant
- * @category Listener
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Listener
+ *  1-19-2016
+ *  1.0.0
  *
  * The Class is for listening to all things mouse 
  */
@@ -33,8 +33,8 @@ public class MouseInput extends MouseAdapter
     private boolean mouseEntered;
 
     /**
-     * @param handle - the handler of the map
-     * @param map - the map
+     *  handle - the handler of the map
+     *  map - the map
      * 
      * Constructor
      */
@@ -58,7 +58,7 @@ public class MouseInput extends MouseAdapter
 
     /**
      * When dragging the mouse, the center moves around mouse cursor. 
-     * @param e - the mouse event
+     *  e - the mouse event
      */
     private void handleDrag(MouseEvent e)
     {
@@ -193,7 +193,7 @@ public class MouseInput extends MouseAdapter
     }
     
     /**
-     * @param e - the mouse event
+     *  e - the mouse event
      * 
      * Checks all the objects on the map to see if the event is on them, then dispatchs the event to the one's hit
      */

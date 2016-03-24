@@ -1,8 +1,6 @@
 package mappanel.objects;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
@@ -16,117 +14,123 @@ import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 import mappanel.window.MapPanel;
 
-/**
- * 
- * @author Tyler Valant
- * @category Object
- * @since 1-19-2016
- * @version 1.0.0
- *
- */
 public class MapPoint extends MapObject implements ImageObserver
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 3169731756082120901L;
+    private Boolean labelVisible = false;
+    private Color labelForegroundColor = Color.black;
+    private Color labelBackgroundColor = Color.white;
+    private String labelText = "";
     private Image image;
     private int width,height;
     private double lat,lon;
-    private String Name;
     private boolean enter = false;
-    
-    public MapPoint(double lon, double lat)
-    {
-	this(lon,  lat,  0,  null,  null,  null);
-	
-    }
-    
-    public MapPoint(double lon, double lat, int Zoom)
-    {
-	this(lon,  lat,  0,  null,  null,  null);
-    }
-    
-    public MapPoint(double lon, double lat, Image image)
-    {
-	this(lon,  lat,  0,  image,  null,  null);
-    }  
-    
-    public MapPoint(double lon, double lat, int Zoom, Image image)
-    {
-	this(lon,  lat,  Zoom,  image,  null,  null);
-    }
-    
-    public MapPoint(double lon, double lat, int Zoom, Image image, String Name)
-    {
-	this(lon,  lat,  Zoom,  image,  null,  Name);
-    }
-    
-    public MapPoint(double lon, double lat, int Zoom, Image image, MouseListener mouseListener)
-    {
-	this(lon,  lat,  Zoom,  image,  mouseListener,  null);
-    }
-    
-    public MapPoint(double lon, double lat, int Zoom, Image image, MouseListener mouseListener, String Name)
-    {
-	super(0, 0, ObjectID.Point);
-	if(image == null)
-	{
-	    try
-	    {
-		this.image = ImageIO.read(this.getClass().getResource("/image/X.png"));
-		this.width = this.image.getWidth(this);
-		this.height = this.image.getHeight(this);
-		this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
-		this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
-	    }
-	    catch (IOException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	}
-	else
-	{
-	    this.image = image;
-	    this.width = this.image.getWidth(this);
-	    this.height = this.image.getHeight(this);
-	    this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
-	    this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
-	}
-	
-	this.lat = lat;
-	this.lon = lon;
-	this.Zoom = Zoom;
-	if(mouseListener != null)
-	{
-		this.addMouseListener(mouseListener);
-	}
-	this.Name = Name;
-    }
-    
-    
-        
+    private int uniqueID = 0;
 
-    
+    /**
+     *
+     * @param lon
+     * @param lat
+     * @param Zoom
+     * @param image
+     * @param mouseListener
+     * @param name
+     */
+    public MapPoint(double lon, double lat, int Zoom, Image image,  String name, String labelText, Color labelBackgroundColor, Color labelForegroundColor, Boolean labelVisible, MouseListener mouseListener)
+    {
+        super(0, 0, ObjectID.Point,2);
+        if(image == null)
+        {
+            try
+            {
+            this.image = ImageIO.read(this.getClass().getResource("/image/X.png"));
+            this.width = this.image.getWidth(this);
+            this.height = this.image.getHeight(this);
+            this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
+            this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
+            }
+            catch (IOException e)
+            {
+            e.printStackTrace();
+            }
+        }
+        else
+        {
+            this.image = image;
+            this.width = this.image.getWidth(this);
+            this.height = this.image.getHeight(this);
+            this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
+            this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
+        }
+
+        this.lat = lat;
+        this.lon = lon;
+        this.Zoom = Zoom;
+        if(mouseListener != null)
+        {
+            this.addMouseListener(mouseListener);
+        }
+        this.name = name;
+
+        if(labelText != null)
+            this.labelText = labelText;
+        if(labelBackgroundColor != null)
+            this.labelBackgroundColor = labelBackgroundColor;
+        if (labelForegroundColor != null)
+            this.labelForegroundColor = labelForegroundColor;
+        if (labelVisible != null)
+            this.labelVisible = labelVisible;
+
+//        System.out.println(this.name + "'s visibility is " + this.labelText);
+    }
+
+    /**
+     *
+     * @param g
+     */
     public void render(Graphics g)
     {
-	g.drawImage(image, (int)x, (int)y, this);
+	    g.drawImage(image, x, y, this);
+        if(labelVisible)
+        {
+            FontMetrics fm = g.getFontMetrics();
+            int fontWidth = fm.stringWidth(this.labelText);
+            int fontHeight = fm.getAscent();
+            g.setColor(labelBackgroundColor);
+            g.fillRect((int) this.getBound().getCenterX() - (fontWidth / 2) - 5 ,(int) this.getBound().getCenterY() - fontHeight - image.getHeight(this)/2 - 15 , fontWidth + 10, fontHeight + 10);
+            g.setColor(labelForegroundColor);
+            g.drawString(this.labelText,(int) this.getBound().getCenterX() - (fontWidth / 2),(int) this.getBound().getCenterY() - (fontHeight / 4) - image.getHeight(this)/2 - 10);
+        }
     }
 
-    
+    /**
+     *
+     * @return
+     */
     public Rectangle2D getBound()
     {
 	return new Rectangle2D.Double(x,y, width,height);
     }
 
-    
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     * @param arg3
+     * @param arg4
+     * @param arg5
+     * @return
+     */
     public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5)
     {
 	return false;
     }
 
-    
+    /**
+     *
+     * @param Zoom
+     */
     public void setZoom(int Zoom)
     {
         this.Zoom = Zoom;
@@ -135,17 +139,26 @@ public class MapPoint extends MapObject implements ImageObserver
         
     }
 
-    public String getName()
-    {
-        return Name;
+    /**
+     *
+     * @return
+     */
+    public Image getImage() {
+        return image;
     }
 
-    public void setName(String name)
-    {
-        Name = name;
+    /**
+     *
+     * @param image
+     */
+    public void setImage(Image image) {
+        this.image = image;
     }
 
-    
+    /**
+     * 
+     * @param objects
+     */
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
@@ -161,10 +174,44 @@ public class MapPoint extends MapObject implements ImageObserver
     {
         this.enter = enter;
     }
-    
-    
-    
-    
-    
-    
+
+    public Boolean getLabelVisible() {
+        return labelVisible;
+    }
+
+    public void setLabelVisible(Boolean labelVisible) {
+        this.labelVisible = labelVisible;
+    }
+
+    public Color getLabelForegroundColor() {
+        return labelForegroundColor;
+    }
+
+    public void setLabelForegroundColor(Color labelForegroundColor) {
+        this.labelForegroundColor = labelForegroundColor;
+    }
+
+    public Color getLabelBackgroundColor() {
+        return labelBackgroundColor;
+    }
+
+    public void setLabelBackgroundColor(Color labelBackgroundColor) {
+        this.labelBackgroundColor = labelBackgroundColor;
+    }
+
+    public String getLabelText() {
+        return labelText;
+    }
+
+    public void setLabelText(String labelText) {
+        this.labelText = labelText;
+    }
+
+    public int getUniqueID() {
+        return uniqueID;
+    }
+
+    public void setUniqueID(int uniqueID) {
+        this.uniqueID = uniqueID;
+    }
 }

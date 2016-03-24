@@ -2,29 +2,29 @@ package mappanel.window;
 
 import java.awt.Dimension;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * 
- * @author Tyler Valant
- * @category Window
- * @since 1-19-2016
- * @version 1.0.0
+ *  Tyler Valant
+ *  Window
+ *  1-19-2016
+ *  1.0.0
  *
  */
 public class Window 
 {
 
-    public Window(int width, int height, String title, MapPanel map)
+    public Window(MapPanel map)
     {
-	map.setPreferredSize(new Dimension(width,height));
-	map.setMaximumSize(new Dimension(width,height));
-	map.setMinimumSize(new Dimension(width,height));
+	map.setPreferredSize(new Dimension(1280, 800));
+	map.setMaximumSize(new Dimension(1280, 800));
+	map.setMinimumSize(new Dimension(1280, 800));
 	
-	JFrame frame = new JFrame(title);
+	JFrame frame = new JFrame("Map Panel Prototype");
 	frame.add(map);
 	frame.pack();
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	frame.setResizable(true);
 	frame.setLocationRelativeTo(null);
 	frame.setVisible(true);
