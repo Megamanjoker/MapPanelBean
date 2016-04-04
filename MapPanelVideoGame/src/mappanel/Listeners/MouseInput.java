@@ -38,22 +38,22 @@ public class MouseInput extends MouseAdapter
      * 
      * Constructor
      */
-    public MouseInput(Handler handle, MapPanel map)
+    public MouseInput(MapPanel map)
     {
-	this.handle = handle;
-	this.map = map;
+        this.handle = map.getHandler();
+        this.map = map;
 	
     }
     
     public void mouseClicked(MouseEvent e)
     {
-	checkObjects(e);
+	    checkObjects(e);
     }
 
     public void mouseDragged(MouseEvent e)
     {
-	handlePosition(e);
-	handleDrag(e);
+        handlePosition(e);
+        handleDrag(e);
     }
 
     /**
@@ -62,15 +62,15 @@ public class MouseInput extends MouseAdapter
      */
     private void handleDrag(MouseEvent e)
     {
-	if (downCoords != null)
-	{
-	    int tx = downCoords.x - e.getX();
-	    int ty = downCoords.y - e.getY();
-	    handle.getCenter().setX(handle.getCenter().getX() + tx);
-	    handle.getCenter().setY(handle.getCenter().getY() + ty);
-	    downCoords.x = e.getX();
-	    downCoords.y = e.getY();
-	}
+        if (downCoords != null)
+        {
+            int tx = downCoords.x - e.getX();
+            int ty = downCoords.y - e.getY();
+            handle.getCenter().setX(handle.getCenter().getX() + tx);
+            handle.getCenter().setY(handle.getCenter().getY() + ty);
+            downCoords.x = e.getX();
+            downCoords.y = e.getY();
+        }
     }
 
     private void handlePosition(MouseEvent e)
@@ -87,79 +87,83 @@ public class MouseInput extends MouseAdapter
 	mouseEntered = false;
     }
 
+    /**
+     * If the mouse moves into a MapObject, then fire a mouseEnter event on the object.
+     * If the mouse has entered a MapObject and now is not in that MapObject, then fire a mouseExit event on that object
+     * @param e
+     */
     public void mouseMoved(MouseEvent e)
     {
-	if(mouseEntered)
-	{
-	    //This is for the Debug Panel
-	    Point mapPoint = new Point(handle.getCenter().getX() - map.getWidth()/2 + e.getX(), handle.getCenter().getY() - map.getHeight()/2 + e.getY());
-	    map.setMouseLat(MapPanel.position2lat((int) mapPoint.getY(), getMap().getZoom()));
-	    map.setMouseLon(MapPanel.position2lon((int) mapPoint.getX(), getMap().getZoom()));
-	    
-	    //
-	
-	    for(MapObject point: handle.points)
-	    {
-		MapPoint t = (MapPoint) point;
-		if(point.getBound().contains(mapPoint))
-		{
-		    if(!t.isEnter())
-		    {
-			t.setEnter(true);
-			for(MouseListener ml : t.getMouseListeners())
-			{
+        if(mouseEntered)
+        {
+            //This is for the Debug Panel
+            Point mapPoint = new Point(handle.getCenter().getX() - map.getWidth()/2 + e.getX(), handle.getCenter().getY() - map.getHeight()/2 + e.getY());
+            map.setMouseLon(MapPanel.position2lon(mapPoint.x, getMap().getZoom()));
+            map.setMouseLat(MapPanel.position2lat(mapPoint.y, getMap().getZoom()));
+            //
+
+            for(MapObject point: handle.points)
+            {
+                MapPoint t = (MapPoint) point;
+                if(point.getBound().contains(mapPoint))
+                {
+                    if(!t.isEnter())
+                    {
+                        t.setEnter(true);
+                        for(MouseListener ml : t.getMouseListeners())
+                        {
                             e.setSource(point);
-			    ml.mouseEntered(e);
-			}
-		    }
-		}
-		else if(t.isEnter())
-		{
-		    t.setEnter(false);
-		    for(MouseListener ml : t.getMouseListeners())
-		    {
+                            ml.mouseEntered(e);
+                        }
+                    }
+                }
+                else if(t.isEnter())
+                {
+                    t.setEnter(false);
+                    for(MouseListener ml : t.getMouseListeners())
+                    {
                         e.setSource(point);
-			ml.mouseExited(e);
-		    }
-		}
-	    }
-	
-	    for(MapObject shape: handle.shapes)
-	    {
-		MapShape t = (MapShape) shape;
-		if(shape.getBound().contains(mapPoint))
-		{
-		    if(!t.isEnter())
-		    {
-			t.setEnter(true);
-			for(MouseListener ml : t.getMouseListeners())
-			{
+                        ml.mouseExited(e);
+                    }
+                }
+            }
+
+            for(MapObject shape: handle.shapes)
+            {
+                MapShape t = (MapShape) shape;
+                if(shape.getBound().contains(mapPoint))
+                {
+                    if(!t.isEnter())
+                    {
+                        t.setEnter(true);
+                        for(MouseListener ml : t.getMouseListeners())
+                        {
                             e.setSource(shape);
-			    ml.mouseEntered(e);
-			}
-		    }
-		}
-		else if(t.isEnter())
-		{
-		    t.setEnter(false);
-		    for(MouseListener ml : t.getMouseListeners())
-		    {
+                            ml.mouseEntered(e);
+                        }
+                    }
+                }
+                else if(t.isEnter())
+                {
+                    t.setEnter(false);
+                    for(MouseListener ml : t.getMouseListeners())
+                    {
                         e.setSource(shape);
-			ml.mouseExited(e);
-		    }
-	    	}
-	    }
-	}
+                        ml.mouseExited(e);
+                    }
+                }
+            }
+        }
     }
 
     public void mousePressed(MouseEvent e)
     {
-	if (e.getButton() == MouseEvent.BUTTON1)
-	{
-	    downCoords = e.getPoint();
-	}
-	
-	checkObjects(e);
+        if (e.getButton() == MouseEvent.BUTTON1)
+        {
+            downCoords = e.getPoint();
+        }
+
+        checkObjects(e);
     }
 
     public void mouseReleased(MouseEvent e)
@@ -167,19 +171,53 @@ public class MouseInput extends MouseAdapter
 	checkObjects(e);
     }
 
-    
+    /**
+     * Some mouses are more precise than others. That is why I use the getPreciseWheelRotation and not the getWheelRotation
+     * @param e
+     */
     public void mouseWheelMoved(MouseWheelEvent e)
     {
-	double wheel = e.getPreciseWheelRotation();
-	if(wheel <= 0)
-	{
-	    handle.ZoomIn(e.getPoint());
-	}
-	else
-	{
-	    handle.ZoomOut(e.getPoint());
-	}
-	super.mouseWheelMoved(e);
+        double wheel = e.getPreciseWheelRotation();
+        if(wheel <= 0)
+        {
+            handle.ZoomIn(e.getPoint());
+        }
+        else
+        {
+            handle.ZoomOut(e.getPoint());
+        }
+        super.mouseWheelMoved(e);
+    }
+
+    /**
+     *  e - the mouse event
+     * 
+     * Checks all the objects on the map to see if the event is on them, then dispatches the event to the one's hit
+     */
+    protected void checkObjects(MouseEvent e)
+    {
+//	System.out.println("Checking objects");
+	Point mapPoint = new Point(handle.getCenter().getX() - getMap().getWidth()/2 + e.getX(), handle.getCenter().getY() - getMap().getHeight()/2 + e.getY());
+        handle.points.stream().filter(point -> point.getBound().contains(mapPoint)).forEach(point -> {
+            e.setSource(point);
+            point.dispatchEvent(e);
+        });
+
+        handle.shapes.stream().filter(shape -> shape.getBound().contains(mapPoint)).forEach(shape -> {
+            e.setSource(shape);
+            shape.dispatchEvent(e);
+        });
+    }
+
+    //Start of getters/setters
+    public MapPanel getMap()
+    {
+	return map;
+    }
+
+    public void setMap(MapPanel map)
+    {
+	this.map = map;
     }
 
     public MapObject getCenter()
@@ -191,44 +229,5 @@ public class MouseInput extends MouseAdapter
     {
         this.handle.setCenter( (Center) center);
     }
-    
-    /**
-     *  e - the mouse event
-     * 
-     * Checks all the objects on the map to see if the event is on them, then dispatchs the event to the one's hit
-     */
-    protected void checkObjects(MouseEvent e)
-    {
-//	System.out.println("Checking objects");
-	Point mapPoint = new Point(handle.getCenter().getX() - getMap().getWidth()/2 + e.getX(), handle.getCenter().getY() - getMap().getHeight()/2 + e.getY());
-	for(MapObject point: handle.points)
-	{
-	    if(point.getBound().contains(mapPoint))
-	    {
-                e.setSource(point);
-		point.dispatchEvent(e);
-	    }
-	}
-	
-	for(MapObject shape: handle.shapes)
-	{
-	    if(shape.getBound().contains(mapPoint))
-	    {
-                e.setSource(shape);
-		shape.dispatchEvent(e);
-	    }
-	}
-    }
-
-    
-    public MapPanel getMap()
-    {
-	return map;
-    }
-
-    public void setMap(MapPanel map)
-    {
-	this.map = map;
-    }
-    
+    //End of getters/setters
 }

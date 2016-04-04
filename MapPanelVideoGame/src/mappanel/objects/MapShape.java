@@ -39,8 +39,7 @@ public class MapShape extends MapObject
     private Color labelBackgroundColor;
     private Color labelForegroundColor;
     private int uniqueID = 0;
-
-
+    private MapPanel map;
 
     /**
      * the main constructor
@@ -87,14 +86,14 @@ public class MapShape extends MapObject
 	
     }
 
-    
+
     public void tick(LinkedHashSet<MapObject> objects)
     {
 	
     }
 
     /**
-     * renders the shape
+     * renders the shape and label
      * @param g
      * @See Graphics
      */
@@ -150,61 +149,6 @@ public class MapShape extends MapObject
 	return bounds.getBounds2D();
     }
 
-    /**
-     * gets stroke's color of the shape
-     * @return the stroke color of the shape
-     * @See Color
-     */
-    public Color getShapeStrokeColor()
-    {
-        return shapeStrokeColor;
-    }
-
-    /**
-     * sets the shape's stroke color to the color given.
-     * @param shapeStrokeColor
-     */
-    public void setShapeStrokeColor(Color shapeStrokeColor)
-    {
-        this.shapeStrokeColor = shapeStrokeColor;
-    }
-
-    /**
-     * gets fill color of the shape
-     * @return the fill color of the shape
-     * @See Color
-     */
-    public Color getShapeFillColor()
-    {
-        return shapeFillColor;
-    }
-
-    /**
-     * sets the shape's fill color to the color given.
-     * @param shapeFillColor
-     *
-     */
-    public void setShapeFillColor(Color shapeFillColor)
-    {
-        this.shapeFillColor = shapeFillColor;
-    }
-
-    /**
-     * gets whether the label is visible
-     * @return boolean
-     * @See boolean
-     */
-    public boolean isLabelVisible() {
-        return labelVisible;
-    }
-
-    /**
-     * sets whether the label is visible
-     * @param labelVisible is a boolean
-     */
-    public void setLabelVisible(boolean labelVisible) {
-        this.labelVisible = labelVisible;
-    }
 
     /**
      * returns the information of the shape
@@ -213,34 +157,26 @@ public class MapShape extends MapObject
      */
     public String toString()
     {
-	String toString = "";
-	toString += "Name = " + name + "\n";
-	toString += "Bounding Box = " + bounds.getBounds() + "\n";
-	toString += "ListOfLon = " + ListOfLon + " ListOfLat = " + ListOfLat + "\n";
-	toString += "shapeStrokeColor = " + shapeStrokeColor + " shapeFillColor = " + shapeFillColor + "\n";
-	toString += "Zoom = " + Zoom + "\n";
-	toString += "Lat and Lon sizes equal = " ;
-	toString += (ListOfLon.size() == ListOfLat.size()) ;
-	toString += "\n";
-	toString += "Lon list size = " + ListOfLon.size() + " Lat list size = " + ListOfLat.size() + "\n";
-	
-	return toString;
+        String toString = "";
+        toString += "Name = " + name + "\n";
+        toString += "Bounding Box = " + bounds.getBounds() + "\n";
+        toString += "ListOfLon = " + ListOfLon + " ListOfLat = " + ListOfLat + "\n";
+        toString += "shapeStrokeColor = " + shapeStrokeColor + " shapeFillColor = " + shapeFillColor + "\n";
+        toString += "Zoom = " + Zoom + "\n";
+        toString += "Lat and Lon sizes equal = " ;
+        toString += (ListOfLon.size() == ListOfLat.size()) ;
+        toString += "\n";
+        toString += "Lon list size = " + ListOfLon.size() + " Lat list size = " + ListOfLat.size() + "\n";
+
+        return toString;
     }
 
-    /**
-     * gets whether or not the shape has been entered by the mouse
-     * @return boolean
-     * @See String
-     */
+    //Start of getters/setters
     public boolean isEnter()
     {
         return enter;
     }
 
-    /**
-     * sets whether or not the shape has been entered by the mouse
-     * @param enter
-     */
     public void setEnter(boolean enter)
     {
         this.enter = enter;
@@ -293,4 +229,42 @@ public class MapShape extends MapObject
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
     }
+
+    public MapPanel getMap() {
+        return map;
+    }
+
+    public void setMap(MapPanel map) {
+        this.map = map;
+    }
+
+    public boolean isLabelVisible() {
+        return labelVisible;
+    }
+
+    public void setLabelVisible(boolean labelVisible) {
+        this.labelVisible = labelVisible;
+    }
+
+    public Color getShapeStrokeColor()
+    {
+        return shapeStrokeColor;
+    }
+
+    public void setShapeStrokeColor(Color shapeStrokeColor)
+    {
+        this.shapeStrokeColor = shapeStrokeColor;
+    }
+
+    public Color getShapeFillColor()
+    {
+        return shapeFillColor;
+    }
+
+    public void setShapeFillColor(Color shapeFillColor)
+    {
+        this.shapeFillColor = shapeFillColor;
+    }
+
+    //End of getters/setters
 }

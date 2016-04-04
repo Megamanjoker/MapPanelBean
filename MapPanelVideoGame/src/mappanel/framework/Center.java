@@ -43,19 +43,19 @@ public class Center extends MapObject
     
     public void tick(LinkedHashSet<MapObject> objects)
     {
-	if(oldX != x || oldY != y)
-	{
-	   firePropertyChange("center", new Point(oldX, oldY), new Point((int)x, (int)y));
-	   this.oldX = x;
-	   this.oldY = y;
-	}
-	
-	envelope.tick(objects);
-	if(!this.getBound().intersects(envelope.getBound(this.Zoom)) && useEnvelope)
-	{
-	    this.x = envelope.getCenter().x;
-	    this.y = envelope.getCenter().y;
-	}
+        if(oldX != x || oldY != y)
+    {
+        firePropertyChange("center", new Point(oldX, oldY), new Point((int)x, (int)y));
+        this.oldX = x;
+        this.oldY = y;
+    }
+
+        envelope.tick(objects);
+        if(!this.getBound().intersects(envelope.getBound(this.Zoom)) && useEnvelope)
+        {
+            this.x = envelope.getCenter().x;
+            this.y = envelope.getCenter().y;
+        }
     }
 
     /**
@@ -66,26 +66,25 @@ public class Center extends MapObject
     {
         boolean DEBUG = false;
         if(DEBUG)
-	{
-	    Graphics2D g2d = (Graphics2D) g;
-	    g2d.setColor(Color.ORANGE);
-	    g2d.fillRect((int)x - 4, (int)y - 4, 8, 8);
-	    g2d.setColor(Color.RED);
-	    g2d.draw(getPriority());
-	    g2d.setColor(Color.BLUE);
-	    g2d.draw(getDeletePriority());
-	}
-	envelope.render(g);
+        {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(Color.ORANGE);
+            g2d.fillRect((int)x - 4, (int)y - 4, 8, 8);
+            g2d.setColor(Color.RED);
+            g2d.draw(getPriority());
+            g2d.setColor(Color.BLUE);
+            g2d.draw(getDeletePriority());
+        }
+        envelope.render(g);
     }
 
     /**
      * Not used
      */
-    
     public Rectangle2D getBound()
     {
-	// TODO Auto-generated method stub
-	return new Rectangle2D.Double(x,y,1,1);
+	    // TODO Auto-generated method stub
+	    return new Rectangle2D.Double(x,y,1,1);
     }
     
     /**
@@ -113,7 +112,7 @@ public class Center extends MapObject
      */
     private Rectangle2D priorityBounds(double percent)
     {
-	return new Rectangle2D.Double((x - Width/2) -  ((Width/2) * percent),(y - Height/2) - ((Height/2) * percent),(Width + Width * percent) - 1 ,(Height + Height * percent) - 1) ;
+	    return new Rectangle2D.Double((x - Width/2) -  ((Width/2) * percent),(y - Height/2) - ((Height/2) * percent),(Width + Width * percent) - 1 ,(Height + Height * percent) - 1) ;
     }
     
     public int getWidth()
@@ -161,13 +160,13 @@ public class Center extends MapObject
     
     public void setZoom(int Zoom)
     {
-//	this.lon = MapPanel.position2lon((int) this.x, this.Zoom);
-//	this.lat = MapPanel.position2lat((int) this.y, this.Zoom);
-	this.Zoom = Zoom;
-//	this.x = MapPanel.lon2position(this.lon, this.Zoom);
-//	this.y = MapPanel.lat2position(this.y, this.Zoom);
-//	System.out.println("Setting Zoom");
-	this.envelope.setZoom(Zoom);
+    //	this.lon = MapPanel.position2lon((int) this.x, this.Zoom);
+    //	this.lat = MapPanel.position2lat((int) this.y, this.Zoom);
+        this.Zoom = Zoom;
+    //	this.x = MapPanel.lon2position(this.lon, this.Zoom);
+    //	this.y = MapPanel.lat2position(this.y, this.Zoom);
+    //	System.out.println("Setting Zoom");
+        this.envelope.setZoom(Zoom);
     }
     
     public boolean isDrawingEnvelope()

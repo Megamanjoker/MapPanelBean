@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashSet;
 
+/**
+ * This is the base of almost the objects in the map
+ * This excludes the Camera
+ */
 public abstract class MapObject extends JComponent
 {
     private static final long serialVersionUID = 3769380260168628120L;
@@ -24,13 +28,13 @@ public abstract class MapObject extends JComponent
         this.renderingPriority = renderingPriority;
     }
     
-
     public abstract void tick(LinkedHashSet<MapObject> objects);
     
     public abstract void render(Graphics g);
     
     public abstract Rectangle2D getBound(); 
 
+    //Start of getters/setters
     public int getX()
     {
         return x;
@@ -112,4 +116,6 @@ public abstract class MapObject extends JComponent
     {
         this.name = name;
     }
+
+    //End of getters/setters
 }

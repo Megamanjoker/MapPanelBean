@@ -26,6 +26,7 @@ public class MapPoint extends MapObject implements ImageObserver
     private double lat,lon;
     private boolean enter = false;
     private int uniqueID = 0;
+    private MapPanel map;
 
     /**
      *
@@ -43,15 +44,15 @@ public class MapPoint extends MapObject implements ImageObserver
         {
             try
             {
-            this.image = ImageIO.read(this.getClass().getResource("/image/X.png"));
-            this.width = this.image.getWidth(this);
-            this.height = this.image.getHeight(this);
-            this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
-            this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
+                this.image = ImageIO.read(this.getClass().getResource("/image/X.png"));
+                this.width = this.image.getWidth(this);
+                this.height = this.image.getHeight(this);
+                this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
+                this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
             }
             catch (IOException e)
             {
-            e.printStackTrace();
+                e.printStackTrace();
             }
         }
         else
@@ -81,11 +82,10 @@ public class MapPoint extends MapObject implements ImageObserver
         if (labelVisible != null)
             this.labelVisible = labelVisible;
 
-//        System.out.println(this.name + "'s visibility is " + this.labelText);
     }
 
     /**
-     *
+     * Draws the Image on the map
      * @param g
      */
     public void render(Graphics g)
@@ -104,65 +104,47 @@ public class MapPoint extends MapObject implements ImageObserver
     }
 
     /**
-     *
-     * @return
+     * @return returns the boundary of the image
      */
     public Rectangle2D getBound()
     {
-	return new Rectangle2D.Double(x,y, width,height);
+	    return new Rectangle2D.Double(x,y, width,height);
     }
 
     /**
-     *
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     * @param arg3
-     * @param arg4
-     * @param arg5
-     * @return
+     * Used for the ImageObserver interface
+     * @return returns false
      */
-    public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5)
+    public boolean imageUpdate(Image image, int arg1, int arg2, int arg3, int arg4, int arg5)
     {
-	return false;
+	    return false;
     }
 
     /**
-     *
-     * @param Zoom
-     */
-    public void setZoom(int Zoom)
-    {
-        this.Zoom = Zoom;
-        this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
-        this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
-        
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Image getImage() {
-        return image;
-    }
-
-    /**
-     *
-     * @param image
-     */
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    /**
-     * 
+     * move the icon every tick
      * @param objects
      */
     public void tick(LinkedHashSet<MapObject> objects)
     {
-	this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
+	    this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
         this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
+    }
+
+    //Start of getters/setters
+    public void setZoom(int Zoom)
+    {
+        this.Zoom = Zoom;
+        //Change the X and Y to fit the zoom level
+        this.x = MapPanel.lon2position(lon, Zoom) - this.image.getWidth(this)/2;
+        this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public boolean isEnter()
@@ -214,4 +196,15 @@ public class MapPoint extends MapObject implements ImageObserver
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
     }
+
+    public MapPanel getMap()
+    {
+        return map;
+    }
+
+    public void setMap(MapPanel map)
+    {
+        this.map = map;
+    }
+    //End of getters/setters
 }
