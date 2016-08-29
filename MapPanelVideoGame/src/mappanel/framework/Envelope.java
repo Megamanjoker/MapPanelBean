@@ -9,12 +9,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
- * 
- *  Tyler Valant
- *  Framework
- *  1-19-2016
- *  1.0.0
- *
+ * Tyler Valant
+ * Framework
+ * 1-19-2016
+ * 1.0.0
  */
 public class Envelope extends MapObject
 {
@@ -29,6 +27,15 @@ public class Envelope extends MapObject
     private boolean draw = true;
     private Color color = Color.CYAN;
 
+    /**
+     * Instantiates a new Envelope.
+     *
+     * @param startLon the start lon
+     * @param startLat the start lat
+     * @param endLon   the end lon
+     * @param endLat   the end lat
+     * @param Zoom     the zoom
+     */
     public Envelope(double startLon,double startLat,double endLon,double endLat, Integer Zoom)
     {
         super(0, 0, ObjectID.Envelope,3);
@@ -62,7 +69,7 @@ public class Envelope extends MapObject
 
     /**
      * Renders the envelope, if enable to
-     * @param g
+     * @param g graphic to be render on
      */
     public void render(Graphics g)
     {
@@ -87,7 +94,9 @@ public class Envelope extends MapObject
     }
 
     /**
-     * @param zoom
+     * Gets bound.
+     *
+     * @param zoom the zoom
      * @return - the boundary line of the envelope at a given zoom level
      */
     public Rectangle getBound(int zoom)
@@ -102,10 +111,11 @@ public class Envelope extends MapObject
 
     /**
      * This is a conversion of Longitude and Zoom level to screen X-coordinates.
-     * @See <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</>
-     * @param lon
-     * @param z
+     *
+     * @param lon the lon
+     * @param z   the z
      * @return returns the X-coordinated of the given Longitude and Zoom
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</a>
      */
     public static int lon2position(double lon, int z)
     {
@@ -115,10 +125,11 @@ public class Envelope extends MapObject
 
     /**
      * This is a conversion of Latitude and Zoom level to screen X-coordinates.
-     * @See <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</>
-     * @param lat
-     * @param z
+     *
+     * @param lat the lat
+     * @param z   the z
      * @return returns the Y-coordinated of the given Latitude and Zoom
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</a>
      */
     public static int lat2position(double lat, int z)
     {
@@ -127,6 +138,7 @@ public class Envelope extends MapObject
     }
 
     /**
+     * Gets center.
      *
      * @return returns the center point of the envelope
      */
@@ -135,62 +147,122 @@ public class Envelope extends MapObject
         return center;
     }
 
-    //Start of getters/setters
+    /**
+     * Is draw boolean.
+     *
+     * @return the boolean
+     */
+//Start of getters/setters
     public boolean isDraw()
     {
         return draw;
     }
 
+    /**
+     * Sets draw.
+     *
+     * @param draw the draw
+     */
     public void setDraw(boolean draw)
     {
         this.draw = draw;
     }
 
+    /**
+     * Gets color.
+     *
+     * @return the color
+     */
     public Color getColor()
     {
         return color;
     }
 
+    /**
+     * Sets color.
+     *
+     * @param color the color
+     */
     public void setColor(Color color)
     {
         this.color = color;
     }
 
+    /**
+     * Sets start lon.
+     *
+     * @param startLon the start lon
+     */
     public void setStartLon(double startLon)
     {
         this.startLon = startLon;
-    } 
-    
+    }
+
+    /**
+     * Gets start lon.
+     *
+     * @return the start lon
+     */
     public double getStartLon()
     {
         return startLon;
     }
 
+    /**
+     * Sets start lat.
+     *
+     * @param startLat the start lat
+     */
     public void setStartLat(double startLat)
     {
         this.startLat = startLat;
     }
-    
+
+    /**
+     * Gets start lat.
+     *
+     * @return the start lat
+     */
     public double getStartLat()
     {
         return startLat;
     }
 
+    /**
+     * Sets end lon.
+     *
+     * @param endLon the end lon
+     */
     public void setEndLon(double endLon)
     {
         this.endLon = endLon;
     }
-    
+
+    /**
+     * Gets end lon.
+     *
+     * @return the end lon
+     */
     public double getEndLon()
     {
         return endLon;
-    }   
+    }
 
+    /**
+     * Sets end lat.
+     *
+     * @param endLat the end lat
+     */
     public void setEndLat(double endLat)
     {
         this.endLat = endLat;
     }
 
+    /**
+     * Gets end lat.
+     *
+     * @return the end lat
+     */
     public double getEndLat()
     {
         return endLat;

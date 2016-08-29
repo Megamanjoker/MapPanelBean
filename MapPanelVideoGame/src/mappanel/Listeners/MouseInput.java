@@ -16,27 +16,33 @@ import mappanel.window.Handler;
 import mappanel.window.MapPanel;
 
 /**
- * 
- *  Tyler Valant
- *  Listener
- *  1-19-2016
- *  1.0.0
- *
- * The Class is for listening to all things mouse 
+ * Tyler Valant
+ * Listener
+ * 1-19-2016
+ * 1.0.0
+ * <p>
+ * The Class is for listening to all things mouse
  */
-
 public class MouseInput extends MouseAdapter
 {
+    /**
+     * The Down coords.
+     */
     protected Point downCoords;
+    /**
+     * The Handle.
+     */
     protected Handler handle;
     private MapPanel map;
     private boolean mouseEntered;
 
     /**
-     *  handle - the handler of the map
-     *  map - the map
-     * 
+     * handle - the handler of the map
+     * map - the map
+     * <p>
      * Constructor
+     *
+     * @param map the map
      */
     public MouseInput(MapPanel map)
     {
@@ -58,7 +64,7 @@ public class MouseInput extends MouseAdapter
 
     /**
      * When dragging the mouse, the center moves around mouse cursor. 
-     *  e - the mouse event
+     * @param e - the mouse event
      */
     private void handleDrag(MouseEvent e)
     {
@@ -90,7 +96,7 @@ public class MouseInput extends MouseAdapter
     /**
      * If the mouse moves into a MapObject, then fire a mouseEnter event on the object.
      * If the mouse has entered a MapObject and now is not in that MapObject, then fire a mouseExit event on that object
-     * @param e
+     * @param e event
      */
     public void mouseMoved(MouseEvent e)
     {
@@ -173,7 +179,7 @@ public class MouseInput extends MouseAdapter
 
     /**
      * Some mouses are more precise than others. That is why I use the getPreciseWheelRotation and not the getWheelRotation
-     * @param e
+     * @param e event
      */
     public void mouseWheelMoved(MouseWheelEvent e)
     {
@@ -190,9 +196,11 @@ public class MouseInput extends MouseAdapter
     }
 
     /**
-     *  e - the mouse event
-     * 
+     * e - the mouse event
+     * <p>
      * Checks all the objects on the map to see if the event is on them, then dispatches the event to the one's hit
+     *
+     * @param e the event
      */
     protected void checkObjects(MouseEvent e)
     {
@@ -209,22 +217,42 @@ public class MouseInput extends MouseAdapter
         });
     }
 
-    //Start of getters/setters
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
+//Start of getters/setters
     public MapPanel getMap()
     {
 	return map;
     }
 
+    /**
+     * Sets map.
+     *
+     * @param map the map
+     */
     public void setMap(MapPanel map)
     {
 	this.map = map;
     }
 
+    /**
+     * Gets center.
+     *
+     * @return the center
+     */
     public MapObject getCenter()
     {
         return handle.getCenter();
     }
 
+    /**
+     * Sets center.
+     *
+     * @param center the center
+     */
     public void setCenter(MapObject center)
     {
         this.handle.setCenter( (Center) center);

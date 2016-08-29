@@ -5,16 +5,19 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 /**
- * 
- *  Tyler Valant
- *  Window
- *  1-19-2016
- *  1.0.0
- *
+ * Tyler Valant
+ * Window
+ * 1-19-2016
+ * 1.0.0
  */
-public class Window 
+public class Window
 {
 
+    /**
+     * Instantiates a new Window.
+     *
+     * @param map the map
+     */
     public Window(MapPanel map)
     {
         map.setPreferredSize(new Dimension(1280, 800));

@@ -14,6 +14,9 @@ import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 import mappanel.window.MapPanel;
 
+/**
+ * The type Map point.
+ */
 public class MapPoint extends MapObject implements ImageObserver
 {
     private static final long serialVersionUID = 3169731756082120901L;
@@ -29,13 +32,18 @@ public class MapPoint extends MapObject implements ImageObserver
     private MapPanel map;
 
     /**
+     * Instantiates a new Map point.
      *
-     * @param lon
-     * @param lat
-     * @param Zoom
-     * @param image
-     * @param mouseListener
-     * @param name
+     * @param lon                  the lon
+     * @param lat                  the lat
+     * @param Zoom                 the zoom
+     * @param image                the image
+     * @param name                 the name
+     * @param labelText            the label text
+     * @param labelBackgroundColor the label background color
+     * @param labelForegroundColor the label foreground color
+     * @param labelVisible         the label visible
+     * @param mouseListener        the mouse listener
      */
     public MapPoint(double lon, double lat, int Zoom, Image image,  String name, String labelText, Color labelBackgroundColor, Color labelForegroundColor, Boolean labelVisible, MouseListener mouseListener)
     {
@@ -86,7 +94,7 @@ public class MapPoint extends MapObject implements ImageObserver
 
     /**
      * Draws the Image on the map
-     * @param g
+     * @param g graphic to render on
      */
     public void render(Graphics g)
     {
@@ -122,7 +130,7 @@ public class MapPoint extends MapObject implements ImageObserver
 
     /**
      * move the icon every tick
-     * @param objects
+     * @param objects object to be ticked
      */
     public void tick(LinkedHashSet<MapObject> objects)
     {
@@ -139,69 +147,149 @@ public class MapPoint extends MapObject implements ImageObserver
         this.y = MapPanel.lat2position(lat, Zoom) - this.image.getHeight(this)/2;
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Image getImage() {
         return image;
     }
 
+    /**
+     * Sets image.
+     *
+     * @param image the image
+     */
     public void setImage(Image image) {
         this.image = image;
     }
 
+    /**
+     * Is enter boolean.
+     *
+     * @return the boolean
+     */
     public boolean isEnter()
     {
         return enter;
     }
 
+    /**
+     * Sets enter.
+     *
+     * @param enter the enter
+     */
     public void setEnter(boolean enter)
     {
         this.enter = enter;
     }
 
+    /**
+     * Gets label visible.
+     *
+     * @return the label visible
+     */
     public Boolean getLabelVisible() {
         return labelVisible;
     }
 
+    /**
+     * Sets label visible.
+     *
+     * @param labelVisible the label visible
+     */
     public void setLabelVisible(Boolean labelVisible) {
         this.labelVisible = labelVisible;
     }
 
+    /**
+     * Gets label foreground color.
+     *
+     * @return the label foreground color
+     */
     public Color getLabelForegroundColor() {
         return labelForegroundColor;
     }
 
+    /**
+     * Sets label foreground color.
+     *
+     * @param labelForegroundColor the label foreground color
+     */
     public void setLabelForegroundColor(Color labelForegroundColor) {
         this.labelForegroundColor = labelForegroundColor;
     }
 
+    /**
+     * Gets label background color.
+     *
+     * @return the label background color
+     */
     public Color getLabelBackgroundColor() {
         return labelBackgroundColor;
     }
 
+    /**
+     * Sets label background color.
+     *
+     * @param labelBackgroundColor the label background color
+     */
     public void setLabelBackgroundColor(Color labelBackgroundColor) {
         this.labelBackgroundColor = labelBackgroundColor;
     }
 
+    /**
+     * Gets label text.
+     *
+     * @return the label text
+     */
     public String getLabelText() {
         return labelText;
     }
 
+    /**
+     * Sets label text.
+     *
+     * @param labelText the label text
+     */
     public void setLabelText(String labelText) {
         this.labelText = labelText;
     }
 
+    /**
+     * Gets unique id.
+     *
+     * @return the unique id
+     */
     public int getUniqueID() {
         return uniqueID;
     }
 
+    /**
+     * Sets unique id.
+     *
+     * @param uniqueID the unique id
+     */
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
     }
 
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
     public MapPanel getMap()
     {
         return map;
     }
 
+    /**
+     * Sets map.
+     *
+     * @param map the map
+     */
     public void setMap(MapPanel map)
     {
         this.map = map;

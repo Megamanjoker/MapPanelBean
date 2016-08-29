@@ -12,12 +12,10 @@ import java.util.List;
 import mappanel.window.MapPanel;
 
 /**
- * 
- *  Tyler Valant
- *  Framework
- *  1-19-2016
- *  1.0.0
- *
+ * Tyler Valant
+ * Framework
+ * 1-19-2016
+ * 1.0.0
  */
 public class Center extends MapObject
 {
@@ -27,12 +25,24 @@ public class Center extends MapObject
     private static final long serialVersionUID = 7003532228198805203L;
     private double Width=1;
     private double Height=1;
-    double lon,lat;
+    /**
+     * The Lon.
+     */
+    double lon, /**
+ * The Lat.
+ */
+lat;
     private Envelope envelope;
     private boolean useEnvelope = false;
     private int oldX = 0,oldY = 0;
-    
-    
+
+
+    /**
+     * Instantiates a new Center.
+     *
+     * @param x the x
+     * @param y the y
+     */
     public Center(int x, int y)
     {
         super(x, y, ObjectID.Center,2);
@@ -60,8 +70,8 @@ public class Center extends MapObject
 
     /**
      * Only renders in debug mode
+     * @param g graphic to be render on
      */
-    
     public void render(Graphics g)
     {
         boolean DEBUG = false;
@@ -86,19 +96,23 @@ public class Center extends MapObject
 	    // TODO Auto-generated method stub
 	    return new Rectangle2D.Double(x,y,1,1);
     }
-    
+
     /**
-     * the tiles in this 
-     *  - Collision box of don't delete box
+     * the tiles in this
+     * - Collision box of don't delete box
+     *
+     * @return the priority
      */
     public Rectangle2D getPriority()
     {
 	return priorityBounds(.3);
     }
-    
+
     /**
      * Anything outside this box should be deleted
-     *  - Collision box of do delete box
+     * - Collision box of do delete box
+     *
+     * @return the delete priority
      */
     public Rectangle2D getDeletePriority()
     {
@@ -107,8 +121,8 @@ public class Center extends MapObject
 
     /**
      * This method is to minimize the number of times, I have to write the equation Rect = (x - w/2 - (w/2 * %) , y - h/2 - (h/2 * %), w + w * %, h + h * %)
-     *  percent - the percent of increase or decrease of the bounds
-     *  - the bound with the percent
+     *  @param percent - the percent of increase or decrease of the bounds
+     *  @return the bound with the percent
      */
     private Rectangle2D priorityBounds(double percent)
     {
@@ -120,6 +134,11 @@ public class Center extends MapObject
         return (int) Width;
     }
 
+    /**
+     * Sets width.
+     *
+     * @param width the width
+     */
     public void setWidth(double width)
     {
         Width = width;
@@ -130,16 +149,34 @@ public class Center extends MapObject
         return (int) Height;
     }
 
+    /**
+     * Sets height.
+     *
+     * @param height the height
+     */
     public void setHeight(double height)
     {
         Height = height;
     }
 
+    /**
+     * Gets envelope.
+     *
+     * @return the envelope
+     */
     public Envelope getEnvelope()
     {
         return envelope;
     }
 
+    /**
+     * Sets envelope.
+     *
+     * @param startLon the start lon
+     * @param startLat the start lat
+     * @param endLon   the end lon
+     * @param endLat   the end lat
+     */
     public void setEnvelope(Double startLon,Double startLat,Double endLon,Double endLat)
     {
         this.envelope.setStartLon(startLon);
@@ -148,11 +185,21 @@ public class Center extends MapObject
         this.envelope.setEndLat(endLat);
     }
 
+    /**
+     * Is envelope used boolean.
+     *
+     * @return the boolean
+     */
     public boolean isEnvelopeUsed()
     {
         return useEnvelope;
     }
 
+    /**
+     * Sets envelope used.
+     *
+     * @param useEnvelope the use envelope
+     */
     public void setEnvelopeUsed(boolean useEnvelope)
     {
         this.useEnvelope = useEnvelope;
@@ -168,22 +215,42 @@ public class Center extends MapObject
     //	System.out.println("Setting Zoom");
         this.envelope.setZoom(Zoom);
     }
-    
+
+    /**
+     * Is drawing envelope boolean.
+     *
+     * @return the boolean
+     */
     public boolean isDrawingEnvelope()
     {
         return envelope.isDraw();
     }
 
+    /**
+     * Sets drawing envelope.
+     *
+     * @param draw the draw
+     */
     public void setDrawingEnvelope(boolean draw)
     {
         this.envelope.setDraw(draw);
     }
 
+    /**
+     * Gets envelope color.
+     *
+     * @return the envelope color
+     */
     public Color getEnvelopeColor()
     {
         return this.envelope.getColor();
     }
 
+    /**
+     * Sets envelope color.
+     *
+     * @param color the color
+     */
     public void setEnvelopeColor(Color color)
     {
         this.envelope.setColor(color);

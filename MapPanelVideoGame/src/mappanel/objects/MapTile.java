@@ -19,12 +19,10 @@ import mappanel.framework.MapObject;
 import mappanel.framework.ObjectID;
 
 /**
- * 
- *  Tyler Valant
- *  Object
- *  1-19-2016
- *  1.0.0
- *
+ * Tyler Valant
+ * Object
+ * 1-19-2016
+ * 1.0.0
  */
 public class MapTile extends MapObject implements ImageObserver, Runnable
 {
@@ -45,7 +43,14 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     private Rectangle2D NorthBound,EastBound,SouthBound,WestBound;
     private boolean last = false;
     private boolean generateEnable = true;
-    
+
+    /**
+     * Instantiates a new Map tile.
+     *
+     * @param x                   the x
+     * @param y                   the y
+     * @param listOfTileServerURL the list of tile server url
+     */
     public MapTile(int x, int y, LinkedHashSet<String> listOfTileServerURL)
     {
 	    super(x, y, ObjectID.Tile,0);
@@ -56,7 +61,16 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         WestBound  = new Rectangle2D.Double(x  - TestSize,  y + TileSize/2,TestSize - 1,TestSize - 1);
 
     }
-    
+
+    /**
+     * Instantiates a new Map tile.
+     *
+     * @param x                   the x
+     * @param y                   the y
+     * @param listOfTileServerURL the list of tile server url
+     * @param center              the center
+     * @param Zoom                the zoom
+     */
     public MapTile(int x, int y, LinkedHashSet<String> listOfTileServerURL, Center center ,int Zoom)
     {
         super(x, y, ObjectID.Tile,0);
@@ -72,7 +86,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 
     /**
      * Each tick, get Your Neighbors and check the bounds
-     * @param objects
+     * @param objects ticks the give objects if they are tiles
      */
     public void tick(LinkedHashSet<MapObject> objects)
     {
@@ -80,6 +94,10 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         checkBounds(objects);
     }
 
+    /**
+     * Checks the bounds of the map objects
+     * @param objects checks the bounds of the given map object
+     */
     private void checkBounds(LinkedHashSet<MapObject> objects)
     {
         boolean NorthEnabled = (0 <= y - TileSize);
@@ -135,7 +153,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
 
     /**
      * Check to see if the objects is a neighboring tile
-     * @param object
+     * @param object getting the neighbors of the give object
      */
     private void getNeighbors(MapObject object)
     {
@@ -160,7 +178,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     /**
      * If the map tile is set to debug, then the tiles will be a cyan square with debug info.
      * else the map will try to render the images
-     * @param g
+     * @param g the graphic to be render on
      */
     public void render(Graphics g)
     {
@@ -271,52 +289,96 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
         loadImageThread.start();
     }
 
-    //Start of getters/setters
+    /**
+     * Sets dirty.
+     */
+//Start of getters/setters
     public void setDirty()
     {
 	    dirty = true;
     }
-    
+
+    /**
+     * Is dirty boolean.
+     *
+     * @return the boolean
+     */
     public boolean isDirty()
     {
 	    return dirty;
     }
 
+    /**
+     * Is last boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLast()
     {
         return last;
     }
 
+    /**
+     * Sets last.
+     */
     public void setLast()
     {
         this.last = true;
     }
-    
+
+    /**
+     * Is generate enable boolean.
+     *
+     * @return the boolean
+     */
     public boolean isGenerateEnable()
     {
         return generateEnable;
     }
 
+    /**
+     * Sets generate enable.
+     */
     public void setGenerateEnable()
     {
         this.generateEnable = false;
     }
 
+    /**
+     * Gets load image thread.
+     *
+     * @return the load image thread
+     */
     public Thread getLoadImageThread()
     {
         return loadImageThread;
     }
 
+    /**
+     * Gets list of tile server url.
+     *
+     * @return the list of tile server url
+     */
     public LinkedHashSet<String> getListOfTileServerURL()
     {
 	return listOfTileServerURL;
     }
 
+    /**
+     * Sets list of tile server url.
+     *
+     * @param listOfTileServerURL the list of tile server url
+     */
     public void setListOfTileServerURL(LinkedHashSet<String> listOfTileServerURL)
     {
 	    this.listOfTileServerURL = listOfTileServerURL;
     }
-    
+
+    /**
+     * Add url.
+     *
+     * @param url the url
+     */
     public void addURL(String url)
     {
 	listOfTileServerURL.add(url);

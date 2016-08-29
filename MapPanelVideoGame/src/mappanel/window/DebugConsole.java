@@ -8,6 +8,9 @@ package mappanel.window;
 
 import javax.swing.*;
 
+/**
+ * The type Debug console.
+ */
 class DebugConsole extends javax.swing.JPanel
 {
 
@@ -21,12 +24,22 @@ class DebugConsole extends javax.swing.JPanel
         initComponents();
     }
 
+    /**
+     * Instantiates a new Debug console.
+     *
+     * @param map the map
+     */
     public DebugConsole(MapPanel map)
     {
         this.map = map;
         initComponents();
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args)
     {
         JFrame frame = new JFrame(DebugConsole.class.getSimpleName());
@@ -38,8 +51,10 @@ class DebugConsole extends javax.swing.JPanel
         frame.setVisible(true);
     }
 
-    
 
+    /**
+     * Tick.
+     */
     public void tick()
     {
         if(this.isVisible())

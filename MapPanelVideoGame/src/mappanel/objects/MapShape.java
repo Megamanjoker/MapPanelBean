@@ -16,10 +16,10 @@ import mappanel.window.MapPanel;
 
 /**
  * class for drawing shapes on the map.
- * @author Tyler Valant
- * @since 1-19-2016
- * @version 1.0.5.12-SNAPSHOT
  *
+ * @author Tyler Valant
+ * @version 1.0.5.12 -SNAPSHOT
+ * @since 1 -19-2016
  */
 public class MapShape extends MapObject
 {
@@ -43,19 +43,20 @@ public class MapShape extends MapObject
 
     /**
      * the main constructor
-     * @param lons - {@link ArrayList<> ArrayList} of Doubles that are the longitudes
-     * @param lats - {@link ArrayList<> ArrayList} of Doubles that are the latitudes
-     * @param name - name of the shape
-     * @param shapeStrokeColor - color of the stroke
-     * @param shapeFillColor - color of the fill
-     * @param Zoom - the current zoom
-     * @param strokeThickness - the thickness of the stroke
-     * @param isItALine - is the shape closed or not?
-     * @param labelText - the text of the label
+     *
+     * @param lons                 - {@link java.util.ArrayList ArrayList} of Doubles that are the longitudes
+     * @param lats                 - {@link java.util.ArrayList ArrayList} of Doubles that are the latitudes
+     * @param name                 - name of the shape
+     * @param shapeStrokeColor     - color of the stroke
+     * @param shapeFillColor       - color of the fill
+     * @param Zoom                 - the current zoom
+     * @param strokeThickness      - the thickness of the stroke
+     * @param isItALine            - is the shape closed or not?
+     * @param labelText            - the text of the label
      * @param labelBackgroundColor - label's background color
      * @param labelForegroundColor - label's foreground color
-     * @param labelVisible -  is the label visible?
-     * @param mouse -  the mouse listener for the shape
+     * @param labelVisible         -  is the label visible?
+     * @param mouse                -  the mouse listener for the shape
      */
     public MapShape(ArrayList<Double> lons, ArrayList<Double> lats, String name , Color shapeStrokeColor, Color shapeFillColor, Integer Zoom, BasicStroke strokeThickness, Boolean isItALine, String labelText, Color labelBackgroundColor, Color labelForegroundColor, Boolean labelVisible, MouseListener mouse)
     {
@@ -94,8 +95,8 @@ public class MapShape extends MapObject
 
     /**
      * renders the shape and label
-     * @param g
-     * @See Graphics
+     * @param g graphic to be render on
+     * @see Graphics
      */
     public void render(Graphics g)
     {
@@ -142,7 +143,7 @@ public class MapShape extends MapObject
     /**
      * the bounding box of the shape
      * @return the bounding box of the shape
-     * @See Rectangle2D
+     * @see Rectangle2D
      */
     public Rectangle2D getBound()
     {
@@ -153,7 +154,7 @@ public class MapShape extends MapObject
     /**
      * returns the information of the shape
      * @return toString is a {@link java.lang.String String}
-     * @See String
+     * @see String
      */
     public String toString()
     {
@@ -171,96 +172,206 @@ public class MapShape extends MapObject
         return toString;
     }
 
-    //Start of getters/setters
+    /**
+     * Is enter boolean.
+     *
+     * @return the enter boolean
+     */
+//Start of getters/setters
     public boolean isEnter()
     {
         return enter;
     }
 
+    /**
+     * Sets enter.
+     *
+     * @param enter the enter
+     */
     public void setEnter(boolean enter)
     {
         this.enter = enter;
     }
 
+    /**
+     * Gets stroke thickness.
+     *
+     * @return the stroke thickness
+     */
     public BasicStroke getStrokeThickness() {
         return strokeThickness;
     }
 
+    /**
+     * Sets stroke thickness.
+     *
+     * @param strokeThickness the stroke thickness
+     */
     public void setStrokeThickness(BasicStroke strokeThickness) {
         this.strokeThickness = strokeThickness;
     }
 
+    /**
+     * Gets line.
+     *
+     * @return the line
+     */
     public Boolean getLine() {
         return line;
     }
 
+    /**
+     * Sets line.
+     *
+     * @param line the line
+     */
     public void setLine(Boolean line) {
         this.line = line;
     }
 
+    /**
+     * Gets label text.
+     *
+     * @return the label text
+     */
     public String getLabelText() {
         return labelText;
     }
 
+    /**
+     * Sets label text.
+     *
+     * @param labelText the label text
+     */
     public void setLabelText(String labelText) {
         this.labelText = labelText;
     }
 
+    /**
+     * Gets label background color.
+     *
+     * @return the label background color
+     */
     public Color getLabelBackgroundColor() {
         return labelBackgroundColor;
     }
 
+    /**
+     * Sets label background color.
+     *
+     * @param labelBackgroundColor the label background color
+     */
     public void setLabelBackgroundColor(Color labelBackgroundColor) {
         this.labelBackgroundColor = labelBackgroundColor;
     }
 
+    /**
+     * Gets label foreground color.
+     *
+     * @return the label foreground color
+     */
     public Color getLabelForegroundColor() {
         return labelForegroundColor;
     }
 
+    /**
+     * Sets label foreground color.
+     *
+     * @param labelForegroundColor the label foreground color
+     */
     public void setLabelForegroundColor(Color labelForegroundColor) {
         this.labelForegroundColor = labelForegroundColor;
     }
 
+    /**
+     * Gets unique id.
+     *
+     * @return the unique id
+     */
     public int getUniqueID() {
         return uniqueID;
     }
 
+    /**
+     * Sets unique id.
+     *
+     * @param uniqueID the unique id
+     */
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
     }
 
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
     public MapPanel getMap() {
         return map;
     }
 
+    /**
+     * Sets map.
+     *
+     * @param map the map
+     */
     public void setMap(MapPanel map) {
         this.map = map;
     }
 
+    /**
+     * Is label visible boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLabelVisible() {
         return labelVisible;
     }
 
+    /**
+     * Sets label visible.
+     *
+     * @param labelVisible the label visible
+     */
     public void setLabelVisible(boolean labelVisible) {
         this.labelVisible = labelVisible;
     }
 
+    /**
+     * Gets shape stroke color.
+     *
+     * @return the shape stroke color
+     */
     public Color getShapeStrokeColor()
     {
         return shapeStrokeColor;
     }
 
+    /**
+     * Sets shape stroke color.
+     *
+     * @param shapeStrokeColor the shape stroke color
+     */
     public void setShapeStrokeColor(Color shapeStrokeColor)
     {
         this.shapeStrokeColor = shapeStrokeColor;
     }
 
+    /**
+     * Gets shape fill color.
+     *
+     * @return the shape fill color
+     */
     public Color getShapeFillColor()
     {
         return shapeFillColor;
     }
 
+    /**
+     * Sets shape fill color.
+     *
+     * @param shapeFillColor the shape fill color
+     */
     public void setShapeFillColor(Color shapeFillColor)
     {
         this.shapeFillColor = shapeFillColor;

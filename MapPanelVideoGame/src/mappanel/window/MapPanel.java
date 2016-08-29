@@ -59,13 +59,13 @@ public class MapPanel extends Canvas implements Runnable
     /**
      * Initialize the Handler and background color
      */
-    private void initialize()
+    private void initialization()
     {
         handler = new Handler(initLon,initLat,initZoom,this);
         this.setBackground(new Color(54,69,79));
         this.setIgnoreRepaint(true);
         preInitializeHandler();
-        initializeMap();
+        initialize();
         initializeListeners();
     }
 
@@ -110,7 +110,7 @@ public class MapPanel extends Canvas implements Runnable
         this.addMouseWheelListener(mouse);
     }
 
-    public void initializeMap()
+    public void initialize()
     {
 	    handler.CreateMap(lon2position(initLon,initZoom),lat2position(initLat,initZoom));
     }
@@ -138,7 +138,7 @@ public class MapPanel extends Canvas implements Runnable
      */
     public void run()
     {
-        initialize();
+        initialization();
         long lastTime = System.nanoTime();
         double ammountOfTicks = 60.0;
         double ns = 1000000000 / ammountOfTicks;
@@ -235,16 +235,16 @@ public class MapPanel extends Canvas implements Runnable
         }
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         new Window(new MapPanel());
     }
 
     /**
      * This is a conversion of screen X-coordinates and Zoom level to Longitude.
-     * @See <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</>
-     * @param x
-     * @param z
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</a>
+     * @param x screen coordinate
+     * @param z zoom
      * @return returns the Longitude of the given X-coordinated  and Zoom
      */
     public static double position2lon(int x, int z)
@@ -255,9 +255,9 @@ public class MapPanel extends Canvas implements Runnable
 
     /**
      * This is a conversion of screen Y-coordinates and Zoom level to Latitude.
-     * @See <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</>
-     * @param y
-     * @param z
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</a>
+     * @param y screen coordinate
+     * @param z zoom
      * @return returns the Latitude of the given screen Y-coordinates and Zoom
      */
     public static double position2lat(int y, int z)
@@ -268,9 +268,9 @@ public class MapPanel extends Canvas implements Runnable
 
     /**
      * This is a conversion of Longitude and Zoom level to screen X-coordinates.
-     * @See <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</>
-     * @param lon
-     * @param z
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</a>
+     * @param lon longitude
+     * @param z zoom
      * @return returns the X-coordinated of the given Longitude and Zoom
      */
     public static int lon2position(double lon, int z)
@@ -281,9 +281,9 @@ public class MapPanel extends Canvas implements Runnable
 
     /**
      * This is a conversion of Latitude and Zoom level to screen Y-coordinates.
-     * @See <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</>
-     * @param lat
-     * @param z
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers">Source</a>
+     * @param lat latitude
+     * @param z zoom
      * @return returns the Y-coordinated of the given Latitude and Zoom
      */
     public static int lat2position(double lat, int z)
@@ -293,7 +293,12 @@ public class MapPanel extends Canvas implements Runnable
             (1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * ymax);
     }
 
-    //start of setters/getters
+    /**
+     * Add point.
+     *
+     * @param point the point
+     */
+//start of setters/getters
     public void addPoint(MapPoint point)
     {
         if (handler != null)
@@ -306,6 +311,9 @@ public class MapPanel extends Canvas implements Runnable
         }
     }
 
+    /**
+     * Clear points.
+     */
     public void clearPoints()
     {
         if (handler != null)
@@ -313,7 +321,12 @@ public class MapPanel extends Canvas implements Runnable
             handler.clearPoints();
         }
     }
-    
+
+    /**
+     * Add shape.
+     *
+     * @param shape the shape
+     */
     public void addShape(MapShape shape)
     {
         if (handler != null)
@@ -325,7 +338,10 @@ public class MapPanel extends Canvas implements Runnable
             listOfShapes.add(shape);
         }
     }
-    
+
+    /**
+     * Clear shapes.
+     */
     public void clearShapes()
     {
         if (handler != null)
@@ -334,21 +350,42 @@ public class MapPanel extends Canvas implements Runnable
         }
     }
 
+    /**
+     * Collision check at linked hash set.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the linked hash set
+     */
     public LinkedHashSet<MapObject> collisionCheckAt(int x, int y)
     {
         return handler.collisionCheckAt(x,y);
     }
 
+    /**
+     * Sets mouse listener.
+     */
     public void setMouseListener()
     {
 	
     }
 
+    /**
+     * Sets center location.
+     *
+     * @param lon the lon
+     * @param lat the lat
+     */
     public void setCenterLocation(double lon, double lat)
     {
 	handler.setCenterLocation(lon,lat);
     }
-    
+
+    /**
+     * Is envelope used boolean.
+     *
+     * @return the boolean
+     */
     public boolean isEnvelopeUsed()
     {
         if(handler.getCenter() != null)
@@ -357,6 +394,11 @@ public class MapPanel extends Canvas implements Runnable
             return useEnvelope;
     }
 
+    /**
+     * Sets envelope used.
+     *
+     * @param useEnvelope the use envelope
+     */
     public void setEnvelopeUsed(boolean useEnvelope)
     {
         if(handler.getCenter() != null)
@@ -367,7 +409,12 @@ public class MapPanel extends Canvas implements Runnable
         else
             this.useEnvelope = useEnvelope;
     }
-    
+
+    /**
+     * Is drawing envelope boolean.
+     *
+     * @return the boolean
+     */
     public boolean isDrawingEnvelope()
     {
         if(handler.getCenter() != null)
@@ -376,6 +423,11 @@ public class MapPanel extends Canvas implements Runnable
             return draw;
     }
 
+    /**
+     * Sets drawing envelope.
+     *
+     * @param draw the draw
+     */
     public void setDrawingEnvelope(boolean draw)
     {
         if(handler.getCenter() != null)
@@ -387,6 +439,11 @@ public class MapPanel extends Canvas implements Runnable
             this.draw = draw;
     }
 
+    /**
+     * Gets envelope color.
+     *
+     * @return the envelope color
+     */
     public Color getEnvelopeColor()
     {
         if(handler.getCenter() != null)
@@ -395,6 +452,11 @@ public class MapPanel extends Canvas implements Runnable
             return envelopeColor;
     }
 
+    /**
+     * Sets envelope color.
+     *
+     * @param color the color
+     */
     public void setEnvelopeColor(Color color)
     {
         if(handler.getCenter() != null)
@@ -405,7 +467,15 @@ public class MapPanel extends Canvas implements Runnable
         else
             this.envelopeColor = color;
     }
-    
+
+    /**
+     * Sets envelope.
+     *
+     * @param startLon the start lon
+     * @param startLat the start lat
+     * @param endLon   the end lon
+     * @param endLat   the end lat
+     */
     public void setEnvelope(Double startLon, Double startLat, Double endLon, Double endLat)
     {
         if(handler.getCenter() != null)
@@ -421,7 +491,12 @@ public class MapPanel extends Canvas implements Runnable
         }
         this.envelope = new Envelope(startLon, startLat, endLon, endLat, this.zoom);
     }
-    
+
+    /**
+     * Gets envelope.
+     *
+     * @return the envelope
+     */
     public Envelope getEnvelope()
     {
         if(handler.getCenter() != null)
@@ -429,39 +504,72 @@ public class MapPanel extends Canvas implements Runnable
         else
             return this.envelope;
     }
-    
+
+    /**
+     * Gets handler.
+     *
+     * @return the handler
+     */
     public Handler getHandler()
     {
         return handler;
     }
 
+    /**
+     * Gets center.
+     *
+     * @return the center
+     */
     public Center getCenter()
     {
         return handler.getCenter();
     }
-    
+
+    /**
+     * Gets init zoom.
+     *
+     * @return the init zoom
+     */
     public int getInitZoom()
     {
         return initZoom;
     }
 
+    /**
+     * Sets init zoom.
+     *
+     * @param initZoom the init zoom
+     */
     public void setInitZoom(int initZoom)
     {
         this.initZoom = initZoom;
     }
 
+    /**
+     * Add url.
+     *
+     * @param url the url
+     */
     public void addURL(String url)
     {
         if (handler != null)
             handler.addURL(url);
     }
-    
+
+    /**
+     * Clear ur ls.
+     */
     public void clearURLs()
     {
         if (handler != null)
             handler.clearURLs();
     }
 
+    /**
+     * Sets min zoom.
+     *
+     * @param minZoom the min zoom
+     */
     public void setMinZoom(int minZoom)
     {
         if (handler != null)
@@ -475,7 +583,12 @@ public class MapPanel extends Canvas implements Runnable
             this.minZoom = minZoom;
         }
     }
-    
+
+    /**
+     * Gets min zoom.
+     *
+     * @return the min zoom
+     */
     public int getMinZoom()
     {
         if(handler != null)
@@ -483,7 +596,12 @@ public class MapPanel extends Canvas implements Runnable
         else
             return this.minZoom;
     }
-    
+
+    /**
+     * Sets max zoom.
+     *
+     * @param maxZoom the max zoom
+     */
     public void setMaxZoom(int maxZoom)
     {
         if (handler != null)
@@ -497,7 +615,12 @@ public class MapPanel extends Canvas implements Runnable
             this.maxZoom = maxZoom;
         }
     }
-    
+
+    /**
+     * Gets max zoom.
+     *
+     * @return the max zoom
+     */
     public int getMaxZoom()
     {
         if(handler == null)
@@ -509,7 +632,12 @@ public class MapPanel extends Canvas implements Runnable
             return handler.getMaxZoom();
         }
     }
-    
+
+    /**
+     * Gets zoom.
+     *
+     * @return the zoom
+     */
     public int getZoom()
     {
         if(handler == null)
@@ -521,7 +649,12 @@ public class MapPanel extends Canvas implements Runnable
             return handler.getZoom();
         }
     }
-    
+
+    /**
+     * Sets zoom.
+     *
+     * @param zoom the zoom
+     */
     public void setZoom(int zoom)
     {
         if (handler != null)
@@ -536,76 +669,141 @@ public class MapPanel extends Canvas implements Runnable
         }
     }
 
+    /**
+     * Gets mouse lon.
+     *
+     * @return the mouse lon
+     */
     public double getMouseLon()
     {
         return mouseLon;
     }
 
+    /**
+     * Sets mouse lon.
+     *
+     * @param mouseLon the mouse lon
+     */
     public void setMouseLon(double mouseLon)
     {
 	    this.firePropertyChange("mouseLon", this.mouseLon, mouseLon);
         this.mouseLon = mouseLon;
     }
 
+    /**
+     * Gets mouse lat.
+     *
+     * @return the mouse lat
+     */
     public double getMouseLat()
     {
         return mouseLat;
     }
 
+    /**
+     * Sets mouse lat.
+     *
+     * @param mouseLat the mouse lat
+     */
     public void setMouseLat(double mouseLat)
     {
 	    this.firePropertyChange("mouseLat", this.mouseLat, mouseLat);
         this.mouseLat = mouseLat;
     }
 
+    /**
+     * Gets upper right corner lon.
+     *
+     * @return the upper right corner lon
+     */
     public double getUpperRightCornerLon()
     {
 		double upperRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth() / 2, this.getZoom());
         return upperRightCornerLon;
     }
 
+    /**
+     * Gets upper right corner lat.
+     *
+     * @return the upper right corner lat
+     */
     public double getUpperRightCornerLat()
     {
 		double upperRightCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight() / 2, this.getZoom());
         return upperRightCornerLat;
     }
 
+    /**
+     * Gets lower right corner lon.
+     *
+     * @return the lower right corner lon
+     */
     public double getLowerRightCornerLon()
     {
 		double lowerRightCornerLon = MapPanel.position2lon(this.getCenter().getX() + this.getWidth() / 2, this.getZoom());
         return lowerRightCornerLon;
     }
 
+    /**
+     * Gets lower right corner lat.
+     *
+     * @return the lower right corner lat
+     */
     public double getLowerRightCornerLat()
     {
 		double lowerRightCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight() / 2, this.getZoom());
         return lowerRightCornerLat;
     }
 
+    /**
+     * Gets upper left corner lon.
+     *
+     * @return the upper left corner lon
+     */
     public double getUpperLeftCornerLon()
     {
 		double upperLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth() / 2, this.getZoom());
         return upperLeftCornerLon;
     }
 
+    /**
+     * Gets upper left corner lat.
+     *
+     * @return the upper left corner lat
+     */
     public double getUpperLeftCornerLat()
     {
 		double upperLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() - this.getHeight() / 2, this.getZoom());
         return upperLeftCornerLat;
     }
 
+    /**
+     * Gets lower left corner lon.
+     *
+     * @return the lower left corner lon
+     */
     public double getLowerLeftCornerLon()
     {
 		double lowerLeftCornerLon = MapPanel.position2lon(this.getCenter().getX() - this.getWidth() / 2, this.getZoom());
         return lowerLeftCornerLon;
     }
 
+    /**
+     * Gets lower left corner lat.
+     *
+     * @return the lower left corner lat
+     */
     public double getLowerLeftCornerLat()
     {
 		double lowerLeftCornerLat = MapPanel.position2lat(this.getCenter().getY() + this.getHeight() / 2, this.getZoom());
         return lowerLeftCornerLat;
     }
-    
+
+    /**
+     * Gets debug console.
+     *
+     * @return the debug console
+     */
     public JPanel getDebugConsole()
     {
         return debugConsole;

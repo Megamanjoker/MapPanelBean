@@ -17,27 +17,45 @@ import mappanel.objects.MapShape;
 import mappanel.objects.MapTile;
 
 /**
- * 
- *  Tyler Valant
- *  Window
- *  1-19-2016
- *  1.0.0
- *
+ * Tyler Valant
+ * Window
+ * 1-19-2016
+ * 1.0.0
  */
-public class Handler 
+public class Handler
 {
     private static final int TileSize = 256;
+    /**
+     * The Objects.
+     */
     public LinkedHashSet<MapObject> objects = new LinkedHashSet<>();
+    /**
+     * The Points.
+     */
     public LinkedHashSet<MapObject> points = new LinkedHashSet<>();
+    /**
+     * The Shapes.
+     */
     public LinkedHashSet<MapObject> shapes = new LinkedHashSet<>();
+    /**
+     * The List of tile server url.
+     */
     public LinkedHashSet<String> listOfTileServerURL = new LinkedHashSet<>();
 	private Center center;
     private int numberOfTiles = 1;
     private int MaxZoom = 19,MinZoom = 0, Zoom = 0;
     private LinkedHashSet<ObjectID> idBlackList = new LinkedHashSet<ObjectID>(Arrays.asList(ObjectID.Center,ObjectID.Tile,ObjectID.Envelope));
     private Camera camera;
-    
-    
+
+
+    /**
+     * Instantiates a new Handler.
+     *
+     * @param initLon  the init lon
+     * @param initLat  the init lat
+     * @param initZoom the init zoom
+     * @param mapPanel the map panel
+     */
     public Handler(double initLon, double initLat, int initZoom, MapPanel mapPanel)
     {
 		String tileServerURL = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/";
@@ -92,7 +110,8 @@ public class Handler
 
     /**
      * render all the MapObjects
-     * @param g
+     *
+     * @param g The graphic to be render on
      */
     public void render(Graphics g)
     {
@@ -117,9 +136,12 @@ public class Handler
         if(center != null)
             addMapObject(new MapTile(center.getX() - center.getX()%256,center.getY() - center.getY()%256,listOfTileServerURL));
     }
-    
+
     /**
-     * Destroys previous map and Creates the map at some point 
+     * Destroys previous map and Creates the map at some point
+     *
+     * @param x starting point
+     * @param y starting point
      */
     public void CreateMap(int x,int y)
     {
@@ -135,7 +157,9 @@ public class Handler
     }
 
     /**
-     * Creates the map at some point 
+     * Creates the map at some point
+     *
+     * @param point to start at
      */
     public void CreateMap(Point point)
     {
@@ -145,7 +169,8 @@ public class Handler
 
     /**
      * Zoom in
-     *  point - zoom in on this point
+     *
+     * @param point - zoom in on this point
      */
     public void ZoomIn(Point point)
     {
@@ -177,8 +202,9 @@ public class Handler
     }
 
     /**
-     * Zoom out 
-     *  point - zoom out from this point
+     * Zoom out
+     *
+     * @param point - zoom out from this point
      */
     public void ZoomOut(Point point)
     {
@@ -210,7 +236,7 @@ public class Handler
 	    updateObjectZoom();
 	}
     }
-    
+
     /**
      * Clear out all the tiles
      */
@@ -304,52 +330,103 @@ public class Handler
     }
 
     //Start of getters/setters
+
+    /**
+     * Add map object.
+     *
+     * @param object the object
+     */
     public void addMapObject(MapObject object)
     {
         this.objects.add(object);
     }
 
+    /**
+     * Remove map object.
+     *
+     * @param object the object
+     */
     public void removeMapObject(MapObject object)
     {
         this.objects.remove(object);
     }
 
+    /**
+     * Gets max zoom.
+     *
+     * @return the max zoom
+     */
     public int getMaxZoom()
     {
         return MaxZoom;
     }
 
+    /**
+     * Sets max zoom.
+     *
+     * @param maxZoom the max zoom
+     */
     public void setMaxZoom(int maxZoom)
     {
         MaxZoom = maxZoom;
     }
 
+    /**
+     * Gets min zoom.
+     *
+     * @return the min zoom
+     */
     public int getMinZoom()
     {
         return MinZoom;
     }
 
+    /**
+     * Sets min zoom.
+     *
+     * @param minZoom the min zoom
+     */
     public void setMinZoom(int minZoom)
     {
         MinZoom = minZoom;
     }
 
+    /**
+     * Sets use envelope.
+     *
+     * @param useEnvelope the use envelope
+     */
     public void setUseEnvelope(boolean useEnvelope)
     {
 	center.setEnvelopeUsed(useEnvelope);
     }
-    
+
+    /**
+     * Gets use envelope.
+     *
+     * @return the use envelope
+     */
     public boolean getUseEnvelope()
     {
 	return center.isEnvelopeUsed();
     }
-    
 
+
+    /**
+     * Gets zoom.
+     *
+     * @return the zoom
+     */
     public int getZoom()
     {
         return Zoom;
     }
 
+    /**
+     * Sets zoom.
+     *
+     * @param zoom the zoom
+     */
     public void setZoom(int zoom)
     {
         double lat = MapPanel.position2lat((int)(center.getY()), Zoom);
@@ -376,24 +453,42 @@ public class Handler
         this.Zoom = zoom;
         updateObjectZoom();
     }
-    
+
+    /**
+     * Sets init zoom.
+     *
+     * @param zoom the zoom
+     */
     public void setInitZoom(int zoom)
     {
         this.Zoom = zoom;
         updateObjectZoom();
     }
-    
+
+    /**
+     * Clear screen.
+     *
+     * @param g the g
+     */
     public void ClearScreen(Graphics g)
     {
 	    g.clearRect((int) - (Math.pow(2,  Zoom + 1 * 2) * TileSize)/2, (int)-(Math.pow(2, Zoom + 1 * 2) * TileSize)/2, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize, (int)Math.pow(2,  Zoom + 1 * 2) * TileSize);
     }
-    
+
+    /**
+     * Add point.
+     *
+     * @param point the point
+     */
     public void addPoint(MapPoint point)
     {
         objects.add(point);
         points.add(point);
     }
-    
+
+    /**
+     * Clear points.
+     */
     public void clearPoints()
     {
         if (points != null && !points.isEmpty())
@@ -408,13 +503,21 @@ public class Handler
             points.clear();
         }
     }
-    
+
+    /**
+     * Add shape.
+     *
+     * @param shape the shape
+     */
     public void addShape(MapShape shape)
     {
 	    objects.add(shape);
 	    shapes.add(shape);
     }
-    
+
+    /**
+     * Clear shapes.
+     */
     public void clearShapes()
     {
 	if (shapes != null && !shapes.isEmpty())
@@ -429,16 +532,33 @@ public class Handler
 	}
     }
 
+    /**
+     * Gets center.
+     *
+     * @return the center
+     */
     public Center getCenter()
     {
         return center;
     }
 
+    /**
+     * Sets center.
+     *
+     * @param center the center
+     */
     public void setCenter(Center center)
     {
         this.center = center;
     }
 
+    /**
+     * Collision check at linked hash set.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the linked hash set
+     */
     public LinkedHashSet<MapObject> collisionCheckAt(int x, int y)
     {
         LinkedHashSet<MapObject> collidedObjects = new LinkedHashSet<MapObject>();
@@ -458,31 +578,65 @@ public class Handler
 		return idBlackList.contains(object.getId());
     }
 
+    /**
+     * Sets envelope.
+     *
+     * @param startLon the start lon
+     * @param startLat the start lat
+     * @param endLon   the end lon
+     * @param endLat   the end lat
+     */
     public void setEnvelope(double startLon, double startLat, double endLon, double endLat)
     {
 	    center.setEnvelope(startLon, startLat, endLon, endLat);
     }
 
+    /**
+     * Sets drawing envelope.
+     *
+     * @param draw the draw
+     */
     public void setDrawingEnvelope(boolean draw)
     {
 	center.setDrawingEnvelope(draw);
     }
 
+    /**
+     * Sets envelope color.
+     *
+     * @param envelopeColor the envelope color
+     */
     public void setEnvelopeColor(Color envelopeColor)
     {
 	center.setEnvelopeColor(envelopeColor);
     }
 
+    /**
+     * Sets envelope used.
+     *
+     * @param useEnvelope the use envelope
+     */
     public void setEnvelopeUsed(boolean useEnvelope)
     {
 	center.setEnvelopeUsed(useEnvelope);
     }
 
+    /**
+     * Gets camera.
+     *
+     * @return the camera
+     */
     public Camera getCamera()
     {
         return camera;
     }
 
+    /**
+     * Sets center location.
+     *
+     * @param lon the lon
+     * @param lat the lat
+     */
     public void setCenterLocation(double lon, double lat)
     {
         center.setX(MapPanel.lon2position(lon, Zoom));
@@ -490,13 +644,21 @@ public class Handler
         CreateMap(MapPanel.lon2position(lon, Zoom),MapPanel.lat2position(lat, Zoom));
 	
     }
-    
+
+    /**
+     * Add url.
+     *
+     * @param url the url
+     */
     public void addURL(String url)
     {
         this.listOfTileServerURL.add(url);
         updateTileUrl();
     }
-    
+
+    /**
+     * Clear urls.
+     */
     public void clearURLs()
     {
         this.listOfTileServerURL.clear();
