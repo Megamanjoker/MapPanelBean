@@ -4,12 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>WhatTheMap</groupId>
-    <artifactId>MapPanelVideoGame</artifactId>
+    <groupId>com.tv.map</groupId>
+    <artifactId>mappanel</artifactId>
     <version>1.0.0</version>
-
+    <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>rep1</id>
+            <name>Personal Repository</name>
+            <url>File://D:\Documents\Modl Deployment</url>
+            <layout>default</layout>
+        </repository>
+        <!--<downloadUrl>file://D:\Documents\Modl Development\MapPanelBean\MapPanelVideoGame\target</downloadUrl>-->
+    </distributionManagement>
 </project>
