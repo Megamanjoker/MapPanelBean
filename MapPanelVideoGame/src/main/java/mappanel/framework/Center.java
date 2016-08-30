@@ -93,7 +93,6 @@ lat;
      */
     public Rectangle2D getBound()
     {
-	    // TODO Auto-generated method stub
 	    return new Rectangle2D.Double(x,y,1,1);
     }
 
