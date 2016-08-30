@@ -1,4 +1,4 @@
-mappanel.Listeners
-mappanel.framework
-mappanel.objects
-mappanel.window
+com.tv.map.mappanel.Listeners
+com.tv.map.mappanel.framework
+com.tv.map.mappanel.objects
+com.tv.map.mappanel.window
