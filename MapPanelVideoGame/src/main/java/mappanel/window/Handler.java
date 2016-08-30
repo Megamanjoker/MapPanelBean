@@ -112,6 +112,7 @@ public class Handler
      * render all the MapObjects
      *
      * @param g The graphic to be render on
+     * @since 1.6+
      */
     public void render(Graphics g)
     {
@@ -299,6 +300,7 @@ public class Handler
 
     /**
      * Updates all the tiles urls
+     * @since 1.6+
      */
     public void updateTileUrl()
     {
@@ -312,6 +314,7 @@ public class Handler
 
     /**
      * Removes any lingering tiles
+     * @since 1.6+
      */
     protected void removeLingeringTiles()
     {

@@ -87,6 +87,7 @@ public class MapTile extends MapObject implements ImageObserver, Runnable
     /**
      * Each tick, get Your Neighbors and check the bounds
      * @param objects ticks the give objects if they are tiles
+     *
      */
     public void tick(LinkedHashSet<MapObject> objects)
     {
